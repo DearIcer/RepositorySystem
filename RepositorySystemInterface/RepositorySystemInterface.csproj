@@ -1,0 +1,366 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8B8F7923-5A8C-45CD-8490-C64BB91B789B}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RepositorySystemInterface</RootNamespace>
+    <AssemblyName>RepositorySystemInterface</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.2.0.1\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.9\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.9.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.9\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.9\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.9\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.9\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.9\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="layuimini\.gitattributes" />
+    <Content Include="layuimini\.gitignore" />
+    <Content Include="layuimini\css\layuimini.css" />
+    <Content Include="layuimini\css\public.css" />
+    <Content Include="layuimini\css\themes\default.css" />
+    <Content Include="layuimini\images\bg.jpg" />
+    <Content Include="layuimini\images\captcha.jpg" />
+    <Content Include="layuimini\images\donate_qrcode.png" />
+    <Content Include="layuimini\images\favicon.ico" />
+    <Content Include="layuimini\images\home.png" />
+    <Content Include="layuimini\images\icon-login.png" />
+    <Content Include="layuimini\images\loginbg.png" />
+    <Content Include="layuimini\images\logo.png" />
+    <Content Include="layuimini\index.html" />
+    <Content Include="layuimini\js\lay-config.js" />
+    <Content Include="layuimini\js\lay-module\echarts\echarts.js" />
+    <Content Include="layuimini\js\lay-module\echarts\echartsTheme.js" />
+    <Content Include="layuimini\js\lay-module\iconPicker\iconPickerFa.js" />
+    <Content Include="layuimini\js\lay-module\layarea\layarea.js" />
+    <Content Include="layuimini\js\lay-module\layuimini\miniAdmin.js" />
+    <Content Include="layuimini\js\lay-module\layuimini\miniMenu.js" />
+    <Content Include="layuimini\js\lay-module\layuimini\miniTab.js" />
+    <Content Include="layuimini\js\lay-module\layuimini\miniTheme.js" />
+    <Content Include="layuimini\js\lay-module\layuimini\miniTongji.js" />
+    <Content Include="layuimini\js\lay-module\step-lay\step.css" />
+    <Content Include="layuimini\js\lay-module\step-lay\step.js" />
+    <Content Include="layuimini\js\lay-module\tableSelect\tableSelect.js" />
+    <Content Include="layuimini\js\lay-module\treetable-lay\treetable.css" />
+    <Content Include="layuimini\js\lay-module\treetable-lay\treetable.js" />
+    <Content Include="layuimini\js\lay-module\wangEditor\wangEditor.css" />
+    <Content Include="layuimini\js\lay-module\wangEditor\wangEditor.js" />
+    <Content Include="layuimini\js\lay-module\wangEditor\wangEditor.min.css" />
+    <Content Include="layuimini\js\lay-module\wangEditor\wangEditor.min.js" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\css\font-awesome.css" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\css\font-awesome.min.css" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\fonts\fontawesome-webfont.svg" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\HELP-US-OUT.txt" />
+    <Content Include="layuimini\lib\jq-module\jquery.particleground.min.js" />
+    <Content Include="layuimini\lib\jq-module\paigusu.min.js" />
+    <Content Include="layuimini\lib\jq-module\zyupload\zyupload-1.0.0.min.css" />
+    <Content Include="layuimini\lib\jq-module\zyupload\zyupload-1.0.0.min.js" />
+    <Content Include="layuimini\lib\jquery-3.4.1\jquery-3.4.1.min.js" />
+    <Content Include="layuimini\lib\layui-v2.6.3\css\layui.css" />
+    <Content Include="layuimini\lib\layui-v2.6.3\css\modules\code.css" />
+    <Content Include="layuimini\lib\layui-v2.6.3\css\modules\laydate\default\laydate.css" />
+    <Content Include="layuimini\lib\layui-v2.6.3\css\modules\layer\default\icon-ext.png" />
+    <Content Include="layuimini\lib\layui-v2.6.3\css\modules\layer\default\icon.png" />
+    <Content Include="layuimini\lib\layui-v2.6.3\css\modules\layer\default\layer.css" />
+    <Content Include="layuimini\lib\layui-v2.6.3\css\modules\layer\default\loading-0.gif" />
+    <Content Include="layuimini\lib\layui-v2.6.3\css\modules\layer\default\loading-1.gif" />
+    <Content Include="layuimini\lib\layui-v2.6.3\css\modules\layer\default\loading-2.gif" />
+    <Content Include="layuimini\lib\layui-v2.6.3\font\iconfont.svg" />
+    <Content Include="layuimini\lib\layui-v2.6.3\layui.js" />
+    <Content Include="layuimini\page\404.html" />
+    <Content Include="layuimini\page\area.html" />
+    <Content Include="layuimini\page\button.html" />
+    <Content Include="layuimini\page\color-select.html" />
+    <Content Include="layuimini\page\editor.html" />
+    <Content Include="layuimini\page\form-step.html" />
+    <Content Include="layuimini\page\form.html" />
+    <Content Include="layuimini\page\icon-picker.html" />
+    <Content Include="layuimini\page\icon.html" />
+    <Content Include="layuimini\page\layer.html" />
+    <Content Include="layuimini\page\login-1.html" />
+    <Content Include="layuimini\page\login-2.html" />
+    <Content Include="layuimini\page\login-3.html" />
+    <Content Include="layuimini\page\menu.html" />
+    <Content Include="layuimini\page\setting.html" />
+    <Content Include="layuimini\page\table-select.html" />
+    <Content Include="layuimini\page\table.html" />
+    <Content Include="layuimini\page\table\add.html" />
+    <Content Include="layuimini\page\table\edit.html" />
+    <Content Include="layuimini\page\upload.html" />
+    <Content Include="layuimini\page\user-password.html" />
+    <Content Include="layuimini\page\user-setting.html" />
+    <Content Include="layuimini\page\welcome-1.html" />
+    <Content Include="layuimini\page\welcome-2.html" />
+    <Content Include="layuimini\page\welcome-3.html" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="layuimini\api\clear.json" />
+    <Content Include="layuimini\api\init.json" />
+    <Content Include="layuimini\api\menus.json" />
+    <Content Include="layuimini\api\table.json" />
+    <Content Include="layuimini\api\tableSelect.json" />
+    <Content Include="layuimini\api\upload.json" />
+    <Content Include="layuimini\js\lay-module\wangEditor\fonts\w-e-icon.woff" />
+    <Content Include="layuimini\js\lay-module\wangEditor\wangEditor.min.js.map" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\fonts\fontawesome-webfont.eot" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\fonts\fontawesome-webfont.ttf" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\fonts\fontawesome-webfont.woff" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\fonts\fontawesome-webfont.woff2" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\fonts\FontAwesome.otf" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\less\animated.less" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\less\bordered-pulled.less" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\less\core.less" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\less\fixed-width.less" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\less\font-awesome.less" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\less\icons.less" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\less\larger.less" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\less\list.less" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\less\mixins.less" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\less\path.less" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\less\rotated-flipped.less" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\less\screen-reader.less" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\less\stacked.less" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\less\variables.less" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\scss\font-awesome.scss" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\scss\_animated.scss" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\scss\_bordered-pulled.scss" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\scss\_core.scss" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\scss\_fixed-width.scss" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\scss\_icons.scss" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\scss\_larger.scss" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\scss\_list.scss" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\scss\_mixins.scss" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\scss\_path.scss" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\scss\_rotated-flipped.scss" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\scss\_screen-reader.scss" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\scss\_stacked.scss" />
+    <Content Include="layuimini\lib\font-awesome-4.7.0\scss\_variables.scss" />
+    <Content Include="layuimini\lib\layui-v2.6.3\font\iconfont.eot" />
+    <Content Include="layuimini\lib\layui-v2.6.3\font\iconfont.ttf" />
+    <Content Include="layuimini\lib\layui-v2.6.3\font\iconfont.woff" />
+    <Content Include="layuimini\lib\layui-v2.6.3\font\iconfont.woff2" />
+    <Content Include="layuimini\LICENSE" />
+    <Content Include="layuimini\README.md" />
+    <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.4.1.js" />
+    <Content Include="Scripts\jquery-3.4.1.min.js" />
+    <Content Include="Scripts\jquery-3.4.1.slim.js" />
+    <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <None Include="packages.config" />
+    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BLL\BLL.csproj">
+      <Project>{2abcaff2-2fa7-476f-8c0d-a5c2a1a8ac2c}</Project>
+      <Name>BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{febc4e03-4b79-4c4b-b52f-60485d0a30b0}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>62493</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:62493/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>
