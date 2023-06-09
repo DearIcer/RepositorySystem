@@ -127,6 +127,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -292,6 +293,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Account\LoginView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -314,6 +316,10 @@
     <ProjectReference Include="..\BLL\BLL.csproj">
       <Project>{2abcaff2-2fa7-476f-8c0d-a5c2a1a8ac2c}</Project>
       <Name>BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CommonLib\CommonLib.csproj">
+      <Project>{0C78A4E9-C2A2-4C5E-9025-99050A20C24A}</Project>
+      <Name>CommonLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{febc4e03-4b79-4c4b-b52f-60485d0a30b0}</Project>

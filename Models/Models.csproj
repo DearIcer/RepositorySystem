@@ -61,14 +61,6 @@
     <Compile Include="DepartmentInfo.cs" />
     <Compile Include="FileInfo.cs" />
     <Compile Include="MenuInfo.cs" />
-    <Compile Include="Migrations\202306081023185_InitialCreate.cs" />
-    <Compile Include="Migrations\202306081023185_InitialCreate.designer.cs">
-      <DependentUpon>202306081023185_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202306081043568_ice.cs" />
-    <Compile Include="Migrations\202306081043568_ice.designer.cs">
-      <DependentUpon>202306081043568_ice.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositorySystemContext.cs" />
@@ -83,14 +75,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\202306081023185_InitialCreate.resx">
-      <DependentUpon>202306081023185_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202306081043568_ice.resx">
-      <DependentUpon>202306081043568_ice.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -9,10 +9,10 @@ namespace RepositorySystemInterface.Controllers
 {
     public class HomeController : Controller
     {
-        private RepositorySystemContext db = new RepositorySystemContext();
+        //private RepositorySystemContext db = new RepositorySystemContext();
         public ActionResult Index()
         {
-            db.MenuInfo.ToList();
+            //db.MenuInfo.ToList();
             return View();
         }
 

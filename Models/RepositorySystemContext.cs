@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Xml;
 
@@ -17,9 +18,15 @@ namespace Models
             : base("name=RepositorySystemContext")
         {
         }
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+        }
 
         //为您要在模型中包含的每种实体类型都添加 DbSet。有关配置和使用 Code First  模型
         //的详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=390109。
+
+
         public virtual DbSet<UserInfo> UserInfo { get; set; }
         public virtual DbSet<RoleInfo> RoleInfo { get; set; }
         public virtual DbSet<R_UserInfo_RoleInfo> R_UserInfo_RoleInfo { get; set; }
