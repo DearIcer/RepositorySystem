@@ -185,6 +185,27 @@
                 layer.msg('登录成功', function () {
                     window.location = '/Home/Index';
                 });
+
+                $.ajax({
+
+                    url: '/Account/Login',
+                    type: 'Post',
+                    data: (
+                        account: data.username,
+                        passsword: data.password
+                    ),
+                    success: function (res) {
+                        console.log("返回值", res);
+                        if (res.Status == 200) {
+                            layer.msg('登录成功', function () {
+                                window.location = '/Home/Index';
+                            });
+                        }
+                    }
+                })
+
+
+
                 return false;
             });
         });</script>

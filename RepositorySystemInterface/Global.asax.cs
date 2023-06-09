@@ -20,7 +20,7 @@ namespace RepositorySystemInterface
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             //只需要执行一次，用完记得注释！
-            InitDB();
+            //InitDB();
         }
 
         public static void InitDB()
