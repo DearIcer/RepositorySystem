@@ -19,7 +19,7 @@ namespace RepositorySystemInterface
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            //Ö»ĞèÒªÖ´ĞĞÒ»´Î£¬ÓÃÍê¼ÇµÃ×¢ÊÍ£¡
+            //åªéœ€è¦æ‰§è¡Œä¸€æ¬¡ï¼Œç”¨å®Œè®°å¾—æ³¨é‡Šï¼
             //InitDB();
         }
 
@@ -41,7 +41,7 @@ namespace RepositorySystemInterface
                 PassWord = MD5Help.GenerateMD5("123456"),
                 CreatedTime = DateTime.Now,
                 IsAdmin = true,
-                UserName = "³¬¼¶¹ÜÀíÔ±"
+                UserName = "è¶…çº§ç®¡ç†å‘˜"
             };
 
             db.UserInfo.Add(userInfo);

@@ -10,16 +10,20 @@ namespace DAL
 {
     public class UserInfoDAL
     {
-        private RepositorySystemContext _DbContext;
+        private RepositorySystemContext _dbContext;
         public UserInfoDAL()
         {
-            _DbContext = new RepositorySystemContext();
+            _dbContext = new RepositorySystemContext();
         }
+        /// <summary>
+        /// 获取用户表所有的数据
+        /// </summary>
+        /// <returns></returns>
         public DbSet<UserInfo> GetUserInfos()
         {
             //RepositorySystemContext db = new RepositorySystemContext();
 
-            return _DbContext.UserInfo;
+            return _dbContext.UserInfo;
         }
     }
 }

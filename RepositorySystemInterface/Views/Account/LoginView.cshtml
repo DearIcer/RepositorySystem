@@ -135,7 +135,7 @@
                         <label class="layui-icon layui-icon-vercode" for="captcha"></label>
                         <input type="text" name="captcha" lay-verify="required|captcha" placeholder="图形验证码" autocomplete="off" class="layui-input verification captcha" value="xszg">
                         <div class="captcha-img">
-                            <img id="captchaPic" src="../images/captcha.jpg">
+                            <img id="captchaPic" src="../layuimini//images/captcha.jpg">
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -150,9 +150,65 @@
     </div>
     <script src="../layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
     <script src="../layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    @*<script src="../layuimini/lib/jq-module/jquery.particleground.min.js" charset="utf-8"></script>
+        <script>
+            layui.use(['form'], function () {
+                var form = layui.form,
+                    layer = layui.layer;
+
+                // 登录过期的时候，跳出ifram框架
+                if (top.location != self.location) top.location = self.location;
+
+                // 粒子线条背景
+                $(document).ready(function () {
+                    $('.layui-container').particleground({
+                        dotColor: '#7ec7fd',
+                        lineColor: '#7ec7fd'
+                    });
+                });
+
+                // 进行登录操作
+                form.on('submit(login)', function (data) {
+                    data = data.field;
+                    if (data.username == '') {
+                        layer.msg('用户名不能为空');
+                        return false;
+                    }
+                    if (data.password == '') {
+                        layer.msg('密码不能为空');
+                        return false;
+                    }
+                    if (data.captcha == '') {
+                        layer.msg('验证码不能为空');
+                        return false;
+                    }
+                    //layer.msg('登录成功', function () {
+                    //    window.location = '/Home/Index';
+                    $.ajax({
+                        url: '/Account/Login',
+                        type: 'Post',
+                        data: {
+                            account: data.username,
+                            password: data.password
+                        },
+                        successs: function (res) {
+                            console.log("接口返回结果", res);
+                            if (res.Status == 200) {
+                                layer.msg("登录成功,Hi 大冰！", function () {
+                                    window.location = '/Home/Index';
+                                });
+                            }
+                        }
+                    })
+
+                    });
+
+                    return false;
+                });
+            });</script>*@
     <script src="../layuimini/lib/jq-module/jquery.particleground.min.js" charset="utf-8"></script>
     <script>
-    layui.use(['form'], function () {
+        layui.use(['form'], function () {
             var form = layui.form,
                 layer = layui.layer;
 
@@ -182,32 +238,32 @@
                     layer.msg('验证码不能为空');
                     return false;
                 }
-                layer.msg('登录成功', function () {
-                    window.location = '/Home/Index';
-                });
-
+                //layer.msg('登录成功', function () {
+                //    window.location = '/Home/Index';
                 $.ajax({
-
                     url: '/Account/Login',
                     type: 'Post',
-                    data: (
+                    data: {
                         account: data.username,
-                        passsword: data.password
-                    ),
+                        password: data.password
+                    },
                     success: function (res) {
-                        console.log("返回值", res);
+                        console.log("接口返回结果", res);
                         if (res.Status == 200) {
-                            layer.msg('登录成功', function () {
+                            layer.msg("登录成功,Hi 大冰！", function () {
                                 window.location = '/Home/Index';
                             });
+                        } else if (res.Status == 501) {
+                            layer.msg('服务器参数错误！');
+                        } else if (res.Status == 500) {
+                            layer.msg('账号活着密码错误！');
                         }
                     }
-                })
-
-
+                });
 
                 return false;
             });
-        });</script>
+        });
+    </script>
 </body>
 </html>
