@@ -12,7 +12,8 @@ namespace RepositorySystemInterface.Filters
         {
             //base.OnActionExecuting(filterContext);
             var UserId = filterContext.HttpContext.Session["UserId"];
-            if (UserId == null)
+            var UserCookie = filterContext.HttpContext.Response.Cookies["UserId"].Value;
+            if (UserId == null && UserCookie == null)
             {
                 var result = filterContext.Result;
 

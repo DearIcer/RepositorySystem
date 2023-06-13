@@ -67,6 +67,11 @@ namespace RepositorySystemInterface.Controllers
                 HttpContext.Session["UserName"] = userName;
                 HttpContext.Session["UserId"] = userId;
 
+                // cookie
+                HttpCookie cookie = new HttpCookie("UserID",userId);
+                cookie.Expires.AddHours(24);// 设置24小时后过期
+                Response.Cookies.Add(cookie);
+
                 //return Json(result);
                 return new JsonHelper(result);
             }
