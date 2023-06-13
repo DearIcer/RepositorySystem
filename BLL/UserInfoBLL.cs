@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using CommonLib;
 using DAL;
+using IBLL;
+using IDAL;
 using Models;
 
 namespace BLL
@@ -13,13 +15,14 @@ namespace BLL
     /// 用户表的业务逻辑层
     /// </summary>
 
-    public class UserInfoBLL
+    public class UserInfoBLL : IUserInfoBLL
     {
-        private UserInfoDAL _userInfoDAL;
+        private IUserInfoDAL _userInfoDAL;
 
-        public UserInfoBLL()
+        public UserInfoBLL(IUserInfoDAL userInfoDAL)
         {
-            _userInfoDAL = new UserInfoDAL();
+            //_userInfoDAL = new UserInfoDAL();
+            _userInfoDAL = userInfoDAL;
         }
         /// <summary>
         /// 用户登录业务逻辑

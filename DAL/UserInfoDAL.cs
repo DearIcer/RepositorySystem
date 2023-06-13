@@ -4,16 +4,18 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IDAL;
 using Models;
 
 namespace DAL
 {
-    public class UserInfoDAL
+    public class UserInfoDAL : IUserInfoDAL
     {
         private RepositorySystemContext _dbContext;
-        public UserInfoDAL()
+        public UserInfoDAL(RepositorySystemContext dbContext)
         {
-            _dbContext = new RepositorySystemContext();
+            //_dbContext = new RepositorySystemContext();
+            _dbContext = dbContext;
         }
         /// <summary>
         /// 获取用户表所有的数据

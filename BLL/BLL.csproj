@@ -63,6 +63,14 @@
       <Project>{ca756257-af44-4f46-b35a-69bd23421f3f}</Project>
       <Name>DAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\IBLL\IBLL.csproj">
+      <Project>{4931F5FE-CD0B-4A7D-A812-7A41DA5A41B3}</Project>
+      <Name>IBLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IDAL\IDAL.csproj">
+      <Project>{CF95D981-813C-40F8-871A-03ACFAAAABF9}</Project>
+      <Name>IDAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{febc4e03-4b79-4c4b-b52f-60485d0a30b0}</Project>
       <Name>Models</Name>

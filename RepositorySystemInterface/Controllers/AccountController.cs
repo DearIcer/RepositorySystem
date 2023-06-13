@@ -5,16 +5,18 @@ using System.Web;
 using System.Web.Mvc;
 using BLL;
 using CommonLib;
+using IBLL;
 
 namespace RepositorySystemInterface.Controllers
 {
     public class AccountController : Controller
     {
         // GET: Account
-        private UserInfoBLL _userInfoBLL;
-        public AccountController()
+        private IUserInfoBLL _userInfoBLL;
+        public AccountController(IUserInfoBLL userInfoBLL)
         {
-            _userInfoBLL = new UserInfoBLL();
+            //_userInfoBLL = new UserInfoBLL();
+            _userInfoBLL = userInfoBLL;
         }
         public ActionResult LoginView()
         {
@@ -36,14 +38,14 @@ namespace RepositorySystemInterface.Controllers
             if(string.IsNullOrWhiteSpace(account))
             {
                 result.Msg = "账号不能为空";
-                return Json(result);
-                //return new JsonHelper(result);
+                //return Json(result);
+                return new JsonHelper(result);
             }
             if (string.IsNullOrWhiteSpace(password))
             {
                 result.Msg = "密码不能为空";
-                return Json(result);
-                //return new JsonHelper(result);
+                //return Json(result);
+                return new JsonHelper(result);
             }
 
             string msg;
@@ -65,15 +67,15 @@ namespace RepositorySystemInterface.Controllers
                 HttpContext.Session["UserName"] = userName;
                 HttpContext.Session["UserId"] = userId;
 
-                return Json(result);
-                //return new JsonHelper(result);
+                //return Json(result);
+                return new JsonHelper(result);
             }
             else
             {
                 result.Status = 500;
 
-                return Json(result);
-                //return new JsonHelper(result);
+                //return Json(result);
+                return new JsonHelper(result);
             }
         }
     }

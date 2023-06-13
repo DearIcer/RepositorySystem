@@ -249,16 +249,26 @@
                     },
                     success: function (res) {
                         console.log("接口返回结果", res);
-                        if (res.Status == 200) {
+                        if (res.status == 200) {
                             layer.msg("登录成功,Hi 大冰！", function () {
                                 window.location = '/Home/Index';
                             });
-                        } else if (res.Status == 501) {
+                        } else if (res.status == 501) {
                             layer.msg('服务器参数错误！');
-                        } else if (res.Status == 500) {
-                            layer.msg('账号活着密码错误！');
+                        } else if (res.status == 500) {
+                            layer.msg('账号或者密码错误！');
                         }
                     }
+
+                    //success: function (res) {
+                    //    console.log("接口返回结果", res);
+                    //    if (res.status == 200) {
+                    //        window.location = '/Home/Index';
+                    //    } else {
+                    //        layer.msg(res.msg);
+                    //        layer.msg(res.status);
+                    //    }
+                    //}
                 });
 
                 return false;

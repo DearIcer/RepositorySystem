@@ -26,7 +26,7 @@ namespace CommonLib
             //获取响应对象
             var response = context.HttpContext.Response;
             // 设置相对应对象的类型
-            response.ContentType = !string.IsNullOrEmpty(response.ContentType) ? response.ContentType : "application/json";
+            response.ContentType = !string.IsNullOrEmpty(ContentType) ? ContentType : "application/json";
             //编码判断
             if (ContentEncoding != null)
             {
