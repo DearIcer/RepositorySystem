@@ -60,8 +60,8 @@ namespace RepositorySystemInterface.Controllers
             if(isSuccess)
             {
                 result.IsSuccess = isSuccess;
-                result.Status = 200;
-                result.Datas = userName;
+                result.Code = 0;
+                result.Data = userName;
                 //session
 
                 HttpContext.Session["UserName"] = userName;
@@ -69,7 +69,8 @@ namespace RepositorySystemInterface.Controllers
 
                 // cookie
                 HttpCookie cookie = new HttpCookie("UserID",userId);
-                cookie.Expires.AddHours(24);// 设置24小时后过期
+                //cookie.Expires.AddHours(24);// 设置24小时后过期
+                cookie.Expires = DateTime.Now.AddDays(100);
                 Response.Cookies.Add(cookie);
 
                 //return Json(result);
@@ -77,7 +78,7 @@ namespace RepositorySystemInterface.Controllers
             }
             else
             {
-                result.Status = 500;
+                result.Code = 500;
 
                 //return Json(result);
                 return new JsonHelper(result);

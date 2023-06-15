@@ -249,13 +249,13 @@
                     },
                     success: function (res) {
                         console.log("接口返回结果", res);
-                        if (res.status == 200) {
+                        if (res.code == 0) {
                             layer.msg("登录成功,Hi 大冰！", function () {
                                 window.location = '/Home/Index';
                             });
-                        } else if (res.status == 501) {
+                        } else if (res.code == 501) {
                             layer.msg('服务器参数错误！');
-                        } else if (res.status == 500) {
+                        } else if (res.code == 500) {
                             layer.msg('账号或者密码错误！');
                         }
                     }

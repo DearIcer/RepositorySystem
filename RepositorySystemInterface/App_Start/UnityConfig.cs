@@ -2,6 +2,7 @@ using BLL;
 using DAL;
 using IBLL;
 using IDAL;
+using RepositorySystemInterface.Controllers;
 using System;
 
 using Unity;
@@ -50,6 +51,9 @@ namespace RepositorySystemInterface
             // 注册用户表的DAL和BLL
             container.RegisterType<IUserInfoDAL,UserInfoDAL>();
             container.RegisterType<IUserInfoBLL, UserInfoBLL>();
+            //container.RegisterType<IUserInfoBLL, UserInfoBLL>();
+            //
+            container.RegisterType<IDepartmentInfoDAL, DepartmentInfoDAL>();
         }
     }
 }
