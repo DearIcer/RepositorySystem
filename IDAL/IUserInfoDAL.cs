@@ -10,10 +10,6 @@ namespace IDAL
 {
     public interface IUserInfoDAL
     {
-        /// <summary>
-        /// 获取所有的用户表
-        /// </summary>
-        /// <returns></returns>
         DbSet<UserInfo> GetUserInfos();
     }
 }

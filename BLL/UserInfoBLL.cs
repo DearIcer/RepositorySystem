@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +8,6 @@ using DAL;
 using IBLL;
 using IDAL;
 using Models;
-using Models.DTO;
 
 namespace BLL
 {
@@ -20,12 +18,11 @@ namespace BLL
     public class UserInfoBLL : IUserInfoBLL
     {
         private IUserInfoDAL _userInfoDAL;
-        private IDepartmentInfoDAL _departmentInfoDAL;
-        public UserInfoBLL(IUserInfoDAL userInfoDAL, IDepartmentInfoDAL departmentInfoDAL)
+
+        public UserInfoBLL(IUserInfoDAL userInfoDAL)
         {
             //_userInfoDAL = new UserInfoDAL();
             _userInfoDAL = userInfoDAL;
-            _departmentInfoDAL = departmentInfoDAL;
         }
         /// <summary>
         /// 用户登录业务逻辑
@@ -59,59 +56,6 @@ namespace BLL
                 userID = userInfo.Id;
                 return true;
             }
-        }
-
-        /// <summary>
-        /// 查询用户列表的函数
-        /// </summary>
-        /// <param name="page">第几页</param>
-        /// <param name="limit">每页几条数据</param>
-        /// <param name="account">用户账号</param>
-        /// <param name="userName">用户姓名</param>
-        /// <param name="count">数据总量</param>
-        /// <returns></returns>
-        public List<GetUserInfosDTO> GetUserInfos(int page, int limit, string account, string userName, out int count)
-        {
-            // 用户表
-            var userInfos = _userInfoDAL.GetUserInfos().Where(u => u.IsDelete == false);
-
-            //查找账号相同
-            if(!string.IsNullOrEmpty(account))
-            {
-                userInfos = userInfos.Where(u => u.Account == account);
-            }
-            //查找姓名相同的
-            if (!string.IsNullOrEmpty(userName))
-            {
-                userInfos = userInfos.Where(u => u.UserName.Contains(userName));
-            }
-
-            count = userInfos.Count();
-
-            //分页
-            var listPage = userInfos.OrderByDescending(u => u.CreatedTime).Skip(limit * (page - 1)).Take(limit).ToList();
-
-            List<GetUserInfosDTO> tempList = new List<GetUserInfosDTO>();
-            foreach(var item in listPage)
-            {
-                var dt = _departmentInfoDAL.GetDepartmentInfos().SingleOrDefault(d => d.Id == item.DepartmentId);
-                GetUserInfosDTO data = new GetUserInfosDTO
-                {
-                    UserId = item.Id,
-                    Account = item.Account,
-                    UserName = item.UserName,
-                    PhoneNum = item.PhoneNum,
-                    Email = item.Email,
-                    DepartmentName = dt == null ? "空" : dt.DepartmentName,
-                    Sex = item.Sex == 0 ? "女" : "男",
-                    CreateTime = item.CreatedTime
-                };
-                tempList.Add(data);
-            }
-            //部门表
-            var departmentList = _departmentInfoDAL.GetDepartmentInfos().ToList();
-
-            return tempList;
         }
     }
 }
