@@ -29,7 +29,7 @@ namespace RepositorySystemInterface.Controllers
         /// <param name="account">账号</param>
         /// <param name="password">密码</param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         public ActionResult Login(string account,string password)
         {
             ReturnResult result = new ReturnResult();
@@ -60,8 +60,8 @@ namespace RepositorySystemInterface.Controllers
             if(isSuccess)
             {
                 result.IsSuccess = isSuccess;
-                result.Status = 200;
-                result.Datas = userName;
+                result.Code = 200;
+                result.Data = userName;
                 //session
 
                 HttpContext.Session["UserName"] = userName;
@@ -69,7 +69,8 @@ namespace RepositorySystemInterface.Controllers
 
                 // cookie
                 HttpCookie cookie = new HttpCookie("UserID",userId);
-                cookie.Expires.AddHours(24);// 设置24小时后过期
+                //cookie.Expires.AddHours(24);// 设置24小时后过期
+                cookie.Expires = DateTime.Now.AddDays(100);
                 Response.Cookies.Add(cookie);
 
                 //return Json(result);
@@ -77,7 +78,7 @@ namespace RepositorySystemInterface.Controllers
             }
             else
             {
-                result.Status = 500;
+                result.Code = 500;
 
                 //return Json(result);
                 return new JsonHelper(result);

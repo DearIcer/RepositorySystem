@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace IDAL
 {
-    public interface IUserInfoDAL
+    public interface IDepartmentInfoDAL
     {
         /// <summary>
-        /// 获取所有的用户表
+        /// 获取所有的部门表
         /// </summary>
         /// <returns></returns>
-        DbSet<UserInfo> GetUserInfos();
+        DbSet<DepartmentInfo> GetDepartmentInfos();
     }
 }

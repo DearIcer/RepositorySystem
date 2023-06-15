@@ -50,6 +50,10 @@ namespace RepositorySystemInterface
             // 注册用户表的DAL和BLL
             container.RegisterType<IUserInfoDAL,UserInfoDAL>();
             container.RegisterType<IUserInfoBLL, UserInfoBLL>();
+
+            // 注册部门表的DAL和BLL
+            container.RegisterType<IDepartmentInfoDAL, DepartmentInfoDAL>();
+
         }
     }
 }
