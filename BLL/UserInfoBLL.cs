@@ -20,11 +20,13 @@ namespace BLL
     {
         private IUserInfoDAL _userInfoDAL;
         private IDepartmentInfoDAL _departmentInfoDAL;
+        private RepositorySystemContext _dbContext;
 
-        public UserInfoBLL(IUserInfoDAL userInfoDAL, IDepartmentInfoDAL departmentInfoDAL)
+        public UserInfoBLL(IUserInfoDAL userInfoDAL, IDepartmentInfoDAL departmentInfoDAL, RepositorySystemContext dbContext)
         {
             _userInfoDAL = userInfoDAL;
             _departmentInfoDAL = departmentInfoDAL;
+            _dbContext = dbContext;
         }
 
         /// <summary>
@@ -38,46 +40,89 @@ namespace BLL
         /// <returns></returns>
         public List<GetUserInfosDTO> GetUserInfos(int page, int limit, string account, string userName, out int count)
         {
-            // 用户表
-            var userInfos = _userInfoDAL.GetUserInfos().Where(u => u.IsDelete == false);
 
-            //查找账号相同
-            if (!string.IsNullOrEmpty(account))
+            #region OLd
+            //// 用户表
+            //var userInfos = _userInfoDAL.GetUserInfos().Where(u => u.IsDelete == false);
+
+            ////查找账号相同
+            //if (!string.IsNullOrEmpty(account))
+            //{
+            //    userInfos = userInfos.Where(u => u.Account == account);
+            //}
+            ////查找姓名相同的
+            //if (!string.IsNullOrEmpty(userName))
+            //{
+            //    userInfos = userInfos.Where(u => u.UserName.Contains(userName));
+            //}
+
+            //count = userInfos.Count();
+
+            ////分页
+            //var listPage = userInfos.OrderByDescending(u => u.CreatedTime).Skip(limit * (page - 1)).Take(limit).ToList();
+
+            //List<GetUserInfosDTO> tempList = new List<GetUserInfosDTO>();
+
+            ////部门表
+            //var departmentList = _departmentInfoDAL.GetDepartmentInfos().ToList();
+
+            //foreach (var item in listPage)
+            //{
+            //    var dt = departmentList.SingleOrDefault(d => d.Id == item.DepartmentId);
+            //    GetUserInfosDTO data = new GetUserInfosDTO
+            //    {
+            //        UserId = item.Id,
+            //        Account = item.Account,
+            //        UserName = item.UserName,
+            //        PhoneNum = item.PhoneNum,
+            //        Email = item.Email,
+            //        DepartmentName = dt == null ? "空" : dt.DepartmentName,
+            //        Sex = item.Sex == 0 ? "女" : "男",
+            //        CreateTime = item.CreatedTime
+            //    };
+            //    tempList.Add(data);
+            //}
+            
+
+            //return tempList;
+            #endregion
+
+            #region New
+
+            var data = from u in _dbContext.UserInfo.Where(u => u.IsDelete == false)
+                       join d in _dbContext.DepartmentInfo.Where(d => d.IsDelete == false)
+                       on u.DepartmentId equals d.Id
+                       into tempUD
+                       from dd in tempUD.DefaultIfEmpty()
+                       select new GetUserInfosDTO
+                       {
+                           UserId = u.Id,
+                           Account = u.Account,
+                           UserName = u.UserName,
+                           PhoneNum = u.PhoneNum,
+                           Email = u.Email,
+                           DepartmentName = dd.DepartmentName == null ? "空" : dd.DepartmentName,
+                           Sex = u.Sex == 0 ? "女" : "男",
+                           CreateTime = u.CreatedTime
+                       };
+
+            if (!string.IsNullOrWhiteSpace(userName))
             {
-                userInfos = userInfos.Where(u => u.Account == account);
+                data = data.Where(u => u.UserName.Contains(userName));
             }
-            //查找姓名相同的
-            if (!string.IsNullOrEmpty(userName))
+
+            if (!string.IsNullOrWhiteSpace(account))
             {
-                userInfos = userInfos.Where(u => u.UserName.Contains(userName));
+                data = data.Where(u => u.Account == account);
             }
 
-            count = userInfos.Count();
+            count = data.Count();
 
-            //分页
-            var listPage = userInfos.OrderByDescending(u => u.CreatedTime).Skip(limit * (page - 1)).Take(limit).ToList();
+            var ListPage = data.OrderBy(u => u.CreateTime).Skip(limit * (page - 1)).Take(limit).ToList();
 
-            List<GetUserInfosDTO> tempList = new List<GetUserInfosDTO>();
-            foreach (var item in listPage)
-            {
-                var dt = _departmentInfoDAL.GetDepartmentInfos().SingleOrDefault(d => d.Id == item.DepartmentId);
-                GetUserInfosDTO data = new GetUserInfosDTO
-                {
-                    UserId = item.Id,
-                    Account = item.Account,
-                    UserName = item.UserName,
-                    PhoneNum = item.PhoneNum,
-                    Email = item.Email,
-                    DepartmentName = dt == null ? "空" : dt.DepartmentName,
-                    Sex = item.Sex == 0 ? "女" : "男",
-                    CreateTime = item.CreatedTime
-                };
-                tempList.Add(data);
-            }
-            //部门表
-            var departmentList = _departmentInfoDAL.GetDepartmentInfos().ToList();
+            return ListPage;
 
-            return tempList;
+            #endregion
         }
 
         /// <summary>
@@ -112,6 +157,53 @@ namespace BLL
                 userID = userInfo.Id;
                 return true;
             }
+        }
+        /// <summary>
+        /// 添加用户的操作
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns>反正值:真、假</returns>
+        public bool CreateUserInfo(UserInfo entity , out string msg)
+        {
+            if (string.IsNullOrWhiteSpace(entity.Account))
+            {
+                msg = "用户名不能为空";
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(entity.PassWord))
+            {
+                msg = "密码不能为空";
+                return false;
+            }
+            if(string.IsNullOrWhiteSpace(entity.UserName))
+            {
+                msg = "用户名不能为空";
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(entity.PhoneNum))
+            {
+                msg = "手机号不能为空";
+                return false;
+            }
+
+            // 判断账号是否重复
+            UserInfo user = _userInfoDAL.GetEntities().FirstOrDefault(u => u.Account == entity.Account);
+            if (user != null)
+            {
+                msg = "用户账号已存在";
+                return false;   
+            }
+
+            // 赋值id
+            entity.Id = Guid.NewGuid().ToString();
+            // Time
+            entity.CreatedTime = DateTime.Now;
+            // 更新到数据库
+            bool isSuccess = _userInfoDAL.CreateEntity(entity);
+
+            msg = isSuccess ? $"添加{entity.UserName}成功!" : "添加用户失败";
+            
+            return isSuccess;
         }
     }
 }

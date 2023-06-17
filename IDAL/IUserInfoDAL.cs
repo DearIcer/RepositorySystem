@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace IDAL
 {
-    public interface IUserInfoDAL
+    public interface IUserInfoDAL : IBaseDeleteDAL<UserInfo>
     {
         // <summary>
         /// 获取所有的用户表

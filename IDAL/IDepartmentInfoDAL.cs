@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace IDAL
 {
-    public interface IDepartmentInfoDAL
+    public interface IDepartmentInfoDAL : IBaseDeleteDAL<DepartmentInfo>
     {
         /// <summary>
         /// 获取所有的部门表

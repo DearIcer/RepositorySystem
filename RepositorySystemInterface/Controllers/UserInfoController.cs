@@ -1,11 +1,13 @@
 ﻿using CommonLib;
 using IBLL;
+using Models;
 using Models.DTO;
 using RepositorySystemInterface.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.ModelBinding;
 using System.Web.Mvc;
 
 namespace RepositorySystemInterface.Controllers
@@ -25,8 +27,14 @@ namespace RepositorySystemInterface.Controllers
         {
             return View();
         }
+
+        public ActionResult CreateUserInfoView()
+        {
+            return View();
+
+        }
         /// <summary>
-        /// 
+        /// 获取用户的接口
         /// </summary>
         /// <param name="page"></param>
         /// <param name="limit"></param>
@@ -48,6 +56,27 @@ namespace RepositorySystemInterface.Controllers
                 Count = count
             };
 
+            return new JsonHelper(result);
+        }
+        /// <summary>
+        /// 添加用户的接口
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult CreateUserInfo([Form] UserInfo user)
+        {
+            string msg;
+
+            bool isSuccess = _userInfoBLL.CreateUserInfo(user, out msg);
+
+            ReturnResult result = new ReturnResult();
+            result.Msg = msg;
+            result.IsSuccess = isSuccess;
+            if (isSuccess)
+            {
+                result.Code = 200;
+            }
             return new JsonHelper(result);
         }
     }

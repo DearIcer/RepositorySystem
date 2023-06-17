@@ -104,10 +104,10 @@
 
             // 监听搜索操作
             form.on('submit(data-search-btn)', function (data) {
-                var result = JSON.stringify(data.field);
-                layer.alert(result, {
-                    title: '最终的搜索信息'
-                });
+                //var result = JSON.stringify(data.field);
+                //layer.alert(result, {
+                //    title: '最终的搜索信息'
+                //});
 
                 //执行搜索重载
                 table.reload('currentTableId', {
@@ -115,10 +115,12 @@
                         curr: 1
                     }
                     , where: {
-                        searchParams: result
+                         //searchParams: result
+                        account : data.field.account,
+                         userName : data.field.userName  
                     }
                 }, 'data');
-
+                
                 return false;
             });
 
@@ -133,18 +135,23 @@
                         shade: 0.2,
                         maxmin: true,
                         shadeClose: true,
-                        area: ['100%', '100%'],
-                        content: '../layuimini/page/table/add.html',
+                        area: ['80%', '80%'],
+                        /*content: '../layuimini/page/table/add.html',*/
+                        content: '/UserInfo/CreateUserInfoView'
                     });
                     $(window).on("resize", function () {
+
                         layer.full(index);
                     });
+ 
+
                 } else if (obj.event === 'delete') {  // 监听删除操作
                     var checkStatus = table.checkStatus('currentTableId')
                         , data = checkStatus.data;
                     layer.alert(JSON.stringify(data));
                 } else if (obj.event === 'excel') {
-                    layer.alert("点击了按钮");
+                    
+                    //table.reload('currentTableId');
                 }
             });
 

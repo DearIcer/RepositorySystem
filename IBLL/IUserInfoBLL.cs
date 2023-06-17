@@ -32,5 +32,12 @@ namespace IBLL
         /// <param name="count">数据总量</param>
         /// <returns></returns>
         List<GetUserInfosDTO> GetUserInfos(int page, int limit, string account, string userName, out int count);
+        /// <summary>
+        /// 添加用户
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        bool CreateUserInfo(UserInfo entity, out string msg);
     }
 }

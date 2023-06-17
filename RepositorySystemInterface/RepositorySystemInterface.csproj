@@ -318,6 +318,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\LoginView.cshtml" />
     <Content Include="Views\UserInfo\ListView.cshtml" />
+    <Content Include="Views\UserInfo\CreateUserInfoView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

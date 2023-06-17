@@ -51,6 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IBaseDAL.cs" />
+    <Compile Include="IBaseDeleteDAL.cs" />
     <Compile Include="IDepartmentInfoDAL.cs" />
     <Compile Include="IUserInfoDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

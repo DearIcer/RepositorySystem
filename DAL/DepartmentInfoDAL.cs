@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class DepartmentInfoDAL : IDepartmentInfoDAL
+    public class DepartmentInfoDAL : BaseDeleteDAL<DepartmentInfo>,IDepartmentInfoDAL
     {
+        //数据上下文
         private RepositorySystemContext _dbContext;
-        public DepartmentInfoDAL(RepositorySystemContext dbContext)
+        public DepartmentInfoDAL(RepositorySystemContext dbContext) : base(dbContext)
         {            
-            _dbContext = dbContext;
+            this._dbContext = dbContext;
         }
         /// <summary>
         /// 获取用户表所有的数据
