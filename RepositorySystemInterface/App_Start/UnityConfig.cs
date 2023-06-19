@@ -54,6 +54,7 @@ namespace RepositorySystemInterface
             //container.RegisterType<IUserInfoBLL, UserInfoBLL>();
             //
             container.RegisterType<IDepartmentInfoDAL, DepartmentInfoDAL>();
+            container.RegisterType<IDepartmentInfoBLL, DepartmentInfoBLL>();
         }
     }
 }

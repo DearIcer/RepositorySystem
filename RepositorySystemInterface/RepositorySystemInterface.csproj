@@ -148,6 +148,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\DepartmentInfoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserInfoController.cs" />
     <Compile Include="Filters\CustomAttribute.cs" />
@@ -319,6 +320,7 @@
     <Content Include="Views\Account\LoginView.cshtml" />
     <Content Include="Views\UserInfo\ListView.cshtml" />
     <Content Include="Views\UserInfo\CreateUserInfoView.cshtml" />
+    <Content Include="Views\DepartmentInfo\ListView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
