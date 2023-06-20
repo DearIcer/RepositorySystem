@@ -201,6 +201,8 @@ namespace BLL
 
             // 赋值id
             entity.Id = Guid.NewGuid().ToString();
+            // 赋值密码，需要进行MD5加密
+            entity.PassWord = MD5Help.GenerateMD5(entity.PassWord);
             // Time
             entity.CreatedTime = DateTime.Now;
             // 更新到数据库
@@ -253,6 +255,58 @@ namespace BLL
                 _userInfoDAL.UpdateEntity(user);
             }
             return true;
+        }
+        /// <summary>
+        /// 更新用户
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+
+        public bool UpdateUserInfo(UserInfo user, out string msg)
+        {
+            //throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(user.Account))
+            {
+                msg = "用户名不能为空";
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(user.PassWord))
+            {
+                msg = "密码不能为空";
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(user.UserName))
+            {
+                msg = "用户名不能为空";
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(user.PhoneNum))
+            {
+                msg = "手机号不能为空";
+                return false;
+            }
+
+            UserInfo entity = _userInfoDAL.GetEntities().FirstOrDefault(u => u.Account == user.Account);
+            if (entity == null)
+            {
+                msg = "用户账号不存在";
+                return false;
+            }
+
+            entity.Account = user.Account;
+            entity.UserName = user.UserName;
+            entity.PhoneNum = user.PhoneNum;
+            entity.Email = user.Email;
+            entity.DepartmentId = user.DepartmentId;
+            entity.Sex = user.Sex;
+            entity.PassWord = MD5Help.GenerateMD5(user.PassWord);
+
+            bool isOk = _userInfoDAL.UpdateEntity(entity);
+
+            msg = isOk ? $"修改{entity.UserName}成功!" : "添加修改失败";
+
+            return isOk;
         }
     }
 }

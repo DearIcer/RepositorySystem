@@ -134,5 +134,26 @@ namespace RepositorySystemInterface.Controllers
             }
             return new JsonHelper(result);
         }
+        /// <summary>
+        /// 更新用户的接口
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult UpdateUserInfo([Form] UserInfo user)
+        {
+            string msg;
+
+            bool isSuccess = _userInfoBLL.UpdateUserInfo(user, out msg);
+
+            ReturnResult result = new ReturnResult();
+            result.Msg = msg;
+            result.IsSuccess = isSuccess;
+            if (isSuccess)
+            {
+                result.Code = 200;
+            }
+            return new JsonHelper(result);
+        }
     }
 }

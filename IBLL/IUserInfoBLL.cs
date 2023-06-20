@@ -51,5 +51,11 @@ namespace IBLL
         /// <param name="ids"></param>
         /// <returns></returns>
         bool DeleteUserInfo(List<string> ids);
+        /// <summary>
+        /// 更新用户
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        bool UpdateUserInfo(UserInfo user , out string msg);
     }
 }
