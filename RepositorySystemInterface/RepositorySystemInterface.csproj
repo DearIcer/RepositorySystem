@@ -321,6 +321,8 @@
     <Content Include="Views\UserInfo\ListView.cshtml" />
     <Content Include="Views\UserInfo\CreateUserInfoView.cshtml" />
     <Content Include="Views\DepartmentInfo\ListView.cshtml" />
+    <Content Include="Views\DepartmentInfo\CreateDepartmentInfoView.cshtml" />
+    <Content Include="Views\UserInfo\UpdateUserInfoView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

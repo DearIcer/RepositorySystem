@@ -21,7 +21,12 @@ namespace BLL
         private IUserInfoDAL _userInfoDAL;
         private IDepartmentInfoDAL _departmentInfoDAL;
         private RepositorySystemContext _dbContext;
-
+        /// <summary>
+        /// 构造所需的基本数据
+        /// </summary>
+        /// <param name="userInfoDAL"></param>
+        /// <param name="departmentInfoDAL"></param>
+        /// <param name="dbContext"></param>
         public UserInfoBLL(IUserInfoDAL userInfoDAL, IDepartmentInfoDAL departmentInfoDAL, RepositorySystemContext dbContext)
         {
             _userInfoDAL = userInfoDAL;
@@ -204,6 +209,50 @@ namespace BLL
             msg = isSuccess ? $"添加{entity.UserName}成功!" : "添加用户失败";
             
             return isSuccess;
+        }
+        /// <summary>
+        /// 用户软删除
+        /// </summary>
+        /// <param name="id">要删除的用户ID</param>
+        /// <returns></returns>
+        public bool DeleteUserInfo(string id)
+        {
+            /*throw new NotImplementedException();*/
+            
+            // 根据Id查找用户是否存在
+            UserInfo userInfo = _userInfoDAL.GetEntityByID(id);
+
+            if (userInfo == null)
+            {
+                return false;
+            }
+            //修改用户状态
+            userInfo.IsDelete = true;
+            userInfo.DeleteTime = DateTime.Now;
+            //返回结果
+            return _userInfoDAL.UpdateEntity(userInfo);
+        }
+        /// <summary>
+        /// 批量软删除用户
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public bool DeleteUserInfo(List<string> ids)
+        {
+            foreach (var item in ids)
+            {
+                // 根据用户ID查询用户
+                UserInfo user = _userInfoDAL.GetEntityByID(item);
+                if (user == null)
+                {
+                    continue;
+                }
+                user.IsDelete = true;
+                user.DeleteTime = DateTime.Now;
+
+                _userInfoDAL.UpdateEntity(user);
+            }
+            return true;
         }
     }
 }

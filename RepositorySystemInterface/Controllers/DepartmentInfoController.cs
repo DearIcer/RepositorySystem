@@ -1,10 +1,12 @@
 ﻿using CommonLib;
 using IBLL;
+using Models;
 using Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.ModelBinding;
 using System.Web.Mvc;
 
 namespace RepositorySystemInterface.Controllers
@@ -25,6 +27,14 @@ namespace RepositorySystemInterface.Controllers
         {
             return View();
         }
+        /// <summary>
+        /// 获取所有部门表的接口
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="limit"></param>
+        /// <param name="departmentInfoId"></param>
+        /// <param name="departmentName"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult GetDepartmentInfos(int page, int limit, string departmentInfoId, string departmentName)
         {
@@ -45,5 +55,34 @@ namespace RepositorySystemInterface.Controllers
             return new JsonHelper(result);
         }
 
+        public ActionResult CreateDepartmentInfoView()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 添加部门的接口
+        /// </summary>
+        /// <param name="infos"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult CreateDepartmentInfo([Form] DepartmentInfo infos)
+        {
+            string msg;
+
+            bool isSuccess = _departmentInfoBLL.CreateDepartmentInfo(infos,out msg);
+
+            ReturnResult result = new ReturnResult();
+
+            result.Msg = msg;
+
+            result.IsSuccess = isSuccess;
+
+            if (isSuccess)
+            {
+                result.Code = 200;
+            }
+            return new JsonHelper(result);
+        }
     }
 }

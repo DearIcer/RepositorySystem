@@ -18,12 +18,12 @@
                 <div style="margin: 10px 10px 10px 10px">
                     <form class="layui-form layui-form-pane" action="">
                         <div class="layui-form-item">
-                            <div class="layui-inline">
+                            @*<div class="layui-inline">
                                 <label class="layui-form-label">部门ID</label>
                                 <div class="layui-input-inline">
                                     <input type="text" name="account" autocomplete="off" class="layui-input">
                                 </div>
-                            </div>
+                            </div>*@
                             <div class="layui-inline">
                                 <label class="layui-form-label">部门名称</label>
                                 <div class="layui-input-inline">
@@ -119,14 +119,14 @@
             table.on('toolbar(currentTableFilter)', function (obj) {
                 if (obj.event === 'add') {  // 监听添加操作
                     var index = layer.open({
-                        title: '添加用户',
+                        title: '添加部门',
                         type: 2,
                         shade: 0.2,
                         maxmin: true,
                         shadeClose: true,
                         area: ['80%', '80%'],
                         /*content: '../layuimini/page/table/add.html',*/
-                        content: '/UserInfo/CreateUserInfoView'
+                        content: '/DepartmentInfo/CreateDepartmentInfoView'
                     });
                     $(window).on("resize", function () {
 

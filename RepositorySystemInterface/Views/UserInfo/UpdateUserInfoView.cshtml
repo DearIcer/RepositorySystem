@@ -72,60 +72,29 @@
     </div>
     <script src="../layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
     <script>
+        layui.use(['form'], function () {
+            var form = layui.form,
+                layer = layui.layer,
+                $ = layui.$;
 
-        // 刷新父页面的表格函数
-        function reloadParentTable() {
-            var index = parent.layer.getFrameIndex(window.name);
-            parent.layer.close(index);
-            parent.layui.table.reload('currentTableId');
-        }
+            //监听提交
+            form.on('submit(saveBtn)', function (data) {
+                var index = layer.alert(JSON.stringify(data.field), {
+                    title: '最终的提交信息'
+                }, function () {
 
+                    // 关闭弹出层
+                    layer.close(index);
 
-    layui.use(['form'], function () {
-        var form = layui.form,
-            layer = layui.layer,
-            $ = layui.$;
+                    var iframeIndex = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(iframeIndex);
 
-        //监听提交
-        form.on('submit(saveBtn)', function (data) {
+                });
 
-            $.ajax({
-                url: "/UserInfo/CreateUserInfo",
-                type: "Post",
-                data: {
-                    account: data.field.account,
-                    userName: data.field.userName,
-                    passWord: data.field.passWord,
-                    phoneNum: data.field.phoneNum,
-                    email: data.field.email,
-                    departmentId: data.field.departmentId,
-                    sex: data.field.sex
-                },
-                success: function (res) {
-                    if (res.code == 200) {
-                        var index = layer.alert(res.msg, {
-                            title: '最终的提交信息'
-                        }, function () {
+                return false;
+            });
 
-                            // 关闭弹出层
-                            layer.close(index);
-
-                            reloadParentTable();
-
-                            var iframeIndex = parent.layer.getFrameIndex(window.name);
-                            parent.layer.close(iframeIndex);
-                        });
-                    } else {
-                        layer.alert(res.msg);
-                    }
-
-                }
-
-            });         
-            return false;
         });
-
-    });
     </script>
 </body>
 </html>

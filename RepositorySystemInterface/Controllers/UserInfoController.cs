@@ -27,7 +27,10 @@ namespace RepositorySystemInterface.Controllers
         {
             return View();
         }
-
+        public ActionResult UpdateUserInfoView()
+        {
+            return View();
+        }
         public ActionResult CreateUserInfoView()
         {
             return View();
@@ -76,6 +79,58 @@ namespace RepositorySystemInterface.Controllers
             if (isSuccess)
             {
                 result.Code = 200;
+            }
+            return new JsonHelper(result);
+        }
+        /// <summary>
+        /// 用户软删除的接口
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult DeleteUserInfo(string id)
+        {
+            ReturnResult result = new ReturnResult();
+
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                result.Msg = "id不能为空";
+                return new JsonHelper(result);
+            }
+
+            bool isOK = _userInfoBLL.DeleteUserInfo(id);
+
+            if (isOK)
+            {
+                result.Msg = "删除用户成功";
+                result.Code = 200;
+            }
+
+            return new JsonHelper(result);
+        }
+        /// <summary>
+        /// 用户软删除接口，批量
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult DeleteUserInfos(List<string> ids)
+        {
+            ReturnResult result = new ReturnResult();
+            if (ids == null||ids.Count == 0)
+            {
+                result.Msg = "选中用户为空";
+                return new JsonHelper(result);
+            }
+            bool isOk =_userInfoBLL.DeleteUserInfo(ids);
+            if (isOk)
+            {
+                result.Msg = "删除成功";
+                result.Code = 200;
+            }
+            else
+            {
+                result.Msg = "删除失败";
             }
             return new JsonHelper(result);
         }

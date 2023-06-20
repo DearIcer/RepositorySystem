@@ -18,51 +18,44 @@
     <div class="layui-form layuimini-form">
 
         <div class="layui-form-item">
-            <label class="layui-form-label required">用户账号</label>
+            <label class="layui-form-label required">部门ID</label>
             <div class="layui-input-block">
-                <input type="text" name="account" lay-verify="required" lay-reqtext="用户账号不能为空" placeholder="请输入用户账号" value="" class="layui-input">
-                <tip>填写自己管理账号的名称。</tip>
+                <input type="text" name="departmentInfoId" lay-verify="required" lay-reqtext="部门ID不能为空" placeholder="请输入部门ID" value="" class="layui-input">
+                <tip>请输入部门ID。</tip>
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label required">用户密码</label>
+            <label class="layui-form-label required">部门描述</label>
             <div class="layui-input-block">
-                <input type="password" name="passWord" lay-verify="required" lay-reqtext="用户密码不能为空" placeholder="请输入用户密码" value="" class="layui-input">
-                <tip>填写自己的用户密码。</tip>
+                <input type="text" name="description" lay-verify="required" lay-reqtext="部门描述不能为空" placeholder="请输入部门描述" value="" class="layui-input">
+                <tip>填写部门描述信息。</tip>
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label required">用户名</label>
+            <label class="layui-form-label required">部门名字</label>
             <div class="layui-input-block">
-                <input type="text" name="userName" lay-verify="required" lay-reqtext="用户名不能为空" placeholder="请输入用户名" value="" class="layui-input">
-                <tip>填写自己的用户名。</tip>
+                <input type="text" name="departmentName" lay-verify="required" lay-reqtext="部门名字不能为空" placeholder="请输入部门名字" value="" class="layui-input">
+                <tip>填写部门名字。</tip>
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label required">性别</label>
+            <label class="layui-form-label required">主管ID</label>
             <div class="layui-input-block">
-                <input type="radio" name="sex" value="1" title="男" checked="">
-                <input type="radio" name="sex" value="0" title="女">
+                <input type="text" name="leaderId" lay-verify="required" lay-reqtext="主管ID不能为空" placeholder="请输入主管ID" value="" class="layui-input">
+                <tip>填写主管ID。</tip>
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label required">手机</label>
+            <label class="layui-form-label required">父部门ID</label>
             <div class="layui-input-block">
-                <input type="number" name="phoneNum" lay-verify="required" lay-reqtext="手机不能为空" placeholder="请输入手机" value="" class="layui-input">
+                <input type="text" name="parentId" lay-verify="required" lay-reqtext="父部门ID不能为空" placeholder="请输入父部门ID" value="" class="layui-input">
+                <tip>填写父部门ID。</tip>
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">邮箱</label>
-            <div class="layui-input-block">
-                <input type="email" name="email" placeholder="请输入邮箱" value="" class="layui-input">
-            </div>
-        </div>
-
-
 
         <div class="layui-form-item">
             <div class="layui-input-block">
@@ -90,16 +83,15 @@
         form.on('submit(saveBtn)', function (data) {
 
             $.ajax({
-                url: "/UserInfo/CreateUserInfo",
+                url: "/DepartmentInfo/CreateDepartmentInfo",
                 type: "Post",
                 data: {
-                    account: data.field.account,
-                    userName: data.field.userName,
-                    passWord: data.field.passWord,
-                    phoneNum: data.field.phoneNum,
-                    email: data.field.email,
-                    departmentId: data.field.departmentId,
-                    sex: data.field.sex
+                    id: data.field.departmentInfoId,
+                    description: data.field.description,
+                    departmentName: data.field.departmentName,
+                    leaderId: data.field.leaderId,
+                    parentId: data.field.parentId,
+
                 },
                 success: function (res) {
                     if (res.code == 200) {
@@ -121,7 +113,7 @@
 
                 }
 
-            });         
+            });
             return false;
         });
 

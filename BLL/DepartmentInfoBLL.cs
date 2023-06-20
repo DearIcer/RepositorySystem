@@ -1,4 +1,5 @@
-﻿using IBLL;
+﻿using DAL;
+using IBLL;
 using IDAL;
 using Models;
 using Models.DTO;
@@ -25,6 +26,76 @@ namespace BLL
             _departmentInfoDAL = departmentInfoDAL;
             _dbContext = dbContext;
         }
+        /// <summary>
+        /// 添加部门信息
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+
+        public bool CreateDepartmentInfo(DepartmentInfo entity, out string msg)
+        {
+            if (string.IsNullOrWhiteSpace(entity.Id))
+            {
+                msg = "部门ID不能为空!";
+            }
+
+            if (string.IsNullOrWhiteSpace(entity.Description))
+            {
+                msg = "部门描述不能为空!";
+            }
+
+            if (string.IsNullOrWhiteSpace(entity.DepartmentName))
+            {
+                msg = "部门名字不能为空!";
+            }
+
+            if (string.IsNullOrWhiteSpace(entity.LeaderId))
+            {
+                msg = "主管ID不能为空!";
+            }
+
+            if (string.IsNullOrWhiteSpace(entity.ParentId))
+            {
+                msg = "父部门ID不能为空";
+            }
+
+            //entity.Id = Guid.NewGuid().ToString();
+            // 判断ID 是否重复
+            DepartmentInfo info = _departmentInfoDAL.GetEntities().FirstOrDefault(u => u.Id == entity.Id);
+            if (info != null)
+            {
+                msg = "部门ID已存在";
+                return false;
+            }
+            // 判断名称 是否重复
+            DepartmentInfo info2 = _departmentInfoDAL.GetEntities().FirstOrDefault(u => u.DepartmentName == entity.DepartmentName);
+            if (info2 != null)
+            {
+                msg = "部门名称已存在";
+                return false;
+            }
+
+            entity.CreatedTime = DateTime.Now;
+
+            bool isSuccess = _departmentInfoDAL.CreateEntity(entity);
+
+            msg = isSuccess ? $"添加{entity.DepartmentName}成功!" : "添加用户失败";
+
+            return isSuccess;
+
+        }
+
+        /// <summary>
+        /// 获取所有部门表
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="limit"></param>
+        /// <param name="departmentInfoId"></param>
+        /// <param name="departmentName"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         public List<GetDepartmentInfoDTO> GetDepartmentInfos(int page, int limit, string departmentInfoId, string departmentName, out int count)
         {
             #region Old

@@ -39,5 +39,17 @@ namespace IBLL
         /// <param name="msg"></param>
         /// <returns></returns>
         bool CreateUserInfo(UserInfo entity, out string msg);
+        /// <summary>
+        /// 用户软删除
+        /// </summary>
+        /// <param name="id">要删除的用户ID</param>
+        /// <returns></returns>
+        bool DeleteUserInfo(string id);
+        /// <summary>
+        /// 批量软删除用户
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        bool DeleteUserInfo(List<string> ids);
     }
 }
