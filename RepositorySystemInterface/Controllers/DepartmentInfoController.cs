@@ -55,6 +55,10 @@ namespace RepositorySystemInterface.Controllers
 
             return new JsonHelper(result);
         }
+        public ActionResult UpdateDepartmentInfoView()
+        {
+            return View();
+        }
 
         public ActionResult CreateDepartmentInfoView()
         {
@@ -133,6 +137,28 @@ namespace RepositorySystemInterface.Controllers
             else
             {
                 result.Msg = "删除失败";
+            }
+            return new JsonHelper(result);
+        }
+
+        /// <summary>
+        /// 更新部门的接口
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult UpdatDepartmentInfo([Form] DepartmentInfo department)
+        {
+            string msg;
+
+            bool isSuccess = _departmentInfoBLL.UpdateDepartmentInfo(department, out msg);
+
+            ReturnResult result = new ReturnResult();
+            result.Msg = msg;
+            result.IsSuccess = isSuccess;
+            if (isSuccess)
+            {
+                result.Code = 200;
             }
             return new JsonHelper(result);
         }

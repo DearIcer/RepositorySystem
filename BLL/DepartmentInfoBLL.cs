@@ -186,5 +186,51 @@ namespace BLL
             var ListPage = tempList.OrderBy(u => u.CreateTime).Skip(limit * (page - 1)).Take(limit).ToList();
             return ListPage;
         }
+
+        public bool UpdateDepartmentInfo(DepartmentInfo department, out string msg)
+        {
+            //throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(department.Id))
+            {
+                msg = "部门ID不能为空!";
+            }
+
+            if (string.IsNullOrWhiteSpace(department.Description))
+            {
+                msg = "部门描述不能为空!";
+            }
+
+            if (string.IsNullOrWhiteSpace(department.DepartmentName))
+            {
+                msg = "部门名字不能为空!";
+            }
+
+            if (string.IsNullOrWhiteSpace(department.LeaderId))
+            {
+                msg = "主管ID不能为空!";
+            }
+
+            if (string.IsNullOrWhiteSpace(department.ParentId))
+            {
+                msg = "父部门ID不能为空";
+            }
+            DepartmentInfo entity = _departmentInfoDAL.GetEntities().FirstOrDefault(u => u.Id == department.Id);
+            if (entity == null)
+            {
+                msg = "部门账号不存在";
+                return false;
+            }
+            entity.Id = department.Id;
+            entity.DepartmentName = department.DepartmentName;
+            entity.Description = department.Description;
+            entity.LeaderId = department.LeaderId;
+            entity.ParentId = department.ParentId;
+
+            bool isOk = _departmentInfoDAL.UpdateEntity(entity);
+
+            msg = isOk ? $"修改{entity.DepartmentName}成功!" : "添加修改失败";
+
+            return isOk;
+        }
     }
 }

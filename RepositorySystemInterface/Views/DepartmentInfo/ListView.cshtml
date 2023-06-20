@@ -196,13 +196,17 @@
                 if (obj.event === 'edit') {
 
                     var index = layer.open({
-                        title: '编辑用户',
+                        title: '编辑部门',
                         type: 2,
                         shade: 0.2,
                         maxmin: true,
                         shadeClose: true,
-                        area: ['100%', '100%'],
-                        content: '../layuimini/page/table/edit.html',
+                        area: ['80%', '80%'],
+                        content: "/DepartmentInfo/UpdateDepartmentInfoView?departmentInfoId=" + data.departmentInfoId,
+                        success: function (layero, index) {
+                            var iframe = window['layui-layer-iframe' + index];
+                            iframe.getDate(data);
+                        }
                     });
                     $(window).on("resize", function () {
                         layer.full(index);

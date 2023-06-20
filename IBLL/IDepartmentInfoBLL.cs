@@ -37,6 +37,11 @@ namespace IBLL
         /// <param name="ids"></param>
         /// <returns></returns>
         bool DeleteDepartmentInfos(List<string> ids);
-
+        /// <summary>
+        /// 更新部门
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        bool UpdateDepartmentInfo(DepartmentInfo department, out string msg);
     }
 }
