@@ -1,4 +1,5 @@
-﻿using CommonLib;
+﻿using BLL;
+using CommonLib;
 using IBLL;
 using Models;
 using Models.DTO;
@@ -81,6 +82,57 @@ namespace RepositorySystemInterface.Controllers
             if (isSuccess)
             {
                 result.Code = 200;
+            }
+            return new JsonHelper(result);
+        }
+        /// <summary>
+        /// 部门软删除接口
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public ActionResult DeleteDepartmentInfo(string id)
+        {
+            ReturnResult result = new ReturnResult();
+
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                result.Msg = "id不能为空";
+                return new JsonHelper(result);
+            }
+
+            bool isOK = _departmentInfoBLL.DeleteDepartmentInfo(id);
+
+            if (isOK)
+            {
+                result.Msg = "删除部门成功";
+                result.Code = 200;
+            }
+
+            return new JsonHelper(result);
+        }
+        /// <summary>
+        /// 部门软删除接口，批量
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult DeleteDepartmentInfos(List<string> ids)
+        {
+            ReturnResult result = new ReturnResult();
+            if (ids == null || ids.Count == 0)
+            {
+                result.Msg = "选中用户为空";
+                return new JsonHelper(result);
+            }
+            bool isOk = _departmentInfoBLL.DeleteDepartmentInfos(ids);
+            if (isOk)
+            {
+                result.Msg = "删除成功";
+                result.Code = 200;
+            }
+            else
+            {
+                result.Msg = "删除失败";
             }
             return new JsonHelper(result);
         }

@@ -25,6 +25,18 @@ namespace IBLL
         /// </summary>
         /// <returns></returns>
         bool CreateDepartmentInfo(DepartmentInfo entity, out string msg);
+        /// <summary>
+        /// 部门软删除
+        /// </summary>
+        /// <param name="id">要删除的部门ID</param>
+        /// <returns></returns>
+        bool DeleteDepartmentInfo(string id);
+        /// <summary>
+        /// 批量软删除部门
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        bool DeleteDepartmentInfos(List<string> ids);
 
     }
 }

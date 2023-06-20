@@ -86,6 +86,49 @@ namespace BLL
             return isSuccess;
 
         }
+        /// <summary>
+        /// 部门软删除
+        /// </summary>
+        /// <param name="id">要删除的部门ID</param>
+        /// <returns></returns>
+        public bool DeleteDepartmentInfo(string id)
+        {
+            //throw new NotImplementedException();
+            // 根据Id查找用户是否存在
+            DepartmentInfo department = _departmentInfoDAL.GetEntityByID(id);
+
+            if (department == null)
+            {
+                return false;
+            }
+            //修改用户状态
+            department.IsDelete = true;
+            department.DeleteTime = DateTime.Now;
+            //返回结果
+            return _departmentInfoDAL.UpdateEntity(department);
+        }
+        /// <summary>
+        /// 批量软删除部门
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public bool DeleteDepartmentInfos(List<string> ids)
+        {
+            foreach (var item in ids)
+            {
+                // 根据用户ID查询部门
+                DepartmentInfo department = _departmentInfoDAL.GetEntityByID(item);
+                if (department == null)
+                {
+                    continue;
+                }
+                department.IsDelete = true;
+                department.DeleteTime = DateTime.Now;
+
+                _departmentInfoDAL.UpdateEntity(department);
+            }
+            return true;
+        }
 
         /// <summary>
         /// 获取所有部门表
@@ -127,7 +170,7 @@ namespace BLL
 
             #endregion
             //按照 CreatedTime 字段进行降序排列，然后使用 select 投影为一个新的实体对象类型 GetDepartmentInfoDTO 的集合，再使用 Skip 和 Take 方法实现分页功能，并最终返回查询结果及总记录数。
-            var tempList = (from d in _departmentInfoDAL.GetDepartmentInfos()
+            var tempList = (from d in _departmentInfoDAL.GetDepartmentInfos().Where(u => u.IsDelete == false)
                             orderby d.CreatedTime descending
                             select new GetDepartmentInfoDTO
                             {
