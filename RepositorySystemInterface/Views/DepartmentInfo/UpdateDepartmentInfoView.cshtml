@@ -36,27 +36,44 @@
         <div class="layui-form-item">
             <label class="layui-form-label required">部门名称</label>
             <div class="layui-input-block">
+
                 <input type="text" name="departmentName" lay-verify="required" lay-reqtext="部门名称不能为空" placeholder="请输入部门名称" value="" class="layui-input">
+
                 <tip>填写部门名称。</tip>
             </div>
-        </div>
 
+        </div>
+        @*---------------------------------------------------------*@
         <div class="layui-form-item">
             <label class="layui-form-label required">主管ID</label>
             <div class="layui-input-block">
-                <input type="number" name="leaderId" lay-verify="required" lay-reqtext="主管ID不能为空" placeholder="请输入主管ID" value="" class="layui-input">
+
+                @*<input type="number" name="leaderId" lay-verify="required" lay-reqtext="主管ID不能为空" placeholder="请输入主管ID" value="" class="layui-input">*@
+
+                <select name="leaderIdSelect" id="leaderIdSelectId">
+                    <option value=""></option>
+                </select>
+
                 <tip>填写主管ID。</tip>
             </div>
         </div>
+        @*---------------------------------------------------------*@
 
+        @*---------------------------------------------------------*@
         <div class="layui-form-item">
             <label class="layui-form-label required">父部门ID</label>
             <div class="layui-input-block">
-                <input type="number" name="parentId" lay-verify="required" lay-reqtext="父部门ID不能为空" placeholder="请输入父部门ID" value="" class="layui-input">
-            </div>
-           
-        </div>
 
+                @*<input type="number" name="parentId" lay-verify="required" lay-reqtext="父部门ID不能为空" placeholder="请输入父部门ID" value="" class="layui-input">*@
+
+                <select name="departmentSelect" id="departmentdSelectId">
+                    <option value=""></option>
+                </select>
+
+            </div>
+
+        </div>
+        @*---------------------------------------------------------*@
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
@@ -65,7 +82,6 @@
     </div>
     <script src="../layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
     <script>
-
 
         // 刷新父页面的表格函数
         function reloadParentTable() {
@@ -102,32 +118,43 @@
             var id = window.location.search.substr(4);
             console.log(id);
 
-
+            $.ajax({
+                url: '/DepartmentInfo/GetSelectOptions',
+                type: 'GET',                            
+                success: function (data) {
+                    console.log(data);
+                    var leaderSelect = data.data.leaderSelect;
+                    for (var i = 0; i < leaderSelect.length; i++) {
+                        $("#leaderIdSelectId").append('<option value="' + leaderSelect[i].value + '">' + leaderSelect[i].title + '</option>');
+                       /* console.log(leaderSelect[i].value);*/
+                    }
+                    var parentSelect = data.data.parentSelect;
+                    for (var i = 0; i < parentSelect.length; i++) {
+                        $("#departmentdSelectId").append('<option value="' + parentSelect[i].value + '">' + parentSelect[i].title + '</option>');
+                    }
+                    form.render('select');
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
 
             ////监听提交
             form.on('submit(saveBtn)', function (data) {
                 data.field.id = parentData.departmentInfoId;
-
+                data.field.parentId = $("#departmentdSelectId").val();
+                data.field.leaderId = $("#leaderIdSelectId").val();
+                 //获取数据的方式
+                /*data.field.departmentSelectValue = $("#departmentdSelectId").val();*/
+               
+                console.log(data.field.parentId);
                 $.ajax({
                     url: '/DepartmentInfo/UpdatDepartmentInfo',
                     type: 'POST',
                     data: data.field,
-                    //data: {
-                    //    id: parentData.departmentInfoId,
-                    //    description: data.description,
-                    //    departmentName: data.departmentName,
-                    //    leaderId: data.leaderId,
-                    //    parentId: data.parentId,
-                    //},
                     success: function (res) {
                         if (res.code == 200) {
-                            //layer.alert(res.msg);
-                            //layer.close(index);
-                            //var iframeIndex = parent.layer.getFrameIndex(window.name);
-                            //parent.layer.close(iframeIndex);
-
-
-                            var index = layer.alert(res.msg, {
+                            var index = layer.alert(res.msg, {                               
                                 title: '最终的提交信息'
                             }, function () {
 

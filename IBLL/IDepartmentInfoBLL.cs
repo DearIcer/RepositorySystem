@@ -43,5 +43,10 @@ namespace IBLL
         /// <param name="user"></param>
         /// <returns></returns>
         bool UpdateDepartmentInfo(DepartmentInfo department, out string msg);
+        /// <summary>
+        /// 获取下拉列表数据
+        /// </summary>
+        /// <returns></returns>
+        object GetSelectOptions();
     }
 }

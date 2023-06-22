@@ -271,11 +271,11 @@ namespace BLL
                 msg = "用户名不能为空";
                 return false;
             }
-            if (string.IsNullOrWhiteSpace(user.PassWord))
-            {
-                msg = "密码不能为空";
-                return false;
-            }
+            //if (string.IsNullOrWhiteSpace(user.PassWord))
+            //{
+            //    msg = "密码不能为空";
+            //    return false;
+            //}
             if (string.IsNullOrWhiteSpace(user.UserName))
             {
                 msg = "用户名不能为空";
@@ -287,10 +287,17 @@ namespace BLL
                 return false;
             }
 
-            UserInfo entity = _userInfoDAL.GetEntities().FirstOrDefault(u => u.Account == user.Account);
-            if (entity == null)
+            UserInfo old = _userInfoDAL.GetEntities().FirstOrDefault(u => u.Account == user.Account);
+            if (old == null)
             {
                 msg = "用户账号不存在";
+                return false;
+            }
+
+            UserInfo entity = _userInfoDAL.GetEntityByID(user.Id);
+            if (entity == null)
+            {
+                msg = "用户id不存在";
                 return false;
             }
 
@@ -300,7 +307,10 @@ namespace BLL
             entity.Email = user.Email;
             entity.DepartmentId = user.DepartmentId;
             entity.Sex = user.Sex;
-            entity.PassWord = MD5Help.GenerateMD5(user.PassWord);
+
+            //entity.PassWord = MD5Help.GenerateMD5(user.PassWord);
+
+            entity.PassWord = string.IsNullOrWhiteSpace(user.PassWord) ? entity.PassWord : MD5Help.GenerateMD5(user.PassWord);
 
             bool isOk = _userInfoDAL.UpdateEntity(entity);
 

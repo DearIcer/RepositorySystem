@@ -42,7 +42,7 @@ namespace RepositorySystemInterface.Controllers
 
             int count;
 
-            List<GetDepartmentInfoDTO> list = _departmentInfoBLL.GetDepartmentInfos(page,limit,departmentInfoId,departmentName,out count);
+            List<GetDepartmentInfoDTO> list = _departmentInfoBLL.GetDepartmentInfos(page, limit, departmentInfoId, departmentName, out count);
 
             ReturnResult result = new ReturnResult()
             {
@@ -75,7 +75,7 @@ namespace RepositorySystemInterface.Controllers
         {
             string msg;
 
-            bool isSuccess = _departmentInfoBLL.CreateDepartmentInfo(infos,out msg);
+            bool isSuccess = _departmentInfoBLL.CreateDepartmentInfo(infos, out msg);
 
             ReturnResult result = new ReturnResult();
 
@@ -160,6 +160,24 @@ namespace RepositorySystemInterface.Controllers
             {
                 result.Code = 200;
             }
+            return new JsonHelper(result);
+        }
+        /// <summary>
+        /// 获取下拉列表的接口
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult GetSelectOptions()
+        {
+            ReturnResult result = new ReturnResult();
+
+            var data = _departmentInfoBLL.GetSelectOptions();
+
+            result.Code = 200;
+            result.Msg = "获取成功";
+            result.IsSuccess = true;
+            result.Data = data;
+
             return new JsonHelper(result);
         }
     }

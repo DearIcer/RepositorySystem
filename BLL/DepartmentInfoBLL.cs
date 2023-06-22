@@ -186,7 +186,42 @@ namespace BLL
             var ListPage = tempList.OrderBy(u => u.CreateTime).Skip(limit * (page - 1)).Take(limit).ToList();
             return ListPage;
         }
+        /// <summary>
+        /// 获取下来列表的返回数据
+        /// </summary>
+        /// <returns></returns>
+        public object GetSelectOptions()
+        {
+            /*hrow new NotImplementedException();*/
+            var parentSelect = _dbContext.DepartmentInfo.Where(d => !d.IsDelete)
+                                                        .Select(d => new
+                                                        {
+                                                            value = d.Id,
+                                                            title = d.DepartmentName
+                                                        })
+                                                         .ToList();
+            var leaderSelect = _dbContext.UserInfo.Where(u => !u.IsDelete)
+                                                    .Select(u => new
+                                                    {
+                                                        value = u.Id,
+                                                        title = u.UserName
+                                                    })
+                                                    .ToList();
 
+            var data = new
+            {
+                parentSelect,
+                leaderSelect,
+            };
+
+            return data;
+        }
+        /// <summary>
+        /// 更新部门数据
+        /// </summary>
+        /// <param name="department"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
         public bool UpdateDepartmentInfo(DepartmentInfo department, out string msg)
         {
             //throw new NotImplementedException();

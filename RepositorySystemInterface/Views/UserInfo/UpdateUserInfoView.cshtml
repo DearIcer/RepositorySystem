@@ -17,20 +17,18 @@
 <body>
     <div class="layui-form layuimini-form" lay-filter="fromData">
 
-
-
         <div class="layui-form-item">
             <label class="layui-form-label required">用户账号</label>
             <div class="layui-input-block">
-                <input type="text" name="account" lay-verify="required" lay-reqtext="用户账号不能为空" placeholder="请输入用户账号" value="" class="layui-input">
+                <input type="text" name="account" lay-verify="required" lay-reqtext="用户账号不能为空" placeholder="请输入用户账号" value="" class="layui-input" disabled >
                 <tip>填写自己管理账号的名称。</tip>
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label required">用户密码</label>
+            <label class="layui-form-label ">用户密码</label>
             <div class="layui-input-block">
-                <input type="password" name="passWord" lay-verify="required" lay-reqtext="用户密码不能为空" placeholder="请输入用户密码" value="" class="layui-input">
+                <input type="password" name="passWord"  lay-reqtext="不修改请留空" placeholder="不修改请留空" value="" class="layui-input">
                 <tip>填写自己的用户密码。</tip>
             </div>
         </div>
@@ -53,9 +51,33 @@
 
         <div class="layui-form-item">
             <label class="layui-form-label required">所属部门</label>
+
             <div class="layui-input-block">
-                <input type="text" name="departmentName" lay-verify="required" lay-reqtext="部门不能为空" placeholder="请输入部门名" value="" class="layui-input">
-                <tip>填写部门名字。</tip>
+
+
+                <select name="departmentSelect" id="departmentdSelectId">
+                    <option value=""></option>
+                </select>
+
+                @*<input type="text" name="departmentName" lay-verify="required" lay-reqtext="部门不能为空" placeholder="请输入部门名" value="" class="layui-input">
+        <tip>填写部门名字。</tip>*@
+
+                @*-------------------这是老方案*@
+                @*<div id="department-dropdown-container">
+            <button class="layui-btn demo-dropdown-base">
+                <span name="departmentId" >部门选择</span>
+                <i class="layui-icon layui-icon-down layui-font-12"></i>
+            </button>
+        </div>*@
+
+                @*-----------------------------*@
+                @*<div class="layui-btn-container">
+            <button class="layui-btn layui-btn-primary demo-dropdown-base">
+                <span>下拉菜单</span>
+                <i class="layui-icon layui-icon-down layui-font-12"></i>
+            </button>
+        </div>*@
+                @*------------------------------*@
 
             </div>
         </div>
@@ -83,7 +105,6 @@
     </div>
     <script src="../layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
     <script>
-
 
         // 刷新父页面的表格函数
         function reloadParentTable() {
@@ -115,40 +136,76 @@
             var layer = layui.layer,
                 $ = layui.$;
             form = layui.form;
-
-
             var id = window.location.search.substr(4);
-            console.log(id);
+            /*console.log(id);*/
 
+            $.ajax({
+                url: '/DepartmentInfo/GetSelectOptions',
+                type: 'GET',
+                success: function (data) {
+                    
+                    var parentSelect = data.data.parentSelect;
+                    for (var i = 0; i < parentSelect.length; i++) {
+                        $("#departmentdSelectId").append('<option value="' + parentSelect[i].value + '">' + parentSelect[i].title + '</option>');
+                    }
+                    form.render('select');
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
 
+            ///*---------------------------------------------------------------*/
+            // 点击部门选择按钮时触发事件
+            var dropdown = layui.dropdown;
+            var departmentId;
+            $('#department-dropdown-container button').click(function () {
+                console.log('/DepartmentInfo/GetDepartmentInfos');
+                // 发送 Ajax 请求
+                $.ajax({
+                    url: '/DepartmentInfo/GetDepartmentInfos',
+                    type: 'get',
+                    data: { page: 1, limit: 10 }, // 传入参数
+                    success: function (data) {
+                        // 生成菜单项数组
+                        var menuData = [];
+                        
+                        for (var i = 0; i < data.data.length; i++) {
+                            menuData.push({ title: data.data[i].departmentName, id: data.data[i].departmentInfoId });
+                            
+                        }
+                        // 更新下拉菜单的数据，并重新渲染
+                        dropdown.render({
+                            elem: '.demo-dropdown-base',
+                            data: menuData,
+                            click: function (obj) {
+                                this.elem.find('span').text(obj.title);
+                                departmentId = obj.id;
+                                console.log(obj.id);
+                            }
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('获取部门信息出错：' + error);
+                    }
+                });
 
+            });
+
+            /*---------------------------------------------------------------*/
             ////监听提交
             form.on('submit(saveBtn)', function (data) {
                 data.field.id = parentData.userId;
-                //var index = layer.alert(JSON.stringify(data.field), {
-                //    title: '最终的提交信息'
-                //}, function () {
-
-                //    // 关闭弹出层
-                //    layer.close(index);
-
-                //    var iframeIndex = parent.layer.getFrameIndex(window.name);
-                //    parent.layer.close(iframeIndex);
-
-                //});
-
+                data.field.departmentId = $("#departmentdSelectId").val();
+                /*var departmentId = $('[name="departmentName"]').text();*/
                 $.ajax({
                     url: '/UserInfo/UpdateUserInfo',
                     type: 'POST',
                     data: data.field,
                     success: function (res) {
+                        //console.log(data.field.departmentName);
+
                         if (res.code == 200) {
-                            //layer.alert(res.msg);
-                            //layer.close(index);
-                            //var iframeIndex = parent.layer.getFrameIndex(window.name);
-                            //parent.layer.close(iframeIndex);
-
-
                             var index = layer.alert(res.msg, {
                                 title: '最终的提交信息'
                             }, function () {
@@ -167,7 +224,6 @@
 
                     }
                 })
-
                 return false;
             });
 
