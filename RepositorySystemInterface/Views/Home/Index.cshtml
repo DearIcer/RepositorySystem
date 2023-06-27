@@ -133,6 +133,21 @@
     <script src="../layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
     <script src="../layuimini/js/lay-config.js?v=2.0.0" charset="utf-8"></script>
     <script>
+
+        function deleteAllCookies() {
+            var cookies = document.cookie.split(";");
+
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i];
+                var eqPos = cookie.indexOf("=");
+                var cookieName = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            }
+        }
+
+
+
+
     layui.use(['jquery', 'layer', 'miniAdmin', 'miniTongji'], function () {
             var $ = layui.jquery,
                 layer = layui.layer,
@@ -164,9 +179,14 @@
 
             $('.login-out').on("click", function () {
                 layer.msg('退出登录成功', function () {
-                    window.location = '../layuimini/page/login-3.html';
+                    /* window.location = '../layuimini/page/login-3.html';*/
+                    window.location = '/Account/LoginView'
+                    // 调用函数以删除当前站点的所有 cookie
+                    deleteAllCookies();
                 });
             });
+
+
         });</script>
 </body>
 </html>

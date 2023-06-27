@@ -77,9 +77,9 @@
                     { field: 'departmentInfoId', width: 80, title: 'ID', sort: true },
                     { field: 'description', minwidth: 180, title: '描述' },
                     { field: 'departmentName', minwidth: 180, title: '部门名称', sort: true },
-                    { field: 'leaderId', minwidth: 180, title: '主管ID' },
+                    { field: 'leaderName', minwidth: 180, title: '主管ID' },
                     /*{ field: 'parentId', title: '邮箱', minWidth: 150 },*/
-                    { field: 'parentId', width: 180, title: '父部门ID', sort: true },
+                    { field: 'parentName', width: 180, title: '父部门ID', sort: true },
                     /*{ field: 'sex', width: 80, title: '性别', sort: true },*/
                     { field: 'createTime', minwidth: 180, title: '添加时间' },
                     /*{ field: 'wealth', width: 135, title: '财富', sort: true },*/
@@ -93,7 +93,7 @@
 
             // 监听搜索操作
             form.on('submit(data-search-btn)', function (data) {
-                //var result = JSON.stringify(data.field);
+                var result = JSON.stringify(data.field.departmentName);
                 //layer.alert(result, {
                 //    title: '最终的搜索信息'
                 //});
@@ -105,8 +105,10 @@
                     }
                     , where: {
                          //searchParams: result
-                        account : data.field.account,
-                         userName : data.field.userName
+                        /*departmentName: data.field.departmentName,*/
+                        /*departmentName: data.field.departmentName*/
+                        /* userName : data.field.userName*/
+                        searchParams: result
                     }
                 }, 'data');
 

@@ -54,7 +54,6 @@
 
             <div class="layui-input-block">
 
-
                 <select name="departmentSelect" id="departmentdSelectId">
                     <option value=""></option>
                 </select>
@@ -95,8 +94,6 @@
             </div>
         </div>
 
-
-
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
@@ -117,16 +114,16 @@
         var form;
         //  获取父页面的回调数据
         function getDate(Data) {
-            console.log("父级：", Data);
             parentData = Data;
-
+            console.log('父级页面回调',parentData);
             form.val("fromData", {
                 "account": parentData.account,
                 "userName": parentData.userName,
                 "phoneNum": parentData.phoneNum,
                 "email": parentData.email,
                 "departmentName": parentData.departmentName,
-                "sex": parentData.sex,
+                "departmentId": parentData.departmentId,
+                "sex": parentData.sex,               
             });
         }
 
@@ -137,7 +134,7 @@
                 $ = layui.$;
             form = layui.form;
             var id = window.location.search.substr(4);
-            /*console.log(id);*/
+            console.log('表单页面id',id);
 
             $.ajax({
                 url: '/DepartmentInfo/GetSelectOptions',
@@ -149,6 +146,17 @@
                         $("#departmentdSelectId").append('<option value="' + parentSelect[i].value + '">' + parentSelect[i].title + '</option>');
                     }
                     form.render('select');
+                    /*console.log('二次获取表单数据',parentData);*/
+                   
+                    if (parentData && parentData.departmentId) {
+                        form.val("fromData", {
+                            "departmentSelect": parentData.departmentId
+                        });
+                        /*console.log('三次获取表单数据', parentData);*/
+                    } else {
+                        // 处理对象不存在或属性为空的情况
+                        console.log('数据请求超时');
+                    }
                 },
                 error: function (xhr, status, error) {
                     console.log(error);
@@ -157,40 +165,40 @@
 
             ///*---------------------------------------------------------------*/
             // 点击部门选择按钮时触发事件
-            var dropdown = layui.dropdown;
-            var departmentId;
-            $('#department-dropdown-container button').click(function () {
-                console.log('/DepartmentInfo/GetDepartmentInfos');
-                // 发送 Ajax 请求
-                $.ajax({
-                    url: '/DepartmentInfo/GetDepartmentInfos',
-                    type: 'get',
-                    data: { page: 1, limit: 10 }, // 传入参数
-                    success: function (data) {
-                        // 生成菜单项数组
-                        var menuData = [];
+            //var dropdown = layui.dropdown;
+            //var departmentId;
+            //$('#department-dropdown-container button').click(function () {
+            //    console.log('/DepartmentInfo/GetDepartmentInfos');
+            //    // 发送 Ajax 请求
+            //    $.ajax({
+            //        url: '/DepartmentInfo/GetDepartmentInfos',
+            //        type: 'get',
+            //        data: { page: 1, limit: 10 }, // 传入参数
+            //        success: function (data) {
+            //            // 生成菜单项数组
+            //            var menuData = [];
                         
-                        for (var i = 0; i < data.data.length; i++) {
-                            menuData.push({ title: data.data[i].departmentName, id: data.data[i].departmentInfoId });
+            //            for (var i = 0; i < data.data.length; i++) {
+            //                menuData.push({ title: data.data[i].departmentName, id: data.data[i].departmentInfoId });
                             
-                        }
-                        // 更新下拉菜单的数据，并重新渲染
-                        dropdown.render({
-                            elem: '.demo-dropdown-base',
-                            data: menuData,
-                            click: function (obj) {
-                                this.elem.find('span').text(obj.title);
-                                departmentId = obj.id;
-                                console.log(obj.id);
-                            }
-                        });
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('获取部门信息出错：' + error);
-                    }
-                });
+            //            }
+            //            // 更新下拉菜单的数据，并重新渲染
+            //            dropdown.render({
+            //                elem: '.demo-dropdown-base',
+            //                data: menuData,
+            //                click: function (obj) {
+            //                    this.elem.find('span').text(obj.title);
+            //                    departmentId = obj.id;
+            //                    console.log(obj.id);
+            //                }
+            //            });
+            //        },
+            //        error: function (xhr, status, error) {
+            //            console.error('获取部门信息出错：' + error);
+            //        }
+            //    });
 
-            });
+            //});
 
             /*---------------------------------------------------------------*/
             ////监听提交

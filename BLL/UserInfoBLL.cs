@@ -107,6 +107,7 @@ namespace BLL
                            PhoneNum = u.PhoneNum,
                            Email = u.Email,
                            DepartmentName = dd.DepartmentName == null ? "空" : dd.DepartmentName,
+                           DepartmentId = u.DepartmentId,
                            Sex = u.Sex == 0 ? "女" : "男",
                            CreateTime = u.CreatedTime
                        };

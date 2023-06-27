@@ -3,6 +3,7 @@ using CommonLib;
 using IBLL;
 using Models;
 using Models.DTO;
+using RepositorySystemInterface.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ using System.Web.Mvc;
 
 namespace RepositorySystemInterface.Controllers
 {
+    [CustomAttribute]
     public class DepartmentInfoController : Controller
     {
         /// <summary>
@@ -179,6 +181,39 @@ namespace RepositorySystemInterface.Controllers
             result.Data = data;
 
             return new JsonHelper(result);
+        }
+        /// <summary>
+        /// 获取下拉列表的接口
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult GetDepartmentInfoById(string id)
+        {
+            ReturnResult result = new ReturnResult();
+
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                result.Msg = "Id不能为空";
+                return new JsonHelper(result);
+            }
+            DepartmentInfo department = _departmentInfoBLL.GetDepartmentInfoById(id);
+            if (department == null)
+            {
+                result.Msg = "未获取到部门信息";
+
+            }
+            else
+            {
+                var selectOption = _departmentInfoBLL.GetSelectOptions();
+                result.Code = 200;
+                result.Msg = "获取成功";
+                result.Data = new
+                {
+                    department,
+                    selectOption
+                };
+            }
+            return new JsonHelper(result );
         }
     }
 }

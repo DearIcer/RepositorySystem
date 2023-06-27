@@ -10,17 +10,17 @@ namespace RepositorySystemInterface.Filters
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            //base.OnActionExecuting(filterContext);
-            var UserId = filterContext.HttpContext.Session["UserId"];
-            var UserCookie = filterContext.HttpContext.Response.Cookies["UserId"].Value;
-            if (UserId == null && UserCookie == null)
+            var UserCookie = filterContext.HttpContext.Request.Cookies["UserId"];
+            if (UserCookie == null)
             {
-                var result = filterContext.Result;
-
-                filterContext.Result = new RedirectResult("/Account/LoginView");
+                var result = new RedirectResult("/Account/LoginView");
+                filterContext.Result = result;
             }
+
+            base.OnActionExecuting(filterContext);
         }
+
     }
-    
+
 
 }

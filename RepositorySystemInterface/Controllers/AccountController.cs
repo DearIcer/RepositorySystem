@@ -64,8 +64,8 @@ namespace RepositorySystemInterface.Controllers
                 result.Data = userName;
                 //session
 
-                HttpContext.Session["UserName"] = userName;
-                HttpContext.Session["UserId"] = userId;
+                //HttpContext.Session["UserName"] = userName;
+                //HttpContext.Session["UserId"] = userId;
 
                 // cookie
                 HttpCookie cookie = new HttpCookie("UserID",userId);

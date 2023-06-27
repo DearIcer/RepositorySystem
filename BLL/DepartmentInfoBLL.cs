@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BLL
 {
@@ -129,6 +130,15 @@ namespace BLL
             }
             return true;
         }
+        /// <summary>
+        /// 根据部门id获取数据
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public DepartmentInfo GetDepartmentInfoById(string id)
+        {
+            return _departmentInfoDAL.GetEntityByID(id);
+        }
 
         /// <summary>
         /// 获取所有部门表
@@ -181,91 +191,114 @@ namespace BLL
                                 ParentId = d.ParentId,
                                 CreateTime = d.CreatedTime
                             }).Skip(limit * (page - 1)).Take(limit).ToList();
+          
+            var data = from d in _dbContext.DepartmentInfo.Where(d => d.IsDelete == false)
+                       join u in _dbContext.UserInfo.Where(u => u.IsDelete == false)
+                       on d.LeaderId equals u.Id
+                       into TempDU
+                       from uu in TempDU.DefaultIfEmpty()
+                       join d2 in _dbContext.DepartmentInfo.Where(d => d.IsDelete == false)
+                       on d.ParentId equals d2.Id
+                       into TempDD
+                       from dd2 in TempDD.DefaultIfEmpty()
+                       select new GetDepartmentInfoDTO
+                       {
+                           DepartmentInfoId = d.Id,
+                           DepartmentName= d.DepartmentName,
+                           LeaderId= d.LeaderId,
+                           CreateTime = d.CreatedTime,
+                           Description = d.Description,
+                           ParentName = dd2.DepartmentName,
+                           LeaderName = uu.UserName
+                       };
 
-            count = _departmentInfoDAL.GetDepartmentInfos().Count();
-            var ListPage = tempList.OrderBy(u => u.CreateTime).Skip(limit * (page - 1)).Take(limit).ToList();
+            //count = _departmentInfoDAL.GetDepartmentInfos().Count();
+            //var ListPage = tempList.OrderBy(u => u.CreateTime).Skip(limit * (page - 1)).Take(limit).ToList();
+            count = data.Count();
+            var ListPage = data.OrderBy(u => u.CreateTime).Skip(limit * (page - 1)).Take(limit).ToList();
+
             return ListPage;
         }
-        /// <summary>
-        /// 获取下来列表的返回数据
-        /// </summary>
-        /// <returns></returns>
-        public object GetSelectOptions()
-        {
-            /*hrow new NotImplementedException();*/
-            var parentSelect = _dbContext.DepartmentInfo.Where(d => !d.IsDelete)
-                                                        .Select(d => new
-                                                        {
-                                                            value = d.Id,
-                                                            title = d.DepartmentName
-                                                        })
-                                                         .ToList();
-            var leaderSelect = _dbContext.UserInfo.Where(u => !u.IsDelete)
-                                                    .Select(u => new
+    /// <summary>
+    /// 获取下来列表的返回数据
+    /// </summary>
+    /// <returns></returns>
+    public object GetSelectOptions()
+    {
+        /*hrow new NotImplementedException();*/
+        var parentSelect = _dbContext.DepartmentInfo.Where(d => !d.IsDelete)
+                                                    .Select(d => new
                                                     {
-                                                        value = u.Id,
-                                                        title = u.UserName
+                                                        value = d.Id,
+                                                        title = d.DepartmentName
                                                     })
-                                                    .ToList();
+                                                     .ToList();
+        var leaderSelect = _dbContext.UserInfo.Where(u => !u.IsDelete)
+                                                .Select(u => new
+                                                {
+                                                    value = u.Id,
+                                                    title = u.UserName
+                                                })
+                                                .ToList();
 
-            var data = new
-            {
-                parentSelect,
-                leaderSelect,
-            };
-
-            return data;
-        }
-        /// <summary>
-        /// 更新部门数据
-        /// </summary>
-        /// <param name="department"></param>
-        /// <param name="msg"></param>
-        /// <returns></returns>
-        public bool UpdateDepartmentInfo(DepartmentInfo department, out string msg)
+        var data = new
         {
-            //throw new NotImplementedException();
-            if (string.IsNullOrWhiteSpace(department.Id))
-            {
-                msg = "部门ID不能为空!";
-            }
+            parentSelect,
+            leaderSelect,
+        };
 
-            if (string.IsNullOrWhiteSpace(department.Description))
-            {
-                msg = "部门描述不能为空!";
-            }
-
-            if (string.IsNullOrWhiteSpace(department.DepartmentName))
-            {
-                msg = "部门名字不能为空!";
-            }
-
-            if (string.IsNullOrWhiteSpace(department.LeaderId))
-            {
-                msg = "主管ID不能为空!";
-            }
-
-            if (string.IsNullOrWhiteSpace(department.ParentId))
-            {
-                msg = "父部门ID不能为空";
-            }
-            DepartmentInfo entity = _departmentInfoDAL.GetEntities().FirstOrDefault(u => u.Id == department.Id);
-            if (entity == null)
-            {
-                msg = "部门账号不存在";
-                return false;
-            }
-            entity.Id = department.Id;
-            entity.DepartmentName = department.DepartmentName;
-            entity.Description = department.Description;
-            entity.LeaderId = department.LeaderId;
-            entity.ParentId = department.ParentId;
-
-            bool isOk = _departmentInfoDAL.UpdateEntity(entity);
-
-            msg = isOk ? $"修改{entity.DepartmentName}成功!" : "添加修改失败";
-
-            return isOk;
-        }
+        return data;
     }
+    /// <summary>
+    /// 更新部门数据
+    /// </summary>
+    /// <param name="department"></param>
+    /// <param name="msg"></param>
+    /// <returns></returns>
+    public bool UpdateDepartmentInfo(DepartmentInfo department, out string msg)
+    {
+        //throw new NotImplementedException();
+        if (string.IsNullOrWhiteSpace(department.Id))
+        {
+            msg = "部门ID不能为空!";
+        }
+
+        if (string.IsNullOrWhiteSpace(department.Description))
+        {
+            msg = "部门描述不能为空!";
+        }
+
+        if (string.IsNullOrWhiteSpace(department.DepartmentName))
+        {
+            msg = "部门名字不能为空!";
+        }
+
+        if (string.IsNullOrWhiteSpace(department.LeaderId))
+        {
+            msg = "主管ID不能为空!";
+        }
+
+        if (string.IsNullOrWhiteSpace(department.ParentId))
+        {
+            msg = "父部门ID不能为空";
+        }
+        DepartmentInfo entity = _departmentInfoDAL.GetEntities().FirstOrDefault(u => u.Id == department.Id);
+        if (entity == null)
+        {
+            msg = "部门账号不存在";
+            return false;
+        }
+        entity.Id = department.Id;
+        entity.DepartmentName = department.DepartmentName;
+        entity.Description = department.Description;
+        entity.LeaderId = department.LeaderId;
+        entity.ParentId = department.ParentId;
+
+        bool isOk = _departmentInfoDAL.UpdateEntity(entity);
+
+        msg = isOk ? $"修改{entity.DepartmentName}成功!" : "添加修改失败";
+
+        return isOk;
+    }
+}
 }

@@ -35,5 +35,7 @@ namespace Models.DTO
         /// 创建时间
         /// </summary>
         public DateTime CreateTime { get; set; }
+        public string ParentName { get; set; }
+        public string LeaderName { get; set; }
     }
 }

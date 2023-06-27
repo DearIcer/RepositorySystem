@@ -21,6 +21,12 @@ namespace IBLL
         /// <returns></returns>
         List<GetDepartmentInfoDTO> GetDepartmentInfos(int page, int limit, string departmentInfoId, string departmentName, out int count);
         /// <summary>
+        /// 部门id号
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        DepartmentInfo GetDepartmentInfoById(string id);
+        /// <summary>
         /// 添加部门信息
         /// </summary>
         /// <returns></returns>
