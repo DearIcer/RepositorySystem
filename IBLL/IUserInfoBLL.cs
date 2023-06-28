@@ -57,5 +57,21 @@ namespace IBLL
         /// <param name="user"></param>
         /// <returns></returns>
         bool UpdateUserInfo(UserInfo user , out string msg);
+        /// <summary>
+        /// 根据Id获取用户信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        GetUserInfosDTO GetUserInfoById(string id);
+        /// <summary>
+        /// 根据id修改用户密码
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="OldPassword"></param>
+        /// <param name="NewPassword"></param>
+        /// <param name="AgainPassword"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        bool UpdateUserInfoPassword(string Id,string OldPassword,string NewPassword,string AgainPassword,out string msg);
     }
 }

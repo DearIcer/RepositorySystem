@@ -63,13 +63,13 @@
                         <a href="javascript:;" data-check-screen="full"><i class="fa fa-arrows-alt"></i></a>
                     </li>
                     <li class="layui-nav-item layuimini-setting">
-                        <a href="javascript:;">admin</a>
+                        <a id="UserName" href="javascript:;">admin</a>
                         <dl class="layui-nav-child">
                             <dd>
-                                <a href="javascript:;" layuimini-content-href="../layuimini/page/user-setting.html" data-title="基本资料" data-icon="fa fa-gears">基本资料<span class="layui-badge-dot"></span></a>
+                                <a href="javascript:;" layuimini-content-href="/UserInfo/UserSetingView" data-title="基本资料" data-icon="fa fa-gears">基本资料<span class="layui-badge-dot"></span></a>
                             </dd>
                             <dd>
-                                <a href="javascript:;" layuimini-content-href="../layuimini/page/user-password.html" data-title="修改密码" data-icon="fa fa-gears">修改密码</a>
+                                <a href="javascript:;" layuimini-content-href="/UserInfo/UpdateUserInfoPasswordView" data-title="修改密码" data-icon="fa fa-gears">修改密码</a>
                             </dd>
                             <dd>
                                 <hr>
@@ -146,9 +146,12 @@
         }
 
 
+        function deleteCookie(cookieName) {
+            document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
+        }
 
-    layui.use(['jquery', 'layer', 'miniAdmin', 'miniTongji'], function () {
+        layui.use(['jquery', 'layer', 'miniAdmin', 'miniTongji'], function () {
             var $ = layui.jquery,
                 layer = layui.layer,
                 miniAdmin = layui.miniAdmin,
@@ -183,10 +186,31 @@
                     window.location = '/Account/LoginView'
                     // 调用函数以删除当前站点的所有 cookie
                     deleteAllCookies();
+                    //deleteCookie('UserId');
+                    //deleteCookie('UserName');
                 });
             });
+            // 指定要解码的 cookie 名称
+            var cookieName = "UserName";
 
+            // 获取当前页面的所有 cookie
+            var cookies = document.cookie.split(";");
 
+            // 查找指定 cookie 并解码
+            var decodedValue = "";
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.indexOf(cookieName + "=") === 0) {
+                    var cookieValue = cookie.substring(cookieName.length + 1);
+                    decodedValue = decodeURIComponent(cookieValue);
+                    break;
+                }
+            }
+
+            // 将解码后的值保存到变量
+            var decodedCookie = decodedValue;
+            $("#UserName").html = decodedCookie;
+            console.log(decodedCookie);
         });</script>
 </body>
 </html>

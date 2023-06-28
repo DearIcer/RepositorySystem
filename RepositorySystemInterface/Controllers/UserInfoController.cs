@@ -17,10 +17,12 @@ namespace RepositorySystemInterface.Controllers
     {
         // GET: Account
         private IUserInfoBLL _userInfoBLL;
-        public UserInfoController(IUserInfoBLL userInfoBLL)
+        private IDepartmentInfoBLL _departmentInfoBLL;
+        public UserInfoController(IUserInfoBLL userInfoBLL, IDepartmentInfoBLL departmentInfoBLL)
         {
             //_userInfoBLL = new UserInfoBLL();
             _userInfoBLL = userInfoBLL;
+            _departmentInfoBLL = departmentInfoBLL;
         }
         // GET: UserInfo
         public ActionResult ListView()
@@ -36,6 +38,8 @@ namespace RepositorySystemInterface.Controllers
             return View();
 
         }
+        public ActionResult UserSetingView() { return View(); }
+        public ActionResult UpdateUserInfoPasswordView() { return View(); }
         /// <summary>
         /// 获取用户的接口
         /// </summary>
@@ -152,6 +156,62 @@ namespace RepositorySystemInterface.Controllers
             if (isSuccess)
             {
                 result.Code = 200;
+            }
+            return new JsonHelper(result);
+        }
+        /// <summary>
+        /// 根据Id获取用户信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult GetUserInfoById(string id)
+        {
+            ReturnResult result = new ReturnResult();
+
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                result.Msg = "id不能为空";
+                return new JsonHelper(result);
+            }
+            
+            var userInfo = _userInfoBLL.GetUserInfoById(id);
+            var selectOption = _departmentInfoBLL.GetSelectOptions();
+
+            result.Msg = "获取成功";
+            result.Code = 200;
+            result.IsSuccess = true;
+            result.Data = new
+            {
+                userInfo,
+                selectOption
+            };
+            return new JsonHelper(result);
+        }
+        /// <summary>
+        /// 根据id修改用户密码
+        /// </summary>
+        [HttpPost]
+        public ActionResult UpdateUserInfoPassword(string Id, string OldPassword, string NewPassword, string AgainPassword)
+        {
+            ReturnResult result = new ReturnResult();
+
+            if (string.IsNullOrWhiteSpace(Id))
+            {
+                result.Msg = "id不能为空";
+                return new JsonHelper(result);
+            }
+            string msg;
+            result.IsSuccess = _userInfoBLL.UpdateUserInfoPassword(Id,OldPassword,NewPassword,AgainPassword,out msg);
+            if(result.IsSuccess == true)
+            {
+                result.Code=200;
+                result.Msg = msg;
+            }
+            else
+            {
+                result.Code = 501;
+                result.Msg=msg;
             }
             return new JsonHelper(result);
         }

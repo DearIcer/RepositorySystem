@@ -158,7 +158,7 @@ namespace BLL
             }
             else
             {
-                msg = "成功";
+                msg = "登录成功！Hi" + userInfo.UserName;
                 userName = userInfo.UserName;
                 userID = userInfo.Id;
                 return true;
@@ -318,6 +318,83 @@ namespace BLL
             msg = isOk ? $"修改{entity.UserName}成功!" : "添加修改失败";
 
             return isOk;
+        }
+        /// <summary>
+        /// 根据Id获取用户信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public GetUserInfosDTO GetUserInfoById(string id)
+        {
+            UserInfo user = _userInfoDAL.GetEntityByID(id);
+            if (user == null)
+            {
+                //msg = "UserId is null!";
+                return null;
+            }
+            GetUserInfosDTO userInfosDTO = new GetUserInfosDTO()
+            {
+                UserId = user.Id,
+                Account = user.Account,
+                UserName = user.UserName,
+                DepartmentId = user.DepartmentId,
+                
+                Email = user.Email,
+                PhoneNum = user.PhoneNum,
+                Sex = user.Sex == 1 ? "男" : "女"
+            };
+           
+            return userInfosDTO;
+        }
+        /// <summary>
+        /// 根据id修改用户密码
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="OldPassword"></param>
+        /// <param name="NewPassword"></param>
+        /// <param name="AgainPassword"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        public bool UpdateUserInfoPassword(string Id, string OldPassword, string NewPassword, string AgainPassword, out string msg)
+        {
+            if (string.IsNullOrWhiteSpace(Id))
+            {
+                msg = "用户id不能为空";
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(OldPassword))
+            {
+                msg = "旧密码不能为空";
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(NewPassword))
+            {
+                msg = "新密码不能为空";
+                return false;
+            }
+            if (NewPassword != AgainPassword)
+            {
+                msg = "新密码不能与近期密码相同！";
+                return false;
+            }
+
+            UserInfo userInfo = _userInfoDAL.GetEntityByID(Id);
+
+            if (userInfo == null) 
+            {
+                msg = "用户不存在";
+                return false;
+            }
+            OldPassword = MD5Help.GenerateMD5(OldPassword);
+            if (userInfo.PassWord != OldPassword)
+            {
+                msg = "旧密码错误";
+                return false;
+            }
+            userInfo.PassWord = MD5Help.GenerateMD5(NewPassword);
+            bool IsOk = _userInfoDAL.UpdateEntity(userInfo);//更新用户信息
+            msg = IsOk ? "密码修改成功，请重新登录!" : "修改失败";
+            return IsOk;
         }
     }
 }

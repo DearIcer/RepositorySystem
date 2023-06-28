@@ -123,7 +123,8 @@
                 "email": parentData.email,
                 "departmentName": parentData.departmentName,
                 "departmentId": parentData.departmentId,
-                "sex": parentData.sex,               
+                "sex": parentData.sex,
+                "departmentSelect": parentData.departmentId
             });
         }
 
@@ -218,11 +219,8 @@
                                 title: '最终的提交信息'
                             }, function () {
 
-                                // 关闭弹出层
                                 layer.close(index);
-                                reloadParentTable();
-                                var iframeIndex = parent.layer.getFrameIndex(window.name);
-                                parent.layer.close(iframeIndex);
+                                miniTab.deleteCurrentByIframe();
 
                             });
 

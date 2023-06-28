@@ -250,7 +250,7 @@
                     success: function (res) {
                         console.log("接口返回结果", res);
                         if (res.code == 0) {
-                            layer.msg("登录成功,Hi 大冰！", function () {
+                            layer.msg(res.msg, function () {
                                 window.location = '/Home/Index';
                             });
                         } else if (res.code == 501) {

@@ -69,11 +69,13 @@ namespace RepositorySystemInterface.Controllers
 
                 // cookie
                 HttpCookie cookie = new HttpCookie("UserID",userId);
-                //cookie.Expires.AddHours(24);// 设置24小时后过期
                 cookie.Expires = DateTime.Now.AddDays(100);
                 Response.Cookies.Add(cookie);
 
-                //return Json(result);
+                HttpCookie cookieUserName = new HttpCookie("UserName", Server.UrlEncode(userName));
+                cookieUserName.Expires = DateTime.Now.AddDays(100);
+                Response.Cookies.Add(cookieUserName);
+
                 return new JsonHelper(result);
             }
             else
