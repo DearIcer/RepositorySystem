@@ -180,17 +180,17 @@ namespace BLL
 
             #endregion
             //按照 CreatedTime 字段进行降序排列，然后使用 select 投影为一个新的实体对象类型 GetDepartmentInfoDTO 的集合，再使用 Skip 和 Take 方法实现分页功能，并最终返回查询结果及总记录数。
-            var tempList = (from d in _departmentInfoDAL.GetDepartmentInfos().Where(u => u.IsDelete == false)
-                            orderby d.CreatedTime descending
-                            select new GetDepartmentInfoDTO
-                            {
-                                DepartmentInfoId = d.Id,
-                                Description = d.Description,
-                                DepartmentName = d.DepartmentName,
-                                LeaderId = d.LeaderId,
-                                ParentId = d.ParentId,
-                                CreateTime = d.CreatedTime
-                            }).Skip(limit * (page - 1)).Take(limit).ToList();
+            //var tempList = (from d in _departmentInfoDAL.GetDepartmentInfos().Where(u => u.IsDelete == false)
+            //                orderby d.CreatedTime descending
+            //                select new GetDepartmentInfoDTO
+            //                {
+            //                    DepartmentInfoId = d.Id,
+            //                    Description = d.Description,
+            //                    DepartmentName = d.DepartmentName,
+            //                    LeaderId = d.LeaderId,
+            //                    ParentId = d.ParentId,
+            //                    CreateTime = d.CreatedTime
+            //                }).Skip(limit * (page - 1)).Take(limit).ToList();
           
             var data = from d in _dbContext.DepartmentInfo.Where(d => d.IsDelete == false)
                        join u in _dbContext.UserInfo.Where(u => u.IsDelete == false)

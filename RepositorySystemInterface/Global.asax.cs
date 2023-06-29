@@ -51,16 +51,27 @@ namespace RepositorySystemInterface
         public static void testdate()
         {
             RepositorySystemContext db = new RepositorySystemContext();
-            DepartmentInfo departmentInfo = new DepartmentInfo()
-            {
-                Id = "000",
-                Description = "公司高管",
-                DepartmentName = "董事会",
-                LeaderId = "001",
-                ParentId = "000",
+            // 测试数据源------------------------------------------------
+
+
+            //DepartmentInfo departmentInfo = new DepartmentInfo()
+            //{
+            //    Id = "000",
+            //    Description = "公司高管",
+            //    DepartmentName = "董事会",
+            //    LeaderId = "001",
+            //    ParentId = "000",
+            //    CreatedTime = DateTime.Now,
+            //};
+
+            RoleInfo roleInfo = new RoleInfo()
+            { 
+                Id = "001",
                 CreatedTime = DateTime.Now,
+                RoleName = "Test",
+                Description = "Test",
             };
-            db.DepartmentInfo.Add(departmentInfo);
+            db.RoleInfo.Add(roleInfo);
             db.SaveChanges();
         }
     }

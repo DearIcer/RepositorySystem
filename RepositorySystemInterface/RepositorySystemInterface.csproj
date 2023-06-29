@@ -150,6 +150,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DepartmentInfoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RoleInfoController.cs" />
     <Compile Include="Controllers\UserInfoController.cs" />
     <Compile Include="Filters\CustomAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -326,6 +327,9 @@
     <Content Include="Views\DepartmentInfo\UpdateDepartmentInfoView.cshtml" />
     <Content Include="Views\UserInfo\UserSetingView.cshtml" />
     <Content Include="Views\UserInfo\UpdateUserInfoPasswordView.cshtml" />
+    <Content Include="Views\RoleInfo\ListView.cshtml" />
+    <Content Include="Views\RoleInfo\CreateRoleInfoView.cshtml" />
+    <Content Include="Views\RoleInfo\UpdateRoleInfoView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
