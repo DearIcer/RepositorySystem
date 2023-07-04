@@ -33,6 +33,11 @@ namespace IBLL
         /// <returns></returns>
         List<GetUserInfosDTO> GetUserInfos(int page, int limit, string account, string userName, out int count);
         /// <summary>
+        /// 返回用户列表，非分页
+        /// </summary>
+        /// <returns></returns>
+        List<GetUserInfosDTO> GetUserInfos();
+        /// <summary>
         /// 添加用户
         /// </summary>
         /// <param name="entity"></param>

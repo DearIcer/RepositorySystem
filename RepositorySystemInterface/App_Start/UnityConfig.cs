@@ -58,6 +58,9 @@ namespace RepositorySystemInterface
 
             container.RegisterType<IRoleInfoDAL, RoleInfoDAL>();
             container.RegisterType<IRoleInfoBLL, RoleInfoBLL>();
+
+            container.RegisterType<IR_UserInfo_RoleInfoDAL, R_UserInfo_RoleInfoDAL>();
+            //container.RegisterType<IR_UserInfo_RoleInfoDAL, RoleInfoBLL>();
         }
     }
 }

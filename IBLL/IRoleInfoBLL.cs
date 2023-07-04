@@ -41,5 +41,18 @@ namespace IBLL
         /// <returns></returns>
         bool DeleteRoleInfo(string RoleInfoId);
         bool DeleteRoleInfo(List<string> ids);
+        /// <summary>
+        /// 获取角色已经绑定的用户id集
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        List<string> GetBindUserIds(string roleId);
+        /// <summary>
+        /// 绑定用户角色
+        /// </summary>
+        /// <param name="userIds"></param>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        bool BindUserInfo(List<string> userIds ,string roleId);
     }
 }

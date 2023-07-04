@@ -1,0 +1,127 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../layuimini/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../layuimini/css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+        .box{
+            text-align:center;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div id="showUser"></div>
+        @*<button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>*@
+        <a class="layui-btn layui-btn-xs layui-btn-normal " id ="bindBtn">提交绑定</a>
+    </div>
+
+   
+
+    <script src="../layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script>
+        var transfer = layui.transfer, $ = layui.jquery;
+        layui.use(function () {
+            var transfer = layui.transfer;
+            var roleId = window.location.search.substr(4);
+            console.log(roleId);
+            //发起请求
+            $.ajax({
+                url: "/RoleInfo/GetUserInfoOptions",
+                type: 'Get',
+                data: {
+                    roleId:roleId
+                },
+                success: function (res) {
+                    if (res.code == 200) {
+                        console.log(res.data);
+                        // 渲染
+                        transfer.render({
+                            elem: '#showUser',
+                            data: res.data.options,
+                            title: ['未绑定的用户', '已绑定的用户'],
+                            /*value: '5217d19f-b9c2-439b-ac09-f979ecb4d01d',*/
+                            value: res.data.userIds,
+                            showSearch: true,
+                            parseData: function (result) {
+                                return {
+                                    "value": result.userId, // 数据值
+                                    "title": result.userName, // 数据标题                      
+                                }
+                            },
+                            id: "userList"
+                        });
+                    } else {
+                        layer.msg(res.msg);
+                    }
+                }
+            });
+
+            //// 数据
+            //var data = [
+            //    { "id": "1", "userName": "李白" },
+            //    { "id": "2", "userName": "杜甫" },
+            //    { "id": "3", "userName": "苏轼" },
+            //    { "id": "4", "userName": "李清照" },
+            //    { "id": "5", "userName": "鲁迅" },
+            //    { "id": "6", "userName": "巴金" },
+            //    { "id": "7", "userName": "冰心" },
+            //    { "id": "8", "userName": "矛盾" },
+            //    { "id": "9", "userName": "贤心" }
+            //];
+            //// 渲染
+            //transfer.render({
+            //    elem: '#showUser',
+            //    data: data,
+            //    title: ['未绑定的用户', '已绑定的用户'],
+            //    value: ['2', '1'],
+            //    showSearch: true,
+            //    parseData: function (res) {
+            //        return {
+            //            "value": res.id, // 数据值
+            //            "title": res.userName, // 数据标题                      
+            //        }
+            //    },
+            //    id:"userList"
+            //});
+            layui.jquery("#bindBtn").click(function (res) {
+                var getData = transfer.getData('userList'); // 获取右侧数据
+               /* layer.alert(JSON.stringify(getData)); */
+
+                var userIds = [];
+                for (var i = 0; i < getData.length; i++) {
+                    var userId = getData[i].value;
+                    userIds.push(userId);
+                }
+
+                $.ajax({
+                    url: "/RoleInfo/BindUserInfo",
+                    type: 'post',
+                    data: {
+                        userIds: userIds,
+                        roleId:roleId
+                    },
+                    success: function (res) {
+                        layer.msg(res.msg);
+                    }
+
+                });
+            });
+        });
+    </script>
+</body>
+</html>

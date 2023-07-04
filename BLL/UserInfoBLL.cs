@@ -396,5 +396,30 @@ namespace BLL
             msg = IsOk ? "密码修改成功，请重新登录!" : "修改失败";
             return IsOk;
         }
+        /// <summary>
+        /// 获取用户列表，非分页
+        /// </summary>
+        /// <returns></returns>
+        public List<GetUserInfosDTO> GetUserInfos()
+        {
+            //throw new NotImplementedException();
+            List<GetUserInfosDTO> UserList = _userInfoDAL.GetEntities()
+                                                         .Where( u => u.IsDelete == false)
+                                                         .Select(u => new GetUserInfosDTO
+                                                         {
+                                                             UserId = u.Id,
+                                                             Account = u.Account,
+                                                             UserName = u.UserName,
+                                                             PhoneNum = u.PhoneNum,
+                                                             Email = u.Email,
+                                                             //DepartmentName = u.DepartmentName == null ? "空" : dd.DepartmentName,
+                                                             DepartmentId = u.DepartmentId,
+                                                             Sex = u.Sex == 0 ? "女" : "男",
+                                                             CreateTime = u.CreatedTime
+
+                                                         })
+                                                         .ToList();
+            return UserList;
+        }
     }
 }

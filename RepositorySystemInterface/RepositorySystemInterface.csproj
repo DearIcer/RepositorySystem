@@ -330,6 +330,7 @@
     <Content Include="Views\RoleInfo\ListView.cshtml" />
     <Content Include="Views\RoleInfo\CreateRoleInfoView.cshtml" />
     <Content Include="Views\RoleInfo\UpdateRoleInfoView.cshtml" />
+    <Content Include="Views\RoleInfo\BindUserInfoView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

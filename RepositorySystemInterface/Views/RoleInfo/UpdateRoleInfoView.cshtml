@@ -16,7 +16,6 @@
 </head>
 <body>
     <div class="layui-form layuimini-form" lay-filter="fromData">
-
         <div class="layui-form-item">
             <label class="layui-form-label required">角色名</label>
             <div class="layui-input-block">
@@ -38,7 +37,6 @@
         </div>
     </div>
     <script src="../layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
-
     <script>
 
         // 刷新父页面的表格函数
@@ -59,14 +57,17 @@
                 "description": parentData.description
             });
         }
+
         layui.use(['form'], function () {
 
             var layer = layui.layer,
-                    $ = layui.$;
+                $ = layui.$;
             form = layui.form;
+
             var id = window.location.search.substr(4);
+
             console.log('表单页面id', id);
-            /*---------------------------------------------------------------*/
+
             ////监听提交
             form.on('submit(saveBtn)', function (data) {
                 data.field.id = parentData.roleId;
@@ -76,14 +77,18 @@
                     type: 'POST',
                     data: data.field,
                     success: function (res) {
+                        //console.log(data.field.departmentName);
 
                         if (res.code == 200) {
                             var index = layer.alert(res.msg, {
                                 title: '最终的提交信息'
                             }, function () {
 
+                                // 关闭弹出层
                                 layer.close(index);
-                                miniTab.deleteCurrentByIframe();
+                                reloadParentTable();
+                                var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(iframeIndex);
 
                             });
 

@@ -15,15 +15,7 @@ namespace RepositorySystemInterface.Controllers
     {
         
         public ActionResult Index()
-        {
-            //var UserName =  HttpContext.Session["UserName"];
-            //var UserId = HttpContext.Session["UserId"];
-            //if(UserName == null && UserId == null)
-            //{          
-            //    return RedirectToAction("LoginView", "Account");
-            //}
- 
-            
+        {           
             return View();
         }
 

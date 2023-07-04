@@ -15,16 +15,50 @@ namespace BLL
     {
         private RepositorySystemContext _dbContext;
         private IRoleInfoDAL _roleInfo;
+        private IR_UserInfo_RoleInfoDAL _r_UserInfo_RoleInfoDAL;
         /// <summary>
         /// 接口数据实例化
         /// </summary>
         /// <param name="dbcontext"></param>
         /// <param name="roleInfo"></param>
-        public RoleInfoBLL(RepositorySystemContext dbcontext,IRoleInfoDAL roleInfo)
+        public RoleInfoBLL(RepositorySystemContext dbcontext,IRoleInfoDAL roleInfo, IR_UserInfo_RoleInfoDAL r_UserInfo_RoleInfoDAL)
         {
             _dbContext = dbcontext;
             _roleInfo = roleInfo;
+            _r_UserInfo_RoleInfoDAL = r_UserInfo_RoleInfoDAL;
         }
+        /// <summary>
+        /// 绑定用户角色
+        /// </summary>
+        /// <param name="userIds"></param>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        public bool BindUserInfo(List<string> userIds, string roleId)
+        {
+            //throw new NotImplementedException();
+            if(userIds == null || userIds.Count == 0) return false;
+
+            List<R_UserInfo_RoleInfo> BindUserList = _r_UserInfo_RoleInfoDAL.GetEntities().Where(x => x.RoleId==roleId).ToList();
+
+            foreach (var item in userIds)
+            {
+                //var user = BindUserList.FirstOrDefault(x => x.UserId == item);
+                bool isHas = BindUserList.Any(x => x.UserId == item);
+                if (!isHas)
+                {
+                    R_UserInfo_RoleInfo entity = new R_UserInfo_RoleInfo()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        UserId = item,
+                        RoleId = roleId,
+                        CreatedTime = DateTime.Now,
+                    };
+                    _r_UserInfo_RoleInfoDAL.CreateEntity(entity);
+                }
+            }
+            return true;
+        }
+
         /// <summary>
         /// 添加角色的接口
         /// </summary>
@@ -156,6 +190,23 @@ namespace BLL
             return tempList.OrderBy(u => u.CreateTime).Skip(limit * (page - 1)).Take(limit).ToList(); ;
             #endregion
         }
+        /// <summary>
+        /// 获取角色已经绑定的用户id集
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public List<string> GetBindUserIds(string roleId)
+        {
+            //throw new NotImplementedException();
+            // 查询当前角色已经绑定的用户id
+            List<string> UserIds = _r_UserInfo_RoleInfoDAL.GetEntities()
+                                                          .Where(x => x.RoleId == roleId)
+                                                          .Select(x => x.UserId)
+                                                          .ToList();
+            return UserIds;
+        }
+
         /// <summary>
         /// 添加角色的接口
         /// </summary>

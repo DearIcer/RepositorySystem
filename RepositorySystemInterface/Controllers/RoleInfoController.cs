@@ -18,10 +18,12 @@ namespace RepositorySystemInterface.Controllers
         // GET: RoleInfo
         private RepositorySystemContext _dbContext;
         private IRoleInfoBLL _roleInfo;
-        public RoleInfoController(RepositorySystemContext dbcontext , IRoleInfoBLL roleInfo)
+        private IUserInfoBLL _userInfoBLL;
+        public RoleInfoController(RepositorySystemContext dbcontext , IRoleInfoBLL roleInfo, IUserInfoBLL userInfoBLL)
         { 
             this._dbContext = dbcontext;
             this._roleInfo = roleInfo;
+            this._userInfoBLL = userInfoBLL;
         }
         public ActionResult ListView()
         {
@@ -32,6 +34,10 @@ namespace RepositorySystemInterface.Controllers
             return View();
         }
         public ActionResult UpdateRoleInfoView()
+        {
+            return View();
+        }
+        public ActionResult BindUserInfoView()
         {
             return View();
         }
@@ -154,5 +160,68 @@ namespace RepositorySystemInterface.Controllers
             }
             return new JsonHelper(result);
         }
+
+        /// <summary>
+        /// 获取用户未绑定数据集的接口
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult GetUserInfoOptions(string roleId)
+        {
+            ReturnResult result = new ReturnResult();
+
+            if (string.IsNullOrWhiteSpace(roleId))
+            {
+                result.Msg = "id不能为空";
+                return new JsonHelper(result);
+            }
+
+            List<GetUserInfosDTO> options = _userInfoBLL.GetUserInfos();
+            List<string> UserIds = _roleInfo.GetBindUserIds(roleId);
+            result.Data = new
+            {
+                options,
+                UserIds
+            };
+            result.Code = 200;
+            result.Msg = "获取成功";
+            result.IsSuccess = true;
+            return new JsonHelper(result);
+        }
+        /// <summary>
+        /// 绑定用户角色的接口
+        /// </summary>
+        /// <param name="userIds"></param>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult BindUserInfo(List<string> userIds, string roleId)
+        {
+            ReturnResult result = new ReturnResult();
+
+            if (string.IsNullOrWhiteSpace(roleId))
+            {
+                result.Msg = "id不能为空";
+                return new JsonHelper(result);
+            }
+
+            result.IsSuccess = _roleInfo.BindUserInfo(userIds, roleId);
+
+            if (result.IsSuccess)
+            {              
+                result.Msg = "绑定角色成功";
+                result.Code = 200;
+                return new JsonHelper(result);
+            }
+            else
+            {
+                result.Msg = "绑定角色失败";
+                result.Code = 500;
+                return new JsonHelper(result);
+            }
+            
+        }
     }
+    
 }
