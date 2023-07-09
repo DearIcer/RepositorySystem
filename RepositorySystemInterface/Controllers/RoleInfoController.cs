@@ -19,11 +19,13 @@ namespace RepositorySystemInterface.Controllers
         private RepositorySystemContext _dbContext;
         private IRoleInfoBLL _roleInfo;
         private IUserInfoBLL _userInfoBLL;
-        public RoleInfoController(RepositorySystemContext dbcontext , IRoleInfoBLL roleInfo, IUserInfoBLL userInfoBLL)
+        private IMenuInfoBLL _menuInfoBLL;
+        public RoleInfoController(RepositorySystemContext dbcontext , IRoleInfoBLL roleInfo, IUserInfoBLL userInfoBLL ,IMenuInfoBLL menuInfoBLL)
         { 
             this._dbContext = dbcontext;
             this._roleInfo = roleInfo;
             this._userInfoBLL = userInfoBLL;
+            this._menuInfoBLL = menuInfoBLL;
         }
         public ActionResult ListView()
         {
@@ -38,6 +40,10 @@ namespace RepositorySystemInterface.Controllers
             return View();
         }
         public ActionResult BindUserInfoView()
+        {
+            return View();
+        }
+        public ActionResult BindMenuInfoView()
         {
             return View();
         }
@@ -190,6 +196,34 @@ namespace RepositorySystemInterface.Controllers
             return new JsonHelper(result);
         }
         /// <summary>
+        /// 获取菜单未绑定数据集的接口
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult GetMenuInfoOptions(string roleId)
+        {
+            ReturnResult result = new ReturnResult();
+
+            if (string.IsNullOrWhiteSpace(roleId))
+            {
+                result.Msg = "id不能为空";
+                return new JsonHelper(result);
+            }
+
+            List<GetMenuInfoDTO> options = _menuInfoBLL.GetAllMenuInfos();
+            List<string> MenuIds = _roleInfo.GetBindMenuIds(roleId);
+            result.Data = new
+            {
+                options,
+                MenuIds
+            };
+            result.Code = 200;
+            result.Msg = "获取成功";
+            result.IsSuccess = true;
+            return new JsonHelper(result);
+        }
+        /// <summary>
         /// 绑定用户角色的接口
         /// </summary>
         /// <param name="userIds"></param>
@@ -220,7 +254,41 @@ namespace RepositorySystemInterface.Controllers
                 result.Code = 500;
                 return new JsonHelper(result);
             }
-            
+
+        }
+        /// <summary>
+        /// 绑定用户菜单接口
+        /// </summary>
+        /// <param name="userIds"></param>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+
+        [HttpPost]
+        public ActionResult BindMenuInfo(List<string> menuIds, string roleId)
+        {
+            ReturnResult result = new ReturnResult();
+
+            if (string.IsNullOrWhiteSpace(roleId))
+            {
+                result.Msg = "id不能为空";
+                return new JsonHelper(result);
+            }
+
+            result.IsSuccess = _roleInfo.BindMenuInfo(menuIds, roleId);
+
+            if (result.IsSuccess)
+            {
+                result.Msg = "绑定菜单成功";
+                result.Code = 200;
+                return new JsonHelper(result);
+            }
+            else
+            {
+                result.Msg = "绑定菜单失败";
+                result.Code = 500;
+                return new JsonHelper(result);
+            }
+
         }
     }
     

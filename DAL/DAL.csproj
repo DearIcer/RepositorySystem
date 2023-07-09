@@ -54,8 +54,10 @@
     <Compile Include="BaseDAL.cs" />
     <Compile Include="BaseDeleteDAL.cs" />
     <Compile Include="DepartmentInfoDAL.cs" />
+    <Compile Include="MenuInfoDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleInfoDAL.cs" />
+    <Compile Include="R_RoleInfo_MenuInfoDAL.cs" />
     <Compile Include="R_UserInfo_RoleInfoDAL.cs" />
     <Compile Include="UserInfoDAL.cs" />
   </ItemGroup>

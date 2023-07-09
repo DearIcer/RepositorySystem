@@ -54,5 +54,18 @@ namespace IBLL
         /// <param name="roleId"></param>
         /// <returns></returns>
         bool BindUserInfo(List<string> userIds ,string roleId);
+        /// <summary>
+        /// 绑定菜单
+        /// </summary>
+        /// <param name="menuIds"></param>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        bool BindMenuInfo(List<string> menuIds ,string roleId);
+        /// <summary>
+        /// 获取绑定菜单
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        List<string>GetBindMenuIds(string roleId);
     }
 }

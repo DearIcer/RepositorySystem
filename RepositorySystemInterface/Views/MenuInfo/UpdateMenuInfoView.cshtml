@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../layuimini/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../layuimini/css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-form layuimini-form" lay-filter="fromData">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label required">部门ID</label>
+            <div class="layui-input-block">
+                <input type="text" name="departmentInfoId" lay-verify="required" lay-reqtext="部门ID不能为空" placeholder="请输入部门ID" value="" class="layui-input">
+                <tip>填写部门ID。</tip>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label required">部门描述</label>
+            <div class="layui-input-block">
+                <input type="text" name="description" lay-verify="required" lay-reqtext="部门描述不能为空" placeholder="请输入部门描述" value="" class="layui-input">
+                <tip>填写部门描述。</tip>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label required">部门名称</label>
+            <div class="layui-input-block">
+
+                <input type="text" name="departmentName" lay-verify="required" lay-reqtext="部门名称不能为空" placeholder="请输入部门名称" value="" class="layui-input">
+
+                <tip>填写部门名称。</tip>
+            </div>
+
+        </div>
+        @*---------------------------------------------------------*@
+        <div class="layui-form-item">
+            <label class="layui-form-label required">主管ID</label>
+            <div class="layui-input-block">
+
+                @*<input type="number" name="leaderId" lay-verify="required" lay-reqtext="主管ID不能为空" placeholder="请输入主管ID" value="" class="layui-input">*@
+
+                <select name="leaderIdSelect" id="leaderIdSelectId">
+                    <option value=""></option>
+                </select>
+
+                <tip>填写主管ID。</tip>
+            </div>
+        </div>
+        @*---------------------------------------------------------*@
+
+        @*---------------------------------------------------------*@
+        <div class="layui-form-item">
+            <label class="layui-form-label required">父部门ID</label>
+            <div class="layui-input-block">
+
+                @*<input type="number" name="parentId" lay-verify="required" lay-reqtext="父部门ID不能为空" placeholder="请输入父部门ID" value="" class="layui-input">*@
+
+                <select name="departmentSelect" id="departmentdSelectId">
+                    <option value=""></option>
+                </select>
+
+            </div>
+
+        </div>
+        @*---------------------------------------------------------*@
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+            </div>
+        </div>
+    </div>
+    <script src="../layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script>
+
+        // 刷新父页面的表格函数
+        function reloadParentTable() {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+            parent.layui.table.reload('currentTableId');
+        }
+
+        var parentData;
+        var form;
+        //  获取父页面的回调数据
+        function getDate(Data) {
+            /*console.log("父级：", Data);*/
+            parentData = Data;
+
+            form.val("fromData", {
+                "departmentInfoId": parentData.departmentInfoId,
+                "description": parentData.description,
+                "departmentName": parentData.departmentName,
+                "leaderId": parentData.leaderId,
+                "parentId": parentData.parentId,
+                /*"sex": parentData.sex,*/
+            });
+        }
+
+
+        layui.use(['form'], function () {
+
+            var layer = layui.layer,
+                $ = layui.$;
+            form = layui.form;
+
+
+            var id = window.location.search.substr(18);
+            console.log(id);
+
+            $.ajax({
+                url: '/DepartmentInfo/GetDepartmentInfoById',
+                type: 'GET',
+                data: {
+                    id:id
+                },
+                success: function (data) {
+                    console.log(data.id);
+                    var leaderSelect = data.data.selectOption.leaderSelect;
+                    for (var i = 0; i < leaderSelect.length; i++) {
+                        $("#leaderIdSelectId").append('<option value="' + leaderSelect[i].value + '">' + leaderSelect[i].title + '</option>');
+                        /* console.log(leaderSelect[i].value);*/
+                    }
+                    var parentSelect = data.data.selectOption.parentSelect;
+                    for (var i = 0; i < parentSelect.length; i++) {
+                        $("#departmentdSelectId").append('<option value="' + parentSelect[i].value + '">' + parentSelect[i].title + '</option>');
+                    }
+                    form.render('select');
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+
+            ////监听提交
+            form.on('submit(saveBtn)', function (data) {
+                data.field.id = parentData.departmentInfoId;
+                data.field.parentId = $("#departmentdSelectId").val();
+                data.field.leaderId = $("#leaderIdSelectId").val();
+                 //获取数据的方式
+                /*data.field.departmentSelectValue = $("#departmentdSelectId").val();*/
+
+                console.log(data.field.parentId);
+                $.ajax({
+                    url: '/DepartmentInfo/UpdatDepartmentInfo',
+                    type: 'POST',
+                    data: data.field,
+                    success: function (res) {
+                        if (res.code == 200) {
+                            var index = layer.alert(res.msg, {
+                                title: '最终的提交信息'
+                            }, function () {
+
+                                // 关闭弹出层
+                                layer.close(index);
+                                reloadParentTable();
+                                var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(iframeIndex);
+
+                            });
+
+                        } else {
+                            layer.alert(res.msg);
+                        }
+
+                    }
+                })
+
+                return false;
+            });
+
+        });
+    </script>
+</body>
+</html>

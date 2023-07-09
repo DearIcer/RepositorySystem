@@ -150,6 +150,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DepartmentInfoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MenuInfoController.cs" />
     <Compile Include="Controllers\RoleInfoController.cs" />
     <Compile Include="Controllers\UserInfoController.cs" />
     <Compile Include="Filters\CustomAttribute.cs" />
@@ -331,6 +332,10 @@
     <Content Include="Views\RoleInfo\CreateRoleInfoView.cshtml" />
     <Content Include="Views\RoleInfo\UpdateRoleInfoView.cshtml" />
     <Content Include="Views\RoleInfo\BindUserInfoView.cshtml" />
+    <Content Include="Views\MenuInfo\ListView.cshtml" />
+    <Content Include="Views\MenuInfo\UpdateMenuInfoView.cshtml" />
+    <Content Include="Views\MenuInfo\CreateMenuInfoView.cshtml" />
+    <Content Include="Views\RoleInfo\BindMenuInfoView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

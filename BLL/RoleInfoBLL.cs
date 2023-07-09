@@ -16,17 +16,60 @@ namespace BLL
         private RepositorySystemContext _dbContext;
         private IRoleInfoDAL _roleInfo;
         private IR_UserInfo_RoleInfoDAL _r_UserInfo_RoleInfoDAL;
+        private IR_RoleInfo_MenuInfoDAL _r_RoleInfo_MenuInfoDAL;
+        private IMenuInfoDAL _menuInfoDAL;
         /// <summary>
         /// 接口数据实例化
         /// </summary>
         /// <param name="dbcontext"></param>
         /// <param name="roleInfo"></param>
-        public RoleInfoBLL(RepositorySystemContext dbcontext,IRoleInfoDAL roleInfo, IR_UserInfo_RoleInfoDAL r_UserInfo_RoleInfoDAL)
+        public RoleInfoBLL(IR_RoleInfo_MenuInfoDAL r_RoleInfo_MenuInfoDAL , RepositorySystemContext dbcontext,IRoleInfoDAL roleInfo, IR_UserInfo_RoleInfoDAL r_UserInfo_RoleInfoDAL)
         {
             _dbContext = dbcontext;
             _roleInfo = roleInfo;
             _r_UserInfo_RoleInfoDAL = r_UserInfo_RoleInfoDAL;
+            _r_RoleInfo_MenuInfoDAL = r_RoleInfo_MenuInfoDAL;
         }
+        /// <summary>
+        /// 绑定用户菜单接口
+        /// </summary>
+        /// <param name="menuIds"></param>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public bool BindMenuInfo(List<string> menuIds, string roleId)
+        {
+            //throw new NotImplementedException();
+            List<R_RoleInfo_MenuInfo> BindMenuList = _r_RoleInfo_MenuInfoDAL.GetEntities().Where(x => x.RoleId == roleId).ToList();
+            //解绑数据
+            foreach (var item in BindMenuList)
+            {
+                bool isHas = menuIds == null ? false : menuIds.Any(x => x == item.MenuId);
+                if (!isHas)
+                {
+                    _r_RoleInfo_MenuInfoDAL.DeleteEntity(item);
+                }
+            }
+            if (menuIds == null || menuIds.Count == 0) return false;
+
+            foreach (var item in menuIds)
+            {
+                bool isHas = BindMenuList.Any(x => x.MenuId == item);
+                if (!isHas)
+                {
+                    R_RoleInfo_MenuInfo entity = new R_RoleInfo_MenuInfo()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        MenuId = item,
+                        RoleId = roleId,
+                        CreatedTime = DateTime.Now,
+                    };
+                    _r_RoleInfo_MenuInfoDAL.CreateEntity(entity);
+                }
+            }
+            return true;
+        }
+
         /// <summary>
         /// 绑定用户角色
         /// </summary>
@@ -35,14 +78,23 @@ namespace BLL
         /// <returns></returns>
         public bool BindUserInfo(List<string> userIds, string roleId)
         {
-            //throw new NotImplementedException();
-            if(userIds == null || userIds.Count == 0) return false;
-
-            List<R_UserInfo_RoleInfo> BindUserList = _r_UserInfo_RoleInfoDAL.GetEntities().Where(x => x.RoleId==roleId).ToList();
+            List<R_UserInfo_RoleInfo> BindUserList = _r_UserInfo_RoleInfoDAL.GetEntities().Where(x => x.RoleId == roleId).ToList();
+            bool BindingState = false;
+            //解绑数据
+            foreach (var item in BindUserList)
+            {
+                //bool isHas = userIds == null ? false : userIds.Any(x => x == item.UserId);
+                bool isHas = userIds == null ? false : userIds.Any(x => x == item.UserId);
+                if (!isHas)
+                {
+                    _r_UserInfo_RoleInfoDAL.DeleteEntity(item);                  
+                }
+                BindingState = true;
+            }
+            if (userIds == null || userIds.Count == 0 && BindingState == false) return false;
 
             foreach (var item in userIds)
             {
-                //var user = BindUserList.FirstOrDefault(x => x.UserId == item);
                 bool isHas = BindUserList.Any(x => x.UserId == item);
                 if (!isHas)
                 {
@@ -140,6 +192,8 @@ namespace BLL
             return true;
         }
 
+        
+
         /// <summary>
         /// 查询角色列表的函数
         /// </summary>
@@ -190,6 +244,15 @@ namespace BLL
             return tempList.OrderBy(u => u.CreateTime).Skip(limit * (page - 1)).Take(limit).ToList(); ;
             #endregion
         }
+
+        public List<string> GetBindMenuIds(string roleId)
+        {
+            List<string> ids = _r_RoleInfo_MenuInfoDAL.GetEntities().Where(x => x.RoleId == roleId)
+                                                          .Select(x => x.MenuId)
+                                                          .ToList();
+            return ids;
+        }
+
         /// <summary>
         /// 获取角色已经绑定的用户id集
         /// </summary>

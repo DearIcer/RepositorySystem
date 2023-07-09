@@ -127,7 +127,7 @@ namespace RepositorySystemInterface.Controllers
             ReturnResult result = new ReturnResult();
             if (ids == null || ids.Count == 0)
             {
-                result.Msg = "选中用户为空";
+                result.Msg = "选中部门为空";
                 return new JsonHelper(result);
             }
             bool isOk = _departmentInfoBLL.DeleteDepartmentInfos(ids);

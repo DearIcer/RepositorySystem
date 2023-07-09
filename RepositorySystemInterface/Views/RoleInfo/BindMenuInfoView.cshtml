@@ -18,8 +18,9 @@
         body {
             background-color: #ffffff;
         }
-        .box{
-            text-align:center;
+
+        .box {
+            text-align: center;
         }
     </style>
 </head>
@@ -27,10 +28,10 @@
     <div class="box">
         <div id="showUser"></div>
         @*<button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>*@
-        <a class="layui-btn layui-btn-xs layui-btn-normal " id ="bindBtn">提交绑定</a>
+        <a class="layui-btn layui-btn-xs layui-btn-normal " id="bindBtn">提交绑定</a>
     </div>
 
-   
+
 
     <script src="../layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
     <script>
@@ -38,29 +39,28 @@
         layui.use(function () {
             var transfer = layui.transfer;
             var roleId = window.location.search.substr(4);
-
+            console.log(roleId);
             //发起请求
             $.ajax({
-                url: "/RoleInfo/GetUserInfoOptions",
+                url: "/RoleInfo/GetMenuInfoOptions",
                 type: 'Get',
                 data: {
                     roleId:roleId
                 },
                 success: function (res) {
                     if (res.code == 200) {
-
                         // 渲染
                         transfer.render({
                             elem: '#showUser',
                             data: res.data.options,
-                            title: ['未绑定的用户', '已绑定的用户'],
+                            title: ['备选菜单', '已选菜单'],
                             /*value: '5217d19f-b9c2-439b-ac09-f979ecb4d01d',*/
-                            value: res.data.userIds,
+                            value: res.data.menuIds,
                             showSearch: true,
                             parseData: function (result) {
                                 return {
-                                    "value": result.userId, // 数据值
-                                    "title": result.userName, // 数据标题                      
+                                    "value": result.id, // 数据值
+                                    "title": result.title, // 数据标题
                                 }
                             },
                             id: "userList"
@@ -70,22 +70,21 @@
                     }
                 }
             });
-           
+
             layui.jquery("#bindBtn").click(function (res) {
                 var getData = transfer.getData('userList'); // 获取右侧数据
 
-
-                var userIds = [];
+                var menuIds = [];
                 for (var i = 0; i < getData.length; i++) {
-                    var userId = getData[i].value;
-                    userIds.push(userId);
+                    var menuId = getData[i].value;
+                    menuIds.push(menuId);
                 }
 
                 $.ajax({
-                    url: "/RoleInfo/BindUserInfo",
+                    url: "/RoleInfo/BindMenuInfo",
                     type: 'post',
                     data: {
-                        userIds: userIds,
+                        menuIds: menuIds,
                         roleId:roleId
                     },
                     success: function (res) {

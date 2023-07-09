@@ -44,7 +44,7 @@ namespace DAL
             else
             {
                 _dbContext.Set<T>().Remove(entity);
-                return true;
+                return _dbContext.SaveChanges() > 0;
             }
         }
         /// <summary>
@@ -64,7 +64,7 @@ namespace DAL
             else
             {
                 _dbContext.Set<T>().Remove(entityToDelete);
-                return true;
+                return _dbContext.SaveChanges() > 0;
             }
         }
         /// <summary>

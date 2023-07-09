@@ -64,15 +64,24 @@ namespace RepositorySystemInterface
             //    CreatedTime = DateTime.Now,
             //};
 
-            RoleInfo roleInfo = new RoleInfo()
-            { 
-                Id = "001",
-                CreatedTime = DateTime.Now,
-                RoleName = "Test",
-                Description = "Test",
-            };
-            db.RoleInfo.Add(roleInfo);
-            db.SaveChanges();
+            //RoleInfo roleInfo = new RoleInfo()
+            //{ 
+            //    Id = "001",
+            //    CreatedTime = DateTime.Now,
+            //    RoleName = "Test",
+            //    Description = "Test",
+            //};
+            //db.RoleInfo.Add(roleInfo);
+            //db.SaveChanges();
+
+            //MenuInfo menuInfo = new MenuInfo()
+            //{
+            //    Id = new Guid().ToString(),
+
+
+            //};
+            //db.MenuInfo.Add(menuInfo);
+            //db.SaveChanges();
         }
     }
 }
