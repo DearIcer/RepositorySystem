@@ -91,7 +91,7 @@ namespace BLL
                 }
                 BindingState = true;
             }
-            if (userIds == null || userIds.Count == 0 && BindingState == false) return false;
+            if (userIds == null || userIds.Count == 0 /*&& BindingState == false*/) return false;
 
             foreach (var item in userIds)
             {

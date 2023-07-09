@@ -241,19 +241,22 @@ namespace RepositorySystemInterface.Controllers
             }
 
             result.IsSuccess = _roleInfo.BindUserInfo(userIds, roleId);
+            result.Msg = "绑定角色成功";
+            result.Code = 200;
+            return new JsonHelper(result);
 
-            if (result.IsSuccess)
-            {              
-                result.Msg = "绑定角色成功";
-                result.Code = 200;
-                return new JsonHelper(result);
-            }
-            else
-            {
-                result.Msg = "绑定角色失败";
-                result.Code = 500;
-                return new JsonHelper(result);
-            }
+            //if (result.IsSuccess)
+            //{              
+            //    result.Msg = "绑定角色成功";
+            //    result.Code = 200;
+            //    return new JsonHelper(result);
+            //}
+            //else
+            //{
+            //    result.Msg = "绑定角色失败";
+            //    result.Code = 500;
+            //    return new JsonHelper(result);
+            //}
 
         }
         /// <summary>
@@ -276,18 +279,21 @@ namespace RepositorySystemInterface.Controllers
 
             result.IsSuccess = _roleInfo.BindMenuInfo(menuIds, roleId);
 
-            if (result.IsSuccess)
-            {
-                result.Msg = "绑定菜单成功";
-                result.Code = 200;
-                return new JsonHelper(result);
-            }
-            else
-            {
-                result.Msg = "绑定菜单失败";
-                result.Code = 500;
-                return new JsonHelper(result);
-            }
+            result.Msg = "绑定菜单成功";
+            result.Code = 200;
+            return new JsonHelper(result);
+            //if (result.IsSuccess)
+            //{
+            //    result.Msg = "绑定菜单成功";
+            //    result.Code = 200;
+            //    return new JsonHelper(result);
+            //}
+            //else
+            //{
+            //    result.Msg = "绑定菜单失败";
+            //    result.Code = 500;
+            //    return new JsonHelper(result);
+            //}
 
         }
     }
