@@ -118,27 +118,6 @@
             var id = window.location.search.substr(18);
             console.log(id);
 
-            //$.ajax({
-            //    url: '/DepartmentInfo/GetSelectOptions',
-            //    type: 'GET',                            
-            //    success: function (data) {
-            //        console.log(data);
-            //        var leaderSelect = data.data.leaderSelect;
-            //        for (var i = 0; i < leaderSelect.length; i++) {
-            //            $("#leaderIdSelectId").append('<option value="' + leaderSelect[i].value + '">' + leaderSelect[i].title + '</option>');
-            //           /* console.log(leaderSelect[i].value);*/
-            //        }
-            //        var parentSelect = data.data.parentSelect;
-            //        for (var i = 0; i < parentSelect.length; i++) {
-            //            $("#departmentdSelectId").append('<option value="' + parentSelect[i].value + '">' + parentSelect[i].title + '</option>');
-            //        }
-            //        form.render('select');
-            //    },
-            //    error: function (xhr, status, error) {
-            //        console.log(error);
-            //    }
-            //});
-
             $.ajax({
                 url: '/DepartmentInfo/GetDepartmentInfoById',
                 type: 'GET',

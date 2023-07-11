@@ -18,62 +18,70 @@
     <div class="layui-form layuimini-form" lay-filter="fromData">
 
         <div class="layui-form-item">
-            <label class="layui-form-label required">部门ID</label>
+            <label class="layui-form-label required">标题</label>
             <div class="layui-input-block">
-                <input type="text" name="departmentInfoId" lay-verify="required" lay-reqtext="部门ID不能为空" placeholder="请输入部门ID" value="" class="layui-input">
-                <tip>填写部门ID。</tip>
+                <input type="text" name="title" lay-verify="required" lay-reqtext="标题不能为空" placeholder="请输入标题" value="" class="layui-input">
+                <tip>请输入标题。</tip>
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label required">部门描述</label>
+            <label class="layui-form-label ">描述</label>
             <div class="layui-input-block">
-                <input type="text" name="description" lay-verify="required" lay-reqtext="部门描述不能为空" placeholder="请输入部门描述" value="" class="layui-input">
-                <tip>填写部门描述。</tip>
+                <input type="text" name="description" placeholder="请输入描述" value="" class="layui-input">
+                <tip>填写描述信息。</tip>
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label required">部门名称</label>
+            <label class="layui-form-label ">等级</label>
             <div class="layui-input-block">
-
-                <input type="text" name="departmentName" lay-verify="required" lay-reqtext="部门名称不能为空" placeholder="请输入部门名称" value="" class="layui-input">
-
-                <tip>填写部门名称。</tip>
+                <input type="text" name="level" placeholder="请输入等级" value="" class="layui-input">
+                <tip>填写等级。</tip>
             </div>
-
         </div>
-        @*---------------------------------------------------------*@
+
         <div class="layui-form-item">
-            <label class="layui-form-label required">主管ID</label>
+            <label class="layui-form-label ">排序</label>
             <div class="layui-input-block">
+                <input type="text" name="sort" value="" class="layui-input">
 
-                @*<input type="number" name="leaderId" lay-verify="required" lay-reqtext="主管ID不能为空" placeholder="请输入主管ID" value="" class="layui-input">*@
+            </div>
+        </div>
 
-                <select name="leaderIdSelect" id="leaderIdSelectId">
+        <div class="layui-form-item">
+            <label class="layui-form-label ">访问地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="href" placeholder="请输入访问地址" value="" class="layui-input">
+                <tip>填写访问地址。</tip>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label ">父菜单id</label>
+            <div class="layui-input-block">
+                <select name="parentMenuSelect" id="parentMenuSelectId">
                     <option value=""></option>
                 </select>
-
-                <tip>填写主管ID。</tip>
             </div>
         </div>
-        @*---------------------------------------------------------*@
 
-        @*---------------------------------------------------------*@
         <div class="layui-form-item">
-            <label class="layui-form-label required">父部门ID</label>
+            <label class="layui-form-label ">图标样式</label>
             <div class="layui-input-block">
-
-                @*<input type="number" name="parentId" lay-verify="required" lay-reqtext="父部门ID不能为空" placeholder="请输入父部门ID" value="" class="layui-input">*@
-
-                <select name="departmentSelect" id="departmentdSelectId">
-                    <option value=""></option>
-                </select>
-
+                <input type="text" name="icon" placeholder="请输入图标样式" value="" class="layui-input">
+                <tip>填写图标样式。</tip>
             </div>
-
         </div>
-        @*---------------------------------------------------------*@
+
+        <div class="layui-form-item">
+            <label class="layui-form-label ">目标</label>
+            <div class="layui-input-block">
+                <input type="text" name="target" placeholder="请输入目标" value="_self" class="layui-input">
+                <tip>填写目标。</tip>
+            </div>
+        </div>
+
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
@@ -89,71 +97,65 @@
             parent.layer.close(index);
             parent.layui.table.reload('currentTableId');
         }
-
         var parentData;
         var form;
         //  获取父页面的回调数据
         function getDate(Data) {
-            /*console.log("父级：", Data);*/
             parentData = Data;
-
+            console.log('父级页面回调', parentData);
             form.val("fromData", {
-                "departmentInfoId": parentData.departmentInfoId,
+                "title": parentData.title,
                 "description": parentData.description,
-                "departmentName": parentData.departmentName,
-                "leaderId": parentData.leaderId,
+                "href": parentData.href,
+                "icon": parentData.icon,
+                "level": parentData.level,
                 "parentId": parentData.parentId,
-                /*"sex": parentData.sex,*/
+                "sort": parentData.sort,
+                "target": parentData.target,
+               
             });
         }
 
-
         layui.use(['form'], function () {
-
             var layer = layui.layer,
                 $ = layui.$;
             form = layui.form;
 
-
-            var id = window.location.search.substr(18);
-            console.log(id);
-
             $.ajax({
-                url: '/DepartmentInfo/GetDepartmentInfoById',
+                url: '/MenuInfo/GetSelectOptions',
                 type: 'GET',
-                data: {
-                    id:id
-                },
                 success: function (data) {
-                    console.log(data.id);
-                    var leaderSelect = data.data.selectOption.leaderSelect;
-                    for (var i = 0; i < leaderSelect.length; i++) {
-                        $("#leaderIdSelectId").append('<option value="' + leaderSelect[i].value + '">' + leaderSelect[i].title + '</option>');
-                        /* console.log(leaderSelect[i].value);*/
-                    }
-                    var parentSelect = data.data.selectOption.parentSelect;
+
+                    var parentSelect = data.data.parentSelect;
                     for (var i = 0; i < parentSelect.length; i++) {
-                        $("#departmentdSelectId").append('<option value="' + parentSelect[i].value + '">' + parentSelect[i].title + '</option>');
+                        $("#parentMenuSelectId").append('<option value="' + parentSelect[i].value + '">' + parentSelect[i].title + '</option>');
                     }
                     form.render('select');
+
+                    console.log('父级页面回调2', parentData);
+
+                    if (parentData && parentData.parentId) {
+                        form.val("fromData", {
+                            "parentMenuSelect": parentData.parentId
+                        });
+                        /*console.log('三次获取表单数据', parentData);*/
+                    } else {
+                        // 处理对象不存在或属性为空的情况
+                        console.log('数据请求超时');
+                    }
                 },
                 error: function (xhr, status, error) {
                     console.log(error);
                 }
             });
 
-            ////监听提交
+            //监听提交
             form.on('submit(saveBtn)', function (data) {
-                data.field.id = parentData.departmentInfoId;
-                data.field.parentId = $("#departmentdSelectId").val();
-                data.field.leaderId = $("#leaderIdSelectId").val();
-                 //获取数据的方式
-                /*data.field.departmentSelectValue = $("#departmentdSelectId").val();*/
-
-                console.log(data.field.parentId);
+                data.field.parentId = $("#parentMenuSelectId").val();
+                data.field.id = parentData.id;
                 $.ajax({
-                    url: '/DepartmentInfo/UpdatDepartmentInfo',
-                    type: 'POST',
+                    url: "/MenuInfo/UpdateMenuInfo",
+                    type: "Post",
                     data: data.field,
                     success: function (res) {
                         if (res.code == 200) {
@@ -163,19 +165,19 @@
 
                                 // 关闭弹出层
                                 layer.close(index);
+
                                 reloadParentTable();
+
                                 var iframeIndex = parent.layer.getFrameIndex(window.name);
                                 parent.layer.close(iframeIndex);
-
                             });
-
                         } else {
                             layer.alert(res.msg);
                         }
 
                     }
-                })
 
+                });
                 return false;
             });
 

@@ -60,8 +60,12 @@
         <div class="layui-form-item">
             <label class="layui-form-label ">父菜单id</label>
             <div class="layui-input-block">
-                <input type="text" name="parentId" placeholder="请输入父菜单id" value="" class="layui-input">
-                <tip>填写父菜单id。</tip>
+                <select name="parentMenuSelect" id="parentMenuSelectId">
+                    <option value=""></option>
+                </select>
+                @*老方案*@
+                @*<input type="text" name="parentId" placeholder="请输入父菜单id" value="" class="layui-input">
+                <tip>填写父菜单id。</tip>*@
             </div>
         </div>
 
@@ -76,7 +80,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label ">目标</label>
             <div class="layui-input-block">
-                <input type="text" name="target"  placeholder="请输入目标" value="" class="layui-input">
+                <input type="text" name="target"  placeholder="请输入目标" value="_self" class="layui-input">
                 <tip>填写目标。</tip>
             </div>
         </div>
@@ -103,20 +107,31 @@
             layer = layui.layer,
             $ = layui.$;
 
+        $.ajax({
+            url: '/MenuInfo/GetSelectOptions',
+            type: 'GET',
+            success: function (data) {
+
+                var parentSelect = data.data.parentSelect;
+                for (var i = 0; i < parentSelect.length; i++) {
+                    $("#parentMenuSelectId").append('<option value="' + parentSelect[i].value + '">' + parentSelect[i].title + '</option>');
+                    
+                }
+                form.render('select');
+                
+                console.log(parentSelect);
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
+        });
+
         //监听提交
         form.on('submit(saveBtn)', function (data) {
-
+            data.field.parentId = $("#parentMenuSelectId").val();
             $.ajax({
                 url: "/MenuInfo/CreateMenuInfo",
                 type: "Post",
-                //data: {
-                //    id: data.field.departmentInfoId,
-                //    description: data.field.description,
-                //    departmentName: data.field.departmentName,
-                //    leaderId: data.field.leaderId,
-                //    parentId: data.field.parentId,
-
-                //},
                 data: data.field,
                 success: function (res) {
                     if (res.code == 200) {

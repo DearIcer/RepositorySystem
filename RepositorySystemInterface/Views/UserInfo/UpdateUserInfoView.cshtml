@@ -115,7 +115,7 @@
         //  获取父页面的回调数据
         function getDate(Data) {
             parentData = Data;
-            console.log('父级页面回调',parentData);
+            /*console.log('父级页面回调',parentData);*/
             form.val("fromData", {
                 "account": parentData.account,
                 "userName": parentData.userName,
@@ -135,7 +135,7 @@
                 $ = layui.$;
             form = layui.form;
             var id = window.location.search.substr(4);
-            console.log('表单页面id',id);
+           /* console.log('表单页面id',id);*/
 
             $.ajax({
                 url: '/DepartmentInfo/GetSelectOptions',
@@ -147,6 +147,7 @@
                         $("#departmentdSelectId").append('<option value="' + parentSelect[i].value + '">' + parentSelect[i].title + '</option>');
                     }
                     form.render('select');
+                    /*console.log(parentSelect);*/
                     /*console.log('二次获取表单数据',parentData);*/
                    
                     if (parentData && parentData.departmentId) {

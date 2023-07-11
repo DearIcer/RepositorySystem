@@ -59,5 +59,14 @@ namespace IBLL
         /// </summary>
         /// <returns></returns>
         List<HomeMenuInfoDTO> GetAllHomeMenuInfos(string userId);
+
+        /// <summary>
+        /// 获取下拉列表数据
+        /// </summary>
+        /// <returns></returns>
+        object GetSelectOptions();
+
+
+        bool UpdateMenuInfo(MenuInfo entity, out string msg);
     }
 }

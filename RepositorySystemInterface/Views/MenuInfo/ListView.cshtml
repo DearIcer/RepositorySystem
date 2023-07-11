@@ -163,14 +163,8 @@
                         }
 
                     });
-                    //var checkStatus = table.checkStatus('currentTableId')
-                    //    , data = checkStatus.data;
-                    //layer.alert(JSON.stringify(data));
-
-
                 } else if (obj.event === 'excel') {
 
-                    //table.reload('currentTableId');
                 }
             });
 
@@ -184,13 +178,13 @@
                 if (obj.event === 'edit') {
 
                     var index = layer.open({
-                        title: '编辑部门',
+                        title: '编辑菜单',
                         type: 2,
                         shade: 0.2,
                         maxmin: true,
                         shadeClose: true,
                         area: ['80%', '80%'],
-                        content: "/DepartmentInfo/UpdateDepartmentInfoView?departmentInfoId=" + data.departmentInfoId,
+                        content: "/MenuInfo/UpdateMenuInfoView?id=" + data.id,
                         success: function (layero, index) {
                             var iframe = window['layui-layer-iframe' + index];
                             iframe.getDate(data);

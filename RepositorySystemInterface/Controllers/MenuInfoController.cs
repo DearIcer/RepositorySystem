@@ -37,7 +37,14 @@ namespace RepositorySystemInterface.Controllers
         {
             return View();
         }
-        //(int page, int limit, string id, string MenuName, out int count);
+        /// <summary>
+        /// 获取菜单列表的接口
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="limit"></param>
+        /// <param name="id"></param>
+        /// <param name="MenuName"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult GetMenuInfos(int page, int limit, string id, string MenuName)
         {
@@ -57,8 +64,6 @@ namespace RepositorySystemInterface.Controllers
 
             return new JsonHelper(result);
         }
-
-
         /// <summary>
         /// 添加菜单的接口
         /// </summary>
@@ -187,6 +192,38 @@ namespace RepositorySystemInterface.Controllers
             }
             //res = new GetMenuDTO(menuInfoList);
             return new JsonHelper(res);
+        }
+        /// <summary>
+        /// 获取下拉列表的接口
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult GetSelectOptions()
+        {
+            ReturnResult result = new ReturnResult();
+
+            var data = _menuInfoBLL.GetSelectOptions();
+
+            result.Code = 200;
+            result.Msg = "获取成功";
+            result.IsSuccess = true;
+            result.Data = data;
+
+            return new JsonHelper(result);
+        }
+        [HttpPost]
+        public ActionResult UpdateMenuInfo([Form] MenuInfo menuInfo)
+        {
+            string msg;
+            bool isSuccess = _menuInfoBLL.UpdateMenuInfo(menuInfo, out msg);
+            ReturnResult result = new ReturnResult();
+            result.Msg = msg;
+            result.IsSuccess = isSuccess;
+            if (isSuccess)
+            {
+                result.Code = 200;
+            }
+            return new JsonHelper(result);
         }
     }
 }

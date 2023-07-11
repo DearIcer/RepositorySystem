@@ -137,6 +137,7 @@ namespace BLL
             //    }).ToList();
             //    item.Child = childMenus;
             //}
+            ///使用递归实现来获取子菜单
             GetChilMenus(topMenus, allMenus);
             return topMenus;
         }
@@ -272,5 +273,45 @@ namespace BLL
         {
             return _menuInfoDAL.GetEntityByID(id);
         }
+
+        public object GetSelectOptions()
+        {
+            var parentSelect = _dbContext.MenuInfo.Where(m => m.IsDelete == false).Select(m => new
+            {
+                value = m.Id,
+                title = m.Title
+            }).ToList();
+
+            var data = new
+            {
+                parentSelect
+            };
+            return data;
+        }
+
+        public bool UpdateMenuInfo(MenuInfo entity, out string msg)
+        {
+            if (entity == null) { msg = "数据参数为空！"; }
+            if(entity.Title == null) { msg = "标题不能为空"; }
+            MenuInfo menu = _menuInfoDAL.GetEntityByID(entity.Id);
+            if (menu == null) { msg = "菜单数据为空！"; return false; }
+            menu.Title = entity.Title;
+            menu.Description = entity.Description;  
+            menu.Icon = entity.Icon;
+            menu.Target = entity.Target;
+            //menu.CreatedTime = entity.CreatedTime;
+            menu.Href = entity.Href;
+            menu.ParentId = entity.ParentId;
+            menu.Level = entity.Level;
+            entity.Sort = entity.Sort;
+            
+            bool isOk = _menuInfoDAL.UpdateEntity(menu);
+
+            msg = isOk ? $"修改{entity.Title}成功!" : "添加修改失败";
+
+            return isOk;
+
+        }
+    
     }
 }
