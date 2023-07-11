@@ -33,16 +33,31 @@ namespace IBLL
         /// <param name="id">要删除的菜单ID</param>
         /// <returns></returns>
         bool DeleteMenuInfo(string id);
+
         /// <summary>
         /// 菜单软删除部门
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
         bool DeleteMenuInfos(List<string> ids);
+
         /// <summary>
         /// 返回菜单列表 非分页
         /// </summary>
         /// <returns></returns>
         List<GetMenuInfoDTO> GetAllMenuInfos();
+
+        /// <summary>
+        /// 根据id获取菜单表
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        MenuInfo GetMenuInfoById(string id);
+
+        /// <summary>
+        /// 返回对应用户权限的菜单项
+        /// </summary>
+        /// <returns></returns>
+        List<HomeMenuInfoDTO> GetAllHomeMenuInfos(string userId);
     }
 }

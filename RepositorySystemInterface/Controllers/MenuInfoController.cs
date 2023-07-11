@@ -3,6 +3,7 @@ using CommonLib;
 using IBLL;
 using Models;
 using Models.DTO;
+using RepositorySystemInterface.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ using System.Web.Mvc;
 
 namespace RepositorySystemInterface.Controllers
 {
+    [CustomAttribute]
     public class MenuInfoController : Controller
     {
 
@@ -131,6 +133,60 @@ namespace RepositorySystemInterface.Controllers
                 result.Msg = "删除失败";
             }
             return new JsonHelper(result);
+        }
+        /// <summary>
+        /// 根据用户登录获取访问菜单
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult GetMenus() 
+        {
+            //返回的菜单消息
+            GetMenuDTO res = new GetMenuDTO();
+            #region 测试数据
+            //List<HomeMenuInfoDTO> menuInfoList = new List<HomeMenuInfoDTO>()
+            //{
+            //    new HomeMenuInfoDTO()
+            //    {
+            //        Title = "用户管理",
+            //        Href = "/UserInfo/ListView",
+            //        Icon = "fa fa-user",
+            //        Target = "_self"
+            //    },
+            //    new HomeMenuInfoDTO()
+            //    {
+            //        Title = "系统管理",
+            //        Href = "",
+            //        Icon =  "fa fa-cog",
+            //        Target = "_self",
+            //        Child = new List<HomeMenuInfoDTO>
+            //        {
+            //            new HomeMenuInfoDTO()
+            //            {
+            //                Title = "角色管理",
+            //                Href = "/RoleInfo/ListView",
+            //                Icon = "fa fa-street-view",
+            //                Target = "_self"
+            //            }
+            //        }
+            //    }
+            //};
+            //res.MenuInfo[0].Child = menuInfoList;
+            #endregion
+            //构建菜单树
+            var userId = HttpContext.Request.Cookies["UserId"];
+            if (userId == null)
+            {
+                res = new GetMenuDTO(new List<HomeMenuInfoDTO>());
+                return new JsonHelper(res);
+            }
+            else
+            {
+                List<HomeMenuInfoDTO> menuInfoList = _menuInfoBLL.GetAllHomeMenuInfos(userId.Value);
+                res = new GetMenuDTO(menuInfoList);
+            }
+            //res = new GetMenuDTO(menuInfoList);
+            return new JsonHelper(res);
         }
     }
 }

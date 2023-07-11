@@ -15,10 +15,14 @@ namespace BLL
     {
         private RepositorySystemContext _dbContext;
         private IMenuInfoDAL _menuInfoDAL;
-        public MenuInfoBLL(RepositorySystemContext dbContext, IMenuInfoDAL menuInfoDAL)
+        private IR_UserInfo_RoleInfoDAL _r_UserInfo_RoleInfoDAL;
+        private IR_RoleInfo_MenuInfoDAL _r_RoleInfo_MenuInfoDAL;
+        public MenuInfoBLL(RepositorySystemContext dbContext, IMenuInfoDAL menuInfoDAL, IR_UserInfo_RoleInfoDAL r_UserInfo_RoleInfoDAL, IR_RoleInfo_MenuInfoDAL r_RoleInfo_MenuInfoDAL)
         {
             _dbContext = dbContext;
             _menuInfoDAL = menuInfoDAL;
+            this._r_UserInfo_RoleInfoDAL = r_UserInfo_RoleInfoDAL;
+            this._r_RoleInfo_MenuInfoDAL = r_RoleInfo_MenuInfoDAL;
         }
 
         public bool CreateMenuInfo(MenuInfo entity, out string msg)
@@ -101,6 +105,68 @@ namespace BLL
             return true;
         }
 
+        public List<HomeMenuInfoDTO> GetAllHomeMenuInfos(string userId)
+        {
+            //throw new NotImplementedException();
+            //先获取角色的id
+            List<string> roleIds = _r_UserInfo_RoleInfoDAL.GetEntities().Where(u => u.UserId == userId).Select(u => u.RoleId).ToList();
+            //通关角色查询可访问的菜单
+            List<string> menuIds = _r_RoleInfo_MenuInfoDAL.GetEntities().Where(x => roleIds.Contains(x.RoleId)).Select(x => x.MenuId).ToList();
+            //获取当前用户能够访问的菜单集
+            List<MenuInfo> allMenus = _menuInfoDAL.GetEntities().Where(x => menuIds.Contains(x.Id)).OrderBy(x => x.Sort).ToList();
+            //寻找顶级菜单
+            List<HomeMenuInfoDTO> topMenus = allMenus.Where(x => x.Level == 1).OrderBy(x => x.Sort).Select(x => new
+            HomeMenuInfoDTO()
+            {
+                Id = x.Id,
+                Title = x.Title,
+                Href = x.Href,
+                Target = x.Target,
+                Icon = x.Icon,
+            }).ToList();
+            //// 通关遍历查询顶级菜单的子菜单
+            //foreach (var item in topMenus)
+            //{
+            //    List<HomeMenuInfoDTO> childMenus = allMenus.Where(x => x.ParentId == item.Id).Select(x => new HomeMenuInfoDTO()
+            //    {
+            //        Id = x.Id,
+            //        Title = x.Title,
+            //        Href = x.Href,
+            //        Target = x.Target,
+            //        Icon = x.Icon,
+            //    }).ToList();
+            //    item.Child = childMenus;
+            //}
+            GetChilMenus(topMenus, allMenus);
+            return topMenus;
+        }
+
+        public void GetChilMenus(List<HomeMenuInfoDTO> parentMenus,List<MenuInfo> allMenus)
+        {
+            foreach (var item in parentMenus)
+            {
+                List<HomeMenuInfoDTO> childMenus = allMenus.Where(x => x.ParentId == item.Id).Select(x => new HomeMenuInfoDTO()
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Href = x.Href,
+                    Target = x.Target,
+                    Icon = x.Icon,
+                }).ToList();
+                // 递归
+                GetChilMenus(childMenus, allMenus);
+                item.Child = childMenus;
+            }
+        }
+        /// <summary>
+        /// 查询菜单列表的函数
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="limit"></param>
+        /// <param name="id"></param>
+        /// <param name="MenuName"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         public List<GetMenuInfoDTO> GetAllMenuInfos(int page, int limit, string id, string MenuName, out int count)
         {
 
@@ -135,25 +201,45 @@ namespace BLL
             //return tempList;
             #endregion
             #region 实际查询
-            var tempList = (from r in _menuInfoDAL.GetMenuInfos().Where(r => r.IsDelete == false)
-                            join m in _menuInfoDAL.GetMenuInfos().Where(r => r.IsDelete == false)
-                            on r.ParentId equals m.ParentId
-                                //orderby r.CreatedTime descending
-                            select new GetMenuInfoDTO
-                            {
-                                Id = r.Id,
-                                Title = r.Title,
-                                Target = r.Target,
-                                Description = r.Description,
-                                Level = r.Level,
-                                Sort = r.Sort,
-                                Href = r.Href,
-                                ParentId = m.ParentId,
-                                Icon = r.Icon,
-                                CreateTime = r.CreatedTime
-                            }).ToList();
-            count = tempList.Count;
-            return tempList.OrderBy(u => u.CreateTime).Skip(limit * (page - 1)).Take(limit).ToList();
+            //var tempList = (from r in _menuInfoDAL.GetMenuInfos().Where(r => r.IsDelete == false)
+            //                join m in _menuInfoDAL.GetMenuInfos().Where(r => r.IsDelete == false)
+            //                on r.ParentId equals m.ParentId // 修改join条件
+            //                select new GetMenuInfoDTO
+            //                {
+            //                    Id = r.Id,
+            //                    Title = r.Title,
+            //                    Target = r.Target,
+            //                    Description = r.Description,
+            //                    Level = r.Level,
+            //                    Sort = r.Sort,
+            //                    Href = r.Href,
+            //                    ParentId = r.ParentId, // 使用r.ParentId作为父级ID值
+            //                    Icon = r.Icon,
+            //                    CreateTime = r.CreatedTime
+            //                }).ToList();
+            //count = tempList.Count;
+
+            var data = from m in _dbContext.MenuInfo.Where(r => r.IsDelete == false)
+                       join m2 in _dbContext.MenuInfo.Where(r => r.IsDelete == false)
+                       on m.ParentId equals m2.Id
+                       into m3
+                       from mm in m3.DefaultIfEmpty()
+                       select new GetMenuInfoDTO
+                       {
+                           Id = m.Id,
+                           Title = m.Title,
+                           Target = m.Target,
+                           Description = m.Description,
+                           Level = m.Level,
+                           Sort = m.Sort,
+                           Href = m.Href,
+                           ParentId = m.ParentId, // 使用r.ParentId作为父级ID值
+                           Icon = m.Icon,
+                           CreateTime = m.CreatedTime
+                       };
+            count = data.Count();
+            return data.OrderBy(u => u.CreateTime).Skip(limit * (page - 1)).Take(limit).ToList();
+
             #endregion
 
         }
@@ -175,6 +261,16 @@ namespace BLL
                                                                       })
                                                                       .ToList();
             return MenuList;
+        }
+
+        /// <summary>
+        /// 根据id获取菜单表
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public MenuInfo GetMenuInfoById(string id)
+        {
+            return _menuInfoDAL.GetEntityByID(id);
         }
     }
 }
