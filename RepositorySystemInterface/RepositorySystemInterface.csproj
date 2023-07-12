@@ -344,6 +344,9 @@
     <Content Include="Views\ConsumableRecord\ListView.cshtml" />
     <Content Include="Views\Category\CreatetCategorView.cshtml" />
     <Content Include="Views\Category\UpdateCategorView.cshtml" />
+    <Content Include="Views\ConsumableRecord\CreatetConsumableRecordView.cshtml" />
+    <Content Include="Views\ConsumableInfo\CreatetConsumableInfoView.cshtml" />
+    <Content Include="Views\ConsumableInfo\UpdateConsumableInfoView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

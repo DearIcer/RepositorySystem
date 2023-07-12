@@ -15,18 +15,24 @@
     </style>
 </head>
 <body>
-    <div class="layui-form layuimini-form" lay-filter="fromData">
+    <div class="layui-form layuimini-form">
         <div class="layui-form-item">
-            <label class="layui-form-label ">分类名</label>
+            <label class="layui-form-label required">耗材ID</label>
             <div class="layui-input-block">
-                <input type="text" name="categoryName" placeholder="请输入分类名" value="" class="layui-input">
-                <tip>填写分类的名称。</tip>
+                <input type="text" name="categoryName" lay-verify="required" placeholder="请输入耗材ID" value="" class="layui-input">
+                <tip>填写耗材ID。</tip>
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">描述</label>
+            <label class="layui-form-label">数量</label>
             <div class="layui-input-block">
-                <input type="text" name="description" placeholder="请描述" value="" class="layui-input">
+                <input type="text" name="description" placeholder="请输入数量" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">操作类型</label>
+            <div class="layui-input-block">
+                <input type="text" name="type" placeholder="请输入操作类型" value="" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -38,46 +44,30 @@
     <script src="../layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
     <script>
 
-        // 刷新父页面的表格函数
-        function reloadParentTable() {
-            var index = parent.layer.getFrameIndex(window.name);
-            parent.layer.close(index);
-            parent.layui.table.reload('currentTableId');
-        }
+            // 刷新父页面的表格函数
+            function reloadParentTable() {
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                parent.layui.table.reload('currentTableId');
+            }
 
-        var parentData;
-        var form;
-        //  获取父页面的回调数据
-        function getDate(Data) {
-            parentData = Data;
-            console.log('父级页面回调', parentData);
-            form.val("fromData", {
-                "categoryName": parentData.categoryName,
-                "description": parentData.description
-            });
-        }
 
         layui.use(['form'], function () {
-
-            var layer = layui.layer,
+            var form = layui.form,
+                layer = layui.layer,
                 $ = layui.$;
-            form = layui.form;
 
-            var id = window.location.search.substr(4);
-
-            console.log('表单页面id', id);
-
-            ////监听提交
+            //监听提交
             form.on('submit(saveBtn)', function (data) {
-                data.field.id = parentData.id;
-                console.log(data.field.id);
-                $.ajax({
-                    url: "/Category/UpdatCategory",
-                    type: 'POST',
-                    data: data.field,
-                    success: function (res) {
-                        //console.log(data.field.departmentName);
 
+                $.ajax({
+                    url: "/Category/CreateCategory",
+                    type: "Post",
+                    data: {
+                        categoryName: data.field.categoryName,
+                        description: data.field.description,
+                    },
+                    success: function (res) {
                         if (res.code == 200) {
                             var index = layer.alert(res.msg, {
                                 title: '最终的提交信息'
@@ -85,18 +75,19 @@
 
                                 // 关闭弹出层
                                 layer.close(index);
+
                                 reloadParentTable();
+
                                 var iframeIndex = parent.layer.getFrameIndex(window.name);
                                 parent.layer.close(iframeIndex);
-
                             });
-
                         } else {
                             layer.alert(res.msg);
                         }
 
                     }
-                })
+
+                });
                 return false;
             });
 
@@ -104,3 +95,4 @@
     </script>
 </body>
 </html>
+

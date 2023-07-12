@@ -126,6 +126,11 @@ namespace BLL
             return list;
         }
 
+        public object GetSelectOptions()
+        {
+            throw new NotImplementedException();
+        }
+
         //public bool UpdateCategory(Category entity, out string msg)
         //{
         //    if (string.IsNullOrWhiteSpace(entity.Description))

@@ -54,6 +54,8 @@
     <Compile Include="IBaseDAL.cs" />
     <Compile Include="IBaseDeleteDAL.cs" />
     <Compile Include="ICategoryDAL.cs" />
+    <Compile Include="IConsumableInfoDAL.cs" />
+    <Compile Include="IConsumableRecordDAL.cs" />
     <Compile Include="IDepartmentInfoDAL.cs" />
     <Compile Include="IMenuInfoDAL.cs" />
     <Compile Include="IRoleInfoDAL.cs" />

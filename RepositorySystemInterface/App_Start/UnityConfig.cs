@@ -70,6 +70,12 @@ namespace RepositorySystemInterface
 
             container.RegisterType<ICategoryDAL, CategoryDAL>();
             container.RegisterType<ICategoryBLL, CategoryBLL>();
+
+            container.RegisterType<IConsumableRecordDAL, ConsumableRecordDAL>();
+            container.RegisterType<IConsumableRecordBLL, ConsumableRecordBLL>();
+
+            container.RegisterType<IConsumableInfoDAL, ConsumableInfoDAL>();
+            container.RegisterType<IConsumableInfoBLL, ConsumableInfoBLL>();
         }
     }
 }

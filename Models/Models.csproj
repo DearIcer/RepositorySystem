@@ -60,6 +60,8 @@
     <Compile Include="ConsumableRecord.cs" />
     <Compile Include="DepartmentInfo.cs" />
     <Compile Include="DTO\GetCategoryDTO.cs" />
+    <Compile Include="DTO\GetConsumableInfoDTO.cs" />
+    <Compile Include="DTO\GetConsumableRecordDTO.cs" />
     <Compile Include="DTO\GetDepartmentInfoDTO.cs" />
     <Compile Include="DTO\GetMenuDTO.cs" />
     <Compile Include="DTO\GetMenuInfoDTO.cs" />
