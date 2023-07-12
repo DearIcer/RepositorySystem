@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class Category
+    public class Category : BaseDeleteEntity
     {
-        /// <summary>
-        /// 主键Id
-        /// </summary>
-        [Key]
-        [MaxLength(36)]
-        public string Id { get; set; }
+        ///// <summary>
+        ///// 主键Id
+        ///// </summary>
+        //[Key]
+        //[MaxLength(36)]
+        //public string Id { get; set; }
         /// <summary>
         /// 类别名称
         /// </summary>
