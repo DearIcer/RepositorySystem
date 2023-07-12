@@ -67,6 +67,9 @@ namespace RepositorySystemInterface
 
             container.RegisterType<IR_RoleInfo_MenuInfoDAL, R_RoleInfo_MenuInfoDAL>();
             //container.RegisterType<IR_R, MenuInfoDAL>();
+
+            container.RegisterType<ICategoryDAL, CategoryDAL>();
+            container.RegisterType<ICategoryBLL, CategoryBLL>();
         }
     }
 }

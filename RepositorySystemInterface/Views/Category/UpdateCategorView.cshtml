@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../layuimini/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../layuimini/css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-form layuimini-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label ">分类名</label>
+            <div class="layui-input-block">
+                <input type="text" name="categoryName" placeholder="请输入分类名" value="" class="layui-input">
+                <tip>填写分类的名称。</tip>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">描述</label>
+            <div class="layui-input-block">
+                <input type="text" name="description" placeholder="请描述" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+            </div>
+        </div>
+    </div>
+    <script src="../layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script>
+
+        // 刷新父页面的表格函数
+        function reloadParentTable() {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+            parent.layui.table.reload('currentTableId');
+        }
+
+        var parentData;
+        var form;
+        //  获取父页面的回调数据
+        function getDate(Data) {
+            parentData = Data;
+            console.log('父级页面回调', parentData);
+            form.val("fromData", {
+                "roleName": parentData.categoryName,
+                "description": parentData.description
+            });
+        }
+
+        layui.use(['form'], function () {
+
+            var layer = layui.layer,
+                $ = layui.$;
+            form = layui.form;
+
+            var id = window.location.search.substr(4);
+
+            console.log('表单页面id', id);
+
+            ////监听提交
+            form.on('submit(saveBtn)', function (data) {
+                data.field.id = parentData.id;
+                console.log(data.field.id);
+                $.ajax({
+                    url: "/Category/UpdatCategory",
+                    type: 'POST',
+                    data: data.field,
+                    success: function (res) {
+                        //console.log(data.field.departmentName);
+
+                        if (res.code == 200) {
+                            var index = layer.alert(res.msg, {
+                                title: '最终的提交信息'
+                            }, function () {
+
+                                // 关闭弹出层
+                                layer.close(index);
+                                reloadParentTable();
+                                var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(iframeIndex);
+
+                            });
+
+                        } else {
+                            layer.alert(res.msg);
+                        }
+
+                    }
+                })
+                return false;
+            });
+
+        });
+    </script>
+</body>
+</html>

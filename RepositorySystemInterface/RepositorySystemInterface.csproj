@@ -149,6 +149,8 @@
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\ConsumableInfoController.cs" />
+    <Compile Include="Controllers\ConsumableRecordController.cs" />
     <Compile Include="Controllers\DepartmentInfoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MenuInfoController.cs" />
@@ -337,11 +339,15 @@
     <Content Include="Views\MenuInfo\UpdateMenuInfoView.cshtml" />
     <Content Include="Views\MenuInfo\CreateMenuInfoView.cshtml" />
     <Content Include="Views\RoleInfo\BindMenuInfoView.cshtml" />
+    <Content Include="Views\Category\ListView.cshtml" />
+    <Content Include="Views\ConsumableInfo\ListView.cshtml" />
+    <Content Include="Views\ConsumableRecord\ListView.cshtml" />
+    <Content Include="Views\Category\CreatetCategorView.cshtml" />
+    <Content Include="Views\Category\UpdateCategorView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\Category\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

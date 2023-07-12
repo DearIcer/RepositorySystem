@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="BaseDAL.cs" />
     <Compile Include="BaseDeleteDAL.cs" />
+    <Compile Include="CategoryDAL.cs" />
     <Compile Include="DepartmentInfoDAL.cs" />
     <Compile Include="MenuInfoDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

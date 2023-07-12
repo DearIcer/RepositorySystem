@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CategoryBLL.cs" />
     <Compile Include="DepartmentInfoBLL.cs" />
     <Compile Include="MenuInfoBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
