@@ -56,7 +56,15 @@ namespace BLL
 
         public bool DeleteCategory(string id)
         {
-            return _categoryDAL.DeleteEntity(id);
+            Category category = _categoryDAL.GetEntities().FirstOrDefault(u => u.Id == id);
+            if(category == null)
+            {
+                return false;
+            }
+            category.IsDelete = true;
+            category.DeleteTime = DateTime.Now;
+
+            return _categoryDAL.UpdateEntity(category);
         }
 
         public bool DeleteCategory(List<string> ids)
@@ -64,7 +72,16 @@ namespace BLL
             int count = 0;
             foreach (var item in ids)
             {
-                if (_categoryDAL.DeleteEntity(item)) count++;
+                Category category = _categoryDAL.GetEntities().FirstOrDefault(u => u.Id == item);
+                if (category == null)
+                {
+                    continue;
+                }
+                category.IsDelete = true;
+                category.DeleteTime = DateTime.Now;
+
+                _categoryDAL.UpdateEntity(category);
+                count++;
             }
             return count > 0;
         }
@@ -103,7 +120,7 @@ namespace BLL
 
         public List<GetCategoryDTO> GetCategories(int page, int limit, string id, string name, out int count)
         {
-            var tempList = (from r in _categoryDAL.GetCatgory()
+            var tempList = (from r in _categoryDAL.GetCatgory().Where(r => r.IsDelete == false)
                             select new GetCategoryDTO
                             {
                                 Description = r.Description,
@@ -116,7 +133,8 @@ namespace BLL
 
         public List<GetCategoryDTO> GetCategories()
         {
-            List<GetCategoryDTO> list = _categoryDAL.GetEntities().Select(u => new GetCategoryDTO
+            List<GetCategoryDTO> list = _categoryDAL.GetEntities().Where(r => r.IsDelete == false)
+                .Select(u => new GetCategoryDTO
             {
                 Description = u.Description,
                 CategoryName = u.CategoryName,
