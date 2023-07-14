@@ -68,6 +68,7 @@
     <Compile Include="DTO\GetUserInfosDTO.cs" />
     <Compile Include="DTO\GetRoleInfoDTO.cs" />
     <Compile Include="DTO\HomeMenuInfoDTO.cs" />
+    <Compile Include="Enums\ConsumableRecordTypeEnums.cs" />
     <Compile Include="FileInfo.cs" />
     <Compile Include="MenuInfo.cs" />
     <Compile Include="Migrations\202307120825395_InitialCreate.cs" />

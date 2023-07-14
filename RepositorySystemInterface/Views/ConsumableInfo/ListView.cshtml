@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>layui</title>
@@ -9,6 +10,7 @@
     <link rel="stylesheet" href="../layuimini/lib/layui-v2.6.3/css/layui.css" media="all">
     <link rel="stylesheet" href="../layuimini/css/public.css" media="all">
 </head>
+
 <body>
     <div class="layuimini-container">
         <div class="layuimini-main">
@@ -25,7 +27,8 @@
                                 </div>
                             </div>
                             <div class="layui-inline">
-                                <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                                <button type="submit" class="layui-btn layui-btn-primary" lay-submit
+                                    lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
                             </div>
                         </div>
                     </form>
@@ -36,7 +39,15 @@
                 <div class="layui-btn-container">
                     <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
                     <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>
-                    <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="excel"> 导出 </button>
+
+                    <button type="button" class="layui-btn demo-class-accept" lay-options="{accept: 'file'}" id="uploadBut">
+                        <i class="layui-icon layui-icon-upload"></i>
+                        Excel数据上传
+                    </button>
+                    <button type="button" class="layui-btn ">
+                        <i class="layui-icon layui-icon-upload" id=" = "downloadBut"></i>
+                        导出入库数据
+                    </button>
                 </div>
             </script>
 
@@ -51,10 +62,200 @@
     </div>
     <script src="../layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
     <script>
-        layui.use(['form', 'table'], function () {
+
+
+        ////layui.use(['form', 'table'], function () {
+        ////    var $ = layui.jquery,
+        ////        form = layui.form,
+        ////        table = layui.table;
+
+        ////    table.render({
+        ////        elem: '#currentTableId',
+        ////        url: '/ConsumableInfo/GetAllConsumableInfos',
+        ////        toolbar: '#toolbarDemo',
+        ////        defaultToolbar: ['filter', 'exports', 'print', {
+        ////            title: '提示',
+        ////            layEvent: 'LAYTABLE_TIPS',
+        ////            icon: 'layui-icon-tips'
+        ////        }],
+        ////        cols: [[
+        ////            { type: "checkbox", width: 50 },
+        ////            { field: 'id', width: 80, title: 'ID', sort: true, hide: true },
+        ////            { field: 'categoryId', minwidth: 180, title: '耗材类型', sort: true, hide: true },
+        ////            { field: 'consumableName', minwidth: 180, title: '耗材名称' },
+        ////            { field: 'description', minwidth: 180, title: '描述' },
+        ////            { field: 'specification', title: '耗材规格', minWidth: 150 },
+        ////            { field: 'num', width: 180, title: '库存数量', sort: true },
+        ////            { field: 'unit', width: 180, title: '单位', sort: true, hide: true },
+        ////            { field: 'money', width: 80, title: '价格', sort: true },
+        ////            { field: 'warningNum', width: 135, title: '警告库存', sort: true },
+        ////            { field: 'createTime', minwidth: 180, title: '添加时间' },
+        ////            { title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center" }
+        ////        ]],
+        ////        limits: [10, 15, 20, 25, 50, 100],
+        ////        limit: 15,
+        ////        page: true,
+        ////        skin: 'line'
+        ////    });
+
+        ////    // 监听搜索操作
+        ////    form.on('submit(data-search-btn)', function (data) {
+        ////        //执行搜索重载
+        ////        table.reload('currentTableId', {
+        ////            page: {
+        ////                curr: 1
+        ////            }
+        ////            , where: {
+        ////                //searchParams: result
+        ////                id: data.field.id,
+        ////                categoryId: data.field.categoryId
+        ////            }
+        ////        }, 'data');
+
+        ////        return false;
+        ////    });
+
+        ////    /**
+        ////     * toolbar监听事件
+        ////     */
+        ////    table.on('toolbar(currentTableFilter)', function (obj) {
+        ////        if (obj.event === 'add') {  // 监听添加操作
+        ////            var index = layer.open({
+        ////                title: '添加耗材',
+        ////                type: 2,
+        ////                shade: 0.2,
+        ////                maxmin: true,
+        ////                shadeClose: true,
+        ////                area: ['80%', '80%'],
+        ////                content: '/ConsumableInfo/CreatetConsumableInfoView'
+        ////            });
+        ////            $(window).on("resize", function () {
+
+        ////                layer.full(index);
+        ////            });
+
+
+        ////        } else if (obj.event === 'delete') {  // 监听删除操作
+        ////            var checkStatus = table.checkStatus('currentTableId')
+        ////                , data = checkStatus.data;
+        ////            //遍历出所有Id
+        ////            var ids = [];
+        ////            for (var i = 0; i < data.length; i++) {
+        ////                var id = data[i].userId;
+        ////                ids.push(id);
+        ////            }
+        ////            console.log(ids);
+
+
+        ////            $.ajax({
+        ////                url: "/UserInfo/DeleteUserInfos",
+        ////                type: "Post",
+        ////                data: {
+        ////                    ids: ids
+        ////                },
+        ////                success: function (res) {
+        ////                    if (res.code == 200) {
+        ////                        layer.alert(res.msg);
+        ////                        table.reload('currentTableId', {
+        ////                            page: {
+        ////                                curr: 1
+        ////                            }
+        ////                            , where: {
+        ////                            }
+        ////                        }, 'data');
+        ////                    } else {
+        ////                        layer.alert(res.msg);
+        ////                    }
+
+        ////                }
+
+        ////            });
+        ////        } else if (obj.event === 'excel') {
+
+        ////            //table.reload('currentTableId');
+        ////        }
+        ////    });
+
+        ////    //监听表格复选框选择
+        ////    table.on('checkbox(currentTableFilter)', function (obj) {
+        ////        console.log(obj)
+        ////    });
+
+        ////    table.on('tool(currentTableFilter)', function (obj) {
+        ////        var data = obj.data;
+        ////        if (obj.event === 'edit') {
+        ////            var index = layer.open({
+        ////                title: '编辑耗材',
+        ////                type: 2,
+        ////                shade: 0.2,
+        ////                maxmin: true,
+        ////                shadeClose: true,
+        ////                area: ['80%', '80%'],
+        ////                content: "/ConsumableInfo/UpdateConsumableInfoView?id=" + data.id,
+
+        ////                success: function (layero, index) {
+        ////                    var iframe = window['layui-layer-iframe' + index];
+        ////                    iframe.getDate(data);
+        ////                }
+        ////            });
+        ////            $(window).on("resize", function () {
+        ////                layer.full(index);
+        ////            });
+        ////            return false;
+        ////        } else if (obj.event === 'delete') {
+        ////            layer.confirm('真的删除行么', function (index) {
+        ////                $.ajax({
+        ////                    url: "/UserInfo/DeleteUserInfo",
+        ////                    type: "Post",
+        ////                    data: {
+        ////                        id: data.userId
+        ////                    },
+        ////                    success: function (res) {
+        ////                        if (res.code == 200) {
+        ////                            layer.alert(res.msg);
+        ////                            obj.del();
+        ////                            layer.close(index);
+        ////                        } else {
+        ////                            layer.alert(res.msg);
+        ////                        }
+        ////                    }
+        ////                });
+
+        ////            });
+        ////        }
+        ////    });
+
+        ////});
+
+        ////layui.use(function () {
+        ////    var upload = layui.upload;
+        ////    var layer = layui.layer;
+        ////    // 渲染
+        ////    upload.render({
+        ////        elem: '#uploadBut', // 绑定多个元素
+        ////        url: '/ConsumableInfo/Upload', // 此处配置你自己的上传接口即可
+        ////        accept: 'file', // 普通文件
+        ////        done: function (res) {
+
+        ////            table.reload('currentTableId', {
+        ////                page: {
+        ////                    curr: 1
+        ////                }
+        ////                , where: {
+
+        ////                }
+        ////            }, 'data');
+        ////        }
+        ////    });
+        ////});
+
+
+        layui.use(['form', 'table', 'upload', 'layer'], function () {
             var $ = layui.jquery,
                 form = layui.form,
-                table = layui.table;
+                table = layui.table,
+                upload = layui.upload,
+                layer = layui.layer;
 
             table.render({
                 elem: '#currentTableId',
@@ -68,9 +269,9 @@
                 cols: [[
                     { type: "checkbox", width: 50 },
                     { field: 'id', width: 80, title: 'ID', sort: true, hide: true },
-                    { field: 'description', minwidth: 180, title: '描述' },
                     { field: 'categoryId', minwidth: 180, title: '耗材类型', sort: true, hide: true },
                     { field: 'consumableName', minwidth: 180, title: '耗材名称' },
+                    { field: 'description', minwidth: 180, title: '描述' },
                     { field: 'specification', title: '耗材规格', minWidth: 150 },
                     { field: 'num', width: 180, title: '库存数量', sort: true },
                     { field: 'unit', width: 180, title: '单位', sort: true, hide: true },
@@ -87,18 +288,31 @@
 
             // 监听搜索操作
             form.on('submit(data-search-btn)', function (data) {
+                var result = data.field;
                 //执行搜索重载
                 table.reload('currentTableId', {
                     page: {
                         curr: 1
-                    }
-                    , where: {
-                        //searchParams: result
-                        account: data.field.account,
-                        userName: data.field.userName
+                    },
+                    where: {
+/*                        id: data.field.id,*/
+                        consumableName: result.field.consumableName
                     }
                 }, 'data');
-
+                // 渲染
+                upload.render({
+                    elem: '#uploadBut',
+                    url: '/ConsumableInfo/Upload',
+                    accept: 'file',
+                    done: function (res) {
+                        table.reload('currentTableId', {
+                            page: {
+                                curr: 1
+                            },
+                            where: {}
+                        }, 'data');
+                    }
+                });
                 return false;
             });
 
@@ -117,26 +331,20 @@
                         content: '/ConsumableInfo/CreatetConsumableInfoView'
                     });
                     $(window).on("resize", function () {
-
                         layer.full(index);
                     });
-
-
                 } else if (obj.event === 'delete') {  // 监听删除操作
-                    var checkStatus = table.checkStatus('currentTableId')
-                        , data = checkStatus.data;
-                    /*layer.alert(JSON.stringify(data));*/
+                    var checkStatus = table.checkStatus('currentTableId'),
+                        data = checkStatus.data;
                     //遍历出所有Id
                     var ids = [];
                     for (var i = 0; i < data.length; i++) {
-                        var id = data[i].userId;
+                        var id = data[i].id;
                         ids.push(id);
                     }
-                    console.log(ids);
-
-
+                    @* console.log(ids); *@
                     $.ajax({
-                        url: "/UserInfo/DeleteUserInfos",
+                        url: "/ConsumableInfo/DeletetCategories",
                         type: "Post",
                         data: {
                             ids: ids
@@ -147,35 +355,27 @@
                                 table.reload('currentTableId', {
                                     page: {
                                         curr: 1
-                                    }
-                                    , where: {
-                                    }
+                                    },
+                                    where: {}
                                 }, 'data');
                             } else {
                                 layer.alert(res.msg);
                             }
-
                         }
-
                     });
-
-
-
                 } else if (obj.event === 'excel') {
-
                     //table.reload('currentTableId');
                 }
             });
 
             //监听表格复选框选择
             table.on('checkbox(currentTableFilter)', function (obj) {
-                console.log(obj)
+                console.log(obj);
             });
 
             table.on('tool(currentTableFilter)', function (obj) {
                 var data = obj.data;
                 if (obj.event === 'edit') {
-
                     var index = layer.open({
                         title: '编辑耗材',
                         type: 2,
@@ -184,7 +384,6 @@
                         shadeClose: true,
                         area: ['80%', '80%'],
                         content: "/ConsumableInfo/UpdateConsumableInfoView?id=" + data.id,
-
                         success: function (layero, index) {
                             var iframe = window['layui-layer-iframe' + index];
                             iframe.getDate(data);
@@ -196,13 +395,11 @@
                     return false;
                 } else if (obj.event === 'delete') {
                     layer.confirm('真的删除行么', function (index) {
-
-
                         $.ajax({
-                            url: "/UserInfo/DeleteUserInfo",
+                            url: "/ConsumableInfo/DeletetCategory",
                             type: "Post",
                             data: {
-                                id: data.userId
+                                id: data.id
                             },
                             success: function (res) {
                                 if (res.code == 200) {
@@ -212,21 +409,30 @@
                                 } else {
                                     layer.alert(res.msg);
                                 }
-
                             }
-
                         });
-
-
-
-
-
                     });
                 }
             });
 
+            // 渲染
+            upload.render({
+                elem: '#uploadBut',
+                url: '/ConsumableInfo/Upload',
+                accept: 'file',
+                done: function (res) {
+                    table.reload('currentTableId', {
+                        page: {
+                            curr: 1
+                        },
+                        where: {}
+                    }, 'data');
+                }
+            });
         });
+
     </script>
 
 </body>
+
 </html>

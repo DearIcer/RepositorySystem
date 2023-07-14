@@ -2,6 +2,7 @@
 using Models.DTO;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,5 +43,19 @@ namespace IBLL
         /// </summary>
         /// <returns></returns>
         object GetSelectOptions();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="extension"></param>
+        /// <param name="id"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        bool Upload(Stream stream, string extension, string id, out string msg);
+
+        bool DeleteConsumableInfo(string id);
+
+        bool DeleteConsumableInfo(List<string> ids);
     }
 }

@@ -40,7 +40,7 @@ namespace BLL
 
             // 赋值id
             entity.Id = Guid.NewGuid().ToString();
-
+            entity.CreatedTime = DateTime.Now;
             try
             {
                 _categoryDAL.CreateEntity(entity);
@@ -146,7 +146,12 @@ namespace BLL
 
         public object GetSelectOptions()
         {
-            throw new NotImplementedException();
+            var parentSelect = _dbContext.Category.Where(r => r.IsDelete == false).Select(d => new
+            {
+                value = d.Id,
+                title = d.CategoryName
+            }).ToList();
+            return parentSelect;
         }
 
         //public bool UpdateCategory(Category entity, out string msg)

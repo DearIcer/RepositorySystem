@@ -3,9 +3,14 @@ using IBLL;
 using IDAL;
 using Models;
 using Models.DTO;
+using Models.Enums;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,6 +56,38 @@ namespace BLL
             }
         }
 
+        public bool DeleteConsumableInfo(string id)
+        {
+            ConsumableInfo consumable = _consumableInfoDAL.GetEntities().FirstOrDefault(u => u.Id == id);
+            if (consumable == null)
+            {
+                return false;
+            }
+            consumable.IsDelete = true;
+            consumable.DeleteTime = DateTime.Now;
+
+            return _consumableInfoDAL.UpdateEntity(consumable);
+        }
+
+        public bool DeleteConsumableInfo(List<string> ids)
+        {
+            int count = 0;
+            foreach (var item in ids)
+            {
+                ConsumableInfo consumable = _consumableInfoDAL.GetEntities().FirstOrDefault(u => u.Id == item);
+                if (consumable == null)
+                {
+                    continue;
+                }
+                consumable.IsDelete = true;
+                consumable.DeleteTime = DateTime.Now;
+
+                _consumableInfoDAL.UpdateEntity(consumable);
+                count++;
+            }
+            return count > 0;
+        }
+
         public List<GetConsumableInfoDTO> GetAllConsumableInfos(int page, int limit, string id, string ConsumableName, out int count)
         {
             var tempList = (from r in _consumableInfoDAL.GetConsumableInfo().Where(r => r.IsDelete == false)
@@ -85,7 +122,7 @@ namespace BLL
                 return false;
             }
 
-            ConsumableInfo consumableInfo = _consumableInfoDAL.GetEntities().FirstOrDefault(u => u.Id == entity.Id);
+            ConsumableInfo consumableInfo = _consumableInfoDAL.GetEntities().FirstOrDefault(u => u.CategoryId == entity.CategoryId);
             if (consumableInfo == null)
             {
                 msg = "分类不存在";
@@ -116,6 +153,103 @@ namespace BLL
                 msg = "更新分类失败";
                 return false;
             }
+        }
+
+        public bool Upload(Stream stream, string extension, string id, out string msg)
+        {
+            //throw new NotImplementedException();
+            IWorkbook wk = null;
+
+            if (extension.Equals(".xls"))// 老版本Excel
+            {
+                wk = new HSSFWorkbook(stream);
+            }
+            else
+            {
+                wk = new XSSFWorkbook(stream);
+            }
+
+            stream.Close();//释放文件
+            stream.Dispose();
+
+            ISheet sheet = wk.GetSheetAt(0);//获取第一页
+
+            int RowNum = sheet.LastRowNum;
+
+            // 开启事务
+            using(var transaction = _dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    for (int i = 1; i <= RowNum; i++)
+                    {
+                        IRow Row = sheet.GetRow(i);
+
+                        ICell Cell = Row.GetCell(0);
+                        string value = Cell.ToString();//获取商品名称
+
+                        ICell Cell2 = Row.GetCell(2);
+                        string value2 = Cell2.ToString();//实际购买数量
+
+                        int num;
+                        bool b = int.TryParse(value2, out num);
+                        if (b == false)
+                        {
+                            transaction.Rollback();//回滚
+                            msg = $"第{i + i}行耗材的实际购买数量有误";
+                            return false;
+                        }
+                        // 查询该商品在数据库中的数据
+                        ConsumableInfo consumable = _consumableInfoDAL.GetEntities().FirstOrDefault(x => x.ConsumableName == value);
+                        if (consumable == null)
+                        {
+                            transaction.Rollback();
+                            msg = $"第{i + i}行耗材不存在";
+                            return false;
+                        }
+
+                        ConsumableRecord consumableRecord = new ConsumableRecord()
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            ConsumableId = consumable.Id,
+                            CreatedTime = DateTime.Now,
+                            Creator = id,
+                            Num = num,
+                            Type = (int)ConsumableRecordTypeEnums.入库,
+                        };
+                        //提交到数据库
+                        _dbContext.ConsumableRecord.Add(consumableRecord);
+                        bool isOk = _dbContext.SaveChanges() > 0;
+                        if (isOk == false)
+                        {
+                            transaction.Rollback();
+                            msg = $"添加第{i + i}行耗材失败";
+                            return false;
+                        }
+                        // 更新耗材信息库存
+                        consumable.Num += num;
+                        _dbContext.Entry(consumable).State = System.Data.Entity.EntityState.Modified;
+                        isOk = _dbContext.SaveChanges() > 0;
+                        if (isOk == false)
+                        {
+                            transaction.Rollback();
+                            msg = $"添加第{i + i}行耗材更新";
+                            return false;
+                        }
+                    }
+                    // 提交事务
+                    transaction.Commit();
+                    msg = "入库成功";
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    msg = "出错了:" + ex.Message;
+                    return false;
+                    throw;
+                }                   
+            }         
         }
     }
 }

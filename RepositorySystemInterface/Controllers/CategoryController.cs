@@ -3,6 +3,7 @@ using CommonLib;
 using IBLL;
 using Models;
 using Models.DTO;
+using RepositorySystemInterface.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ using System.Web.Mvc;
 
 namespace RepositorySystemInterface.Controllers
 {
+    [CustomAttribute]
     public class CategoryController : Controller
     {
         private ICategoryBLL _categoryBLL;

@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>layui</title>
@@ -14,12 +15,14 @@
         }
     </style>
 </head>
+
 <body>
     <div class="layui-form layuimini-form" lay-filter="fromData">
         <div class="layui-form-item">
             <label class="layui-form-label required">耗材名称</label>
             <div class="layui-input-block">
-                <input type="text" name="consumableName" lay-verify="required" placeholder="请输入分类名" value="" class="layui-input">
+                <input type="text" name="consumableName" lay-verify="required" placeholder="请输入分类名" value=""
+                    class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -53,33 +56,25 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">耗材类型</label>
+            <label class="layui-form-label ">耗材类型</label>
             <div class="layui-input-block">
-                <input type="text" name="categoryId" placeholder="请输入耗材类型" value="" class="layui-input">
+                <select name="parentCategorySelect" id="parentCategoryId">
+                    <option value=""></option>
+                </select>
             </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+                </div>
             </div>
         </div>
     </div>
     <script src="../layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
     <script>
-
-        // 刷新父页面的表格函数
-        function reloadParentTable() {
-            var index = parent.layer.getFrameIndex(window.name);
-            parent.layer.close(index);
-            parent.layui.table.reload('currentTableId');
-        }
-
-        var parentData;
-        var form;
         //  获取父页面的回调数据
         function getDate(Data) {
             parentData = Data;
-            console.log('父级页面回调', parentData);
+            @* console.log('父级页面回调', parentData); *@
             form.val("fromData", {
                 "consumableName": parentData.consumableName,
                 "specification": parentData.specification,
@@ -90,6 +85,15 @@
                 "categoryId": parentData.categoryId
             });
         }
+        // 刷新父页面的表格函数
+        function reloadParentTable() {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+            parent.layui.table.reload('currentTableId');
+        }
+        var parentData ;
+        var form;
+        
 
         layui.use(['form'], function () {
 
@@ -98,13 +102,27 @@
             form = layui.form;
 
             var id = window.location.search.substr(4);
+            console.log('父级页面回调', parentData);
+            $.ajax({
+                url: '/ConsumableInfo/GetSelectOptions',
+                type: 'GET',
+                success: function (data) {
+                    console.log(data.data);
+                    var parentSelect = data.data;
+                    for (var i = 0; i < parentSelect.length; i++) {
+                        $("#parentCategoryId").append('<option value="' + parentSelect[i].value + '">' + parentSelect[i].title + '</option>');
+                    }
+                    form.render('select');
 
-            console.log('表单页面id', id);
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
 
             ////监听提交
             form.on('submit(saveBtn)', function (data) {
-                data.field.id = parentData.id;
-                console.log(data.field.id);
+                data.field.categoryId = $("#parentCategoryId").val();
                 $.ajax({
                     url: "/ConsumableInfo/UpdateConsumableInfo",
                     type: 'POST',
@@ -135,5 +153,6 @@
         });
     </script>
 </body>
+
 </html>
 

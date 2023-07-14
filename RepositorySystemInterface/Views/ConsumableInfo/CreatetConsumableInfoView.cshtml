@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>layui</title>
@@ -14,12 +15,14 @@
         }
     </style>
 </head>
+
 <body>
     <div class="layui-form layuimini-form" lay-filter="fromData">
         <div class="layui-form-item">
             <label class="layui-form-label required">耗材名称</label>
             <div class="layui-input-block">
-                <input type="text" name="consumableName" lay-verify="required" placeholder="请输入分类名" value="" class="layui-input">              
+                <input type="text" name="consumableName" lay-verify="required" placeholder="请输入分类名" value=""
+                    class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -53,19 +56,24 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">耗材类型</label>
+            <label class="layui-form-label ">耗材类型</label>
             <div class="layui-input-block">
+                <select name="parentCategorySelect" id="parentCategoryId">
+                    <option value=""></option>
+                </select>
+                @* <label class="layui-form-label">耗材类型</label>
+                <div class="layui-input-block">
                 <input type="text" name="categoryId" placeholder="请输入耗材类型" value="" class="layui-input">
+                </div> *@
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+                </div>
             </div>
         </div>
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
-            </div>
-        </div>
-    </div>
-    <script src="../layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
-    <script>
+        <script src="../layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+        <script>
 
             // 刷新父页面的表格函数
             function reloadParentTable() {
@@ -75,44 +83,64 @@
             }
 
 
-        layui.use(['form'], function () {
-            var form = layui.form,
-                layer = layui.layer,
-                $ = layui.$;
+            layui.use(['form'], function () {
+                var form = layui.form,
+                    layer = layui.layer,
+                    $ = layui.$;
 
-            //监听提交
-            form.on('submit(saveBtn)', function (data) {
 
                 $.ajax({
-                    url: "/ConsumableInfo/CreateConsumableInfo",
-                    type: "Post",
-                    data: data.field,
-                    success: function (res) {
-                        if (res.code == 200) {
-                            var index = layer.alert(res.msg, {
-                                title: '最终的提交信息'
-                            }, function () {
+                    url: '/ConsumableInfo/GetSelectOptions',
+                    type: 'GET',
+                    success: function (data) {
+                        console.log(data.data);
+                        var parentSelect = data.data;
+                        for (var i = 0; i < parentSelect.length; i++) {
+                            $("#parentCategoryId").append('<option value="' + parentSelect[i].value + '">' + parentSelect[i].title + '</option>');
 
-                                // 关闭弹出层
-                                layer.close(index);
+                        }
+                        form.render('select');
 
-                                reloadParentTable();
+                        @* console.log(parentSelect); *@
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+                //监听提交
+                form.on('submit(saveBtn)', function (data) {
+                    data.field.categoryId = $("#parentCategoryId").val();
+                    $.ajax({
+                        url: "/ConsumableInfo/CreateConsumableInfo",
+                        type: "Post",
+                        data: data.field,
+                        success: function (res) {
+                            if (res.code == 200) {
+                                var index = layer.alert(res.msg, {
+                                    title: '最终的提交信息'
+                                }, function () {
 
-                                var iframeIndex = parent.layer.getFrameIndex(window.name);
-                                parent.layer.close(iframeIndex);
-                            });
-                        } else {
-                            layer.alert(res.msg);
+                                    // 关闭弹出层
+                                    layer.close(index);
+
+                                    reloadParentTable();
+
+                                    var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                    parent.layer.close(iframeIndex);
+                                });
+                            } else {
+                                layer.alert(res.msg);
+                            }
+
                         }
 
-                    }
-
+                    });
+                    return false;
                 });
-                return false;
-            });
 
-        });
-    </script>
+            });
+        </script>
 </body>
+
 </html>
 
