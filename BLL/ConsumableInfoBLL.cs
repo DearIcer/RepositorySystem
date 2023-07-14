@@ -33,7 +33,7 @@ namespace BLL
             }
 
 
-            ConsumableInfo consumableInfo = _consumableInfoDAL.GetEntities().FirstOrDefault(u => u.ConsumableName == entity.ConsumableName);
+            ConsumableInfo consumableInfo = _consumableInfoDAL.GetEntities().FirstOrDefault(u => u.ConsumableName == entity.ConsumableName );
             if (consumableInfo != null)
             {
                 msg = "耗材已存在";
@@ -107,6 +107,97 @@ namespace BLL
                             }).ToList();
             count = _consumableInfoDAL.GetConsumableInfo().Count();
             return tempList.OrderBy(u => u.CreateTime).Skip(limit * (page - 1)).Take(limit).ToList(); ;
+        }
+
+        public Stream GetDownload(out string FileName)
+        {
+            var datas = (from cr in _dbContext.ConsumableRecord
+                        join c in _dbContext.ConsumableInfo.Where(x => x.IsDelete == false) on cr.ConsumableId equals c.Id
+                        into tempCRC
+                        from cc in tempCRC.DefaultIfEmpty()
+
+                        join u in _dbContext.UserInfo on cr.Creator equals u.Id into tempCRU
+                        from uu in tempCRU.DefaultIfEmpty()
+                        select new
+                        {
+                            cc.ConsumableName,
+                            cc.Specification,
+                            Type = cr.Type == (int)ConsumableRecordTypeEnums.入库 ? "入库" : "出库",
+                            cr.Num,
+                            CreateTime = cr.CreatedTime,
+                            uu.UserName,
+
+                        }).ToList();
+            string path = Directory.GetCurrentDirectory();
+            string file_name = "出入库记录" + DateTime.Now.ToString("yyyy-MM-dd hh mm ss") + ".xlsx";
+
+            string filePath = Path.Combine(path, file_name);
+
+            IWorkbook wk = null;
+            string extension = Path.GetExtension(filePath);
+
+            using (FileStream fs = new FileStream(filePath,FileMode.Create,FileAccess.ReadWrite))
+            {
+                if(extension.Equals(".xls"))
+                {
+                    wk = new HSSFWorkbook();
+                }
+                else
+                {
+                    wk = new XSSFWorkbook();
+                }
+                ISheet sheet = wk.CreateSheet("sheet1");
+
+                //创建表头
+                IRow row = sheet.CreateRow(0);
+
+                string[] title =
+                {
+                    "耗材名称",
+                    "耗材规格",
+                    "出入库类型",
+                    "出入库数量",
+                    "出入库时间",
+                    "操作人"
+                };
+
+                for (int i = 0; i < title.Length; i++)
+                {
+                    ICell cell = row.CreateCell(i);
+                    cell.SetCellValue(title[i]);
+                }
+                //数据主体
+                for (int i = 0; i < datas.Count; i++)
+                {
+                    var data = datas[i];
+
+                    IRow tempRow = sheet.CreateRow(i+1);
+
+                    ICell tempCell = tempRow.CreateCell(0);
+                    tempCell.SetCellValue(data.ConsumableName);
+
+                    ICell tempCell2 = tempRow.CreateCell(1);
+                    tempCell2.SetCellValue(data.Specification);
+
+                    ICell tempCell3 = tempRow.CreateCell(2);
+                    tempCell3.SetCellValue(data.Type);
+
+                    ICell tempCell4 = tempRow.CreateCell(3);
+                    tempCell4.SetCellValue(data.Num);
+
+                    ICell tempCell5 = tempRow.CreateCell(4);
+                    tempCell5.SetCellValue(data.CreateTime.ToString("yyyy-MM-dd hh:mm:ss"));
+                    //tempCell5.SetCellValue("1111111111");
+
+                    ICell tempCell6 = tempRow.CreateCell(5);
+                    tempCell6.SetCellValue(data.UserName);
+                }
+                wk.Write(fs);
+                FileStream fileStream = new FileStream(filePath,FileMode.Open,FileAccess.Read);
+                FileName = file_name;
+                return fileStream;
+            }
+
         }
 
         public object GetSelectOptions()
@@ -200,7 +291,7 @@ namespace BLL
                             return false;
                         }
                         // 查询该商品在数据库中的数据
-                        ConsumableInfo consumable = _consumableInfoDAL.GetEntities().FirstOrDefault(x => x.ConsumableName == value);
+                        ConsumableInfo consumable = _consumableInfoDAL.GetEntities().FirstOrDefault(x => x.ConsumableName == value && x.IsDelete == false);
                         if (consumable == null)
                         {
                             transaction.Rollback();

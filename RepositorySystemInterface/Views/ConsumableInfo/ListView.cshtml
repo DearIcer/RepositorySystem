@@ -44,7 +44,7 @@
                         <i class="layui-icon layui-icon-upload"></i>
                         Excel数据上传
                     </button>
-                    <button type="button" class="layui-btn ">
+                    <button type="button" class="layui-btn " onclick="getDownload()">
                         <i class="layui-icon layui-icon-upload" id=" = "downloadBut"></i>
                         导出入库数据
                     </button>
@@ -248,7 +248,10 @@
         ////        }
         ////    });
         ////});
-
+        function getDownload() {
+            window.location = "/ConsumableInfo/DownLoadFile"
+        }
+       
 
         layui.use(['form', 'table', 'upload', 'layer'], function () {
             var $ = layui.jquery,
@@ -286,34 +289,55 @@
                 skin: 'line'
             });
 
-            // 监听搜索操作
-            form.on('submit(data-search-btn)', function (data) {
-                var result = data.field;
-                //执行搜索重载
+            function reloadTable(param) {
                 table.reload('currentTableId', {
                     page: {
                         curr: 1
                     },
-                    where: {
-/*                        id: data.field.id,*/
-                        consumableName: result.field.consumableName
-                    }
+                    where: param
                 }, 'data');
+
                 // 渲染
                 upload.render({
                     elem: '#uploadBut',
                     url: '/ConsumableInfo/Upload',
                     accept: 'file',
                     done: function (res) {
-                        table.reload('currentTableId', {
-                            page: {
-                                curr: 1
-                            },
-                            where: {}
-                        }, 'data');
+                        layer.msg(res.msg);
+                        console.log("上传接口" + res);
+                        if (res.code == 200) {
+                            reloadTable();
+                        }
                     }
                 });
-                return false;
+            }
+            // 监听搜索操作
+            form.on('submit(data-search-btn)', function (data) {
+                var result = data.field;
+                //执行搜索重载
+//                table.reload('currentTableId', {
+//                    page: {
+//                        curr: 1
+//                    },
+//                    where: {
+///*                        id: data.field.id,*/
+//                        consumableName: result.field.consumableName
+//                    }
+//                }, 'data');
+//                // 渲染
+//                upload.render({
+//                    elem: '#uploadBut',
+//                    url: '/ConsumableInfo/Upload',
+//                    accept: 'file',
+//                    done: function (res) {
+
+//                    }
+//                });
+//                return false;
+                var selectWhere = {
+                    consumableName: result.consumableName,
+                }
+                reloadTable(selectWhere);
             });
 
             /**

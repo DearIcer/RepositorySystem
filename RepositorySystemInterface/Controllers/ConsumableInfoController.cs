@@ -206,5 +206,11 @@ namespace RepositorySystemInterface.Controllers
 
             return new JsonHelper(result);
         }
+        public ActionResult DownLoadFile()
+        {
+            string downloadFileName;
+            Stream stream = _consumableInfoBLL.GetDownload(out downloadFileName);
+            return File(stream, "application/octet-stream", downloadFileName);
+        }
     }
 }

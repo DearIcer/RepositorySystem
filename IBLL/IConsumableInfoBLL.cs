@@ -57,5 +57,7 @@ namespace IBLL
         bool DeleteConsumableInfo(string id);
 
         bool DeleteConsumableInfo(List<string> ids);
+
+        Stream GetDownload(out string FileName);
     }
 }
