@@ -62,6 +62,8 @@
     <Compile Include="IR_RoleInfo_MenuInfoDAL.cs" />
     <Compile Include="IR_UserInfo_RoleInfoDAL.cs" />
     <Compile Include="IUserInfoDAL.cs" />
+    <Compile Include="IWorkFlow_InstanceDAL.cs" />
+    <Compile Include="IWorkFlow_ModelDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

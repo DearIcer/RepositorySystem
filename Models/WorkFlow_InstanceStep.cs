@@ -31,7 +31,7 @@ namespace Models
         /// <summary>
         /// 审核时间
         /// </summary>
-        public DateTime ReviewTime { get; set; }
+        public DateTime? ReviewTime { get; set; }
         /// <summary>
         /// 上一个步骤Id
         /// </summary>

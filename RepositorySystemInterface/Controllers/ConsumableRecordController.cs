@@ -2,6 +2,7 @@
 using IBLL;
 using Models;
 using Models.DTO;
+using RepositorySystemInterface.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Web.Mvc;
 
 namespace RepositorySystemInterface.Controllers
 {
+    [CustomAttribute]
     public class ConsumableRecordController : Controller
     {
         private IConsumableRecordBLL _consumableRecordBLL;

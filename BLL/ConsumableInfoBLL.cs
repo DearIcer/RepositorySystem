@@ -202,7 +202,12 @@ namespace BLL
 
         public object GetSelectOptions()
         {
-            throw new NotImplementedException();
+            var list = _consumableInfoDAL.GetEntities().Where(x => x.IsDelete == false).Select(x => new 
+            {
+                value = x.Id,
+                title = x.ConsumableName
+            }).ToList();
+            return list;
         }
 
         public bool UpdateConsumableInfo(ConsumableInfo entity, out string msg)

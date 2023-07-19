@@ -2,6 +2,7 @@ using BLL;
 using DAL;
 using IBLL;
 using IDAL;
+using Models;
 using RepositorySystemInterface.Controllers;
 using System;
 
@@ -76,6 +77,12 @@ namespace RepositorySystemInterface
 
             container.RegisterType<IConsumableInfoDAL, ConsumableInfoDAL>();
             container.RegisterType<IConsumableInfoBLL, ConsumableInfoBLL>();
+
+            container.RegisterType<IWorkFlow_ModelDAL, WorkFlow_ModelDAL>();
+            container.RegisterType<IWorkFlow_ModelBLL, WorkFlow_ModelBLL>();
+
+            container.RegisterType<IWorkFlow_InstanceDAL, WorkFlow_InstanceDAL>();
+            container.RegisterType<IWorkFlow_InstanceBLL, WorkFlow_InstanceBLL>();
         }
     }
 }

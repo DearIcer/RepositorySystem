@@ -86,37 +86,6 @@ namespace BLL
             return count > 0;
         }
 
-        //public bool CreateCategory(Category entity, out string msg)
-        //{
-        //    if (string.IsNullOrWhiteSpace(entity.Description))
-        //    {
-        //        msg = "描述不能为空";
-        //        return false;
-        //    }
-        //    if (string.IsNullOrWhiteSpace(entity.CategoryName))
-        //    {
-        //        msg = "分类名不能为空";
-        //        return true;
-        //    }
-        //    // 判断账号是否重复
-        //    Category category = _categoryDAL.GetEntities().FirstOrDefault(u => u.CategoryName == entity.CategoryName);
-        //    if (category != null)
-        //    {
-        //        msg = "分类已存在";
-        //        return false;
-        //    }
-
-        //    // 赋值id
-        //    entity.Id = Guid.NewGuid().ToString();
-        //    entity.Description = entity.Description;
-        //    entity.CategoryName = entity.CategoryName;
-
-        //    bool isSuccess = _categoryDAL.UpdateEntity(entity);
-
-        //    msg = isSuccess ? $"添加{entity.CategoryName}成功!" : "添加分类失败";
-
-        //    return isSuccess;
-        //}
 
         public List<GetCategoryDTO> GetCategories(int page, int limit, string id, string name, out int count)
         {

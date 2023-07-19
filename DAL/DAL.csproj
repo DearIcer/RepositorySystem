@@ -63,6 +63,8 @@
     <Compile Include="R_RoleInfo_MenuInfoDAL.cs" />
     <Compile Include="R_UserInfo_RoleInfoDAL.cs" />
     <Compile Include="UserInfoDAL.cs" />
+    <Compile Include="WorkFlow_InstanceDAL.cs" />
+    <Compile Include="WorkFlow_ModelDAL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IDAL\IDAL.csproj">

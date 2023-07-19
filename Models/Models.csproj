@@ -67,13 +67,25 @@
     <Compile Include="DTO\GetMenuInfoDTO.cs" />
     <Compile Include="DTO\GetUserInfosDTO.cs" />
     <Compile Include="DTO\GetRoleInfoDTO.cs" />
+    <Compile Include="DTO\GetWorkFlow_InstanceDTO.cs" />
+    <Compile Include="DTO\GetWorkFlow_ModelDTO.cs" />
     <Compile Include="DTO\HomeMenuInfoDTO.cs" />
     <Compile Include="Enums\ConsumableRecordTypeEnums.cs" />
+    <Compile Include="Enums\WorkFlow_InstanceStatusEnum.cs" />
+    <Compile Include="Enums\WorkFlow_InstanceStepStatusEnum.cs" />
     <Compile Include="FileInfo.cs" />
     <Compile Include="MenuInfo.cs" />
     <Compile Include="Migrations\202307120825395_InitialCreate.cs" />
     <Compile Include="Migrations\202307120825395_InitialCreate.designer.cs">
       <DependentUpon>202307120825395_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202307180324494_20230718.cs" />
+    <Compile Include="Migrations\202307180324494_20230718.designer.cs">
+      <DependentUpon>202307180324494_20230718.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202307181101183_updateOutGoodsId.cs" />
+    <Compile Include="Migrations\202307181101183_updateOutGoodsId.designer.cs">
+      <DependentUpon>202307181101183_updateOutGoodsId.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -93,6 +105,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202307120825395_InitialCreate.resx">
       <DependentUpon>202307120825395_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202307180324494_20230718.resx">
+      <DependentUpon>202307180324494_20230718.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202307181101183_updateOutGoodsId.resx">
+      <DependentUpon>202307181101183_updateOutGoodsId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

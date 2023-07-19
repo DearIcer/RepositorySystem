@@ -156,6 +156,8 @@
     <Compile Include="Controllers\MenuInfoController.cs" />
     <Compile Include="Controllers\RoleInfoController.cs" />
     <Compile Include="Controllers\UserInfoController.cs" />
+    <Compile Include="Controllers\WorkFlow_InstanceController.cs" />
+    <Compile Include="Controllers\WorkFlow_ModelController.cs" />
     <Compile Include="Filters\CustomAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -347,6 +349,10 @@
     <Content Include="Views\ConsumableRecord\CreatetConsumableRecordView.cshtml" />
     <Content Include="Views\ConsumableInfo\CreatetConsumableInfoView.cshtml" />
     <Content Include="Views\ConsumableInfo\UpdateConsumableInfoView.cshtml" />
+    <Content Include="Views\WorkFlow_Model\ListView.cshtml" />
+    <Content Include="Views\WorkFlow_Model\CreatetWorkFlow_ModelView.cshtml" />
+    <Content Include="Views\WorkFlow_Instance\ListView.cshtml" />
+    <Content Include="Views\WorkFlow_Instance\CreatetWorkFlow_InstanceView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

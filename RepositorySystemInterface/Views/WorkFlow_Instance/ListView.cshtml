@@ -21,53 +21,50 @@
                     <form class="layui-form layui-form-pane" action="">
                         <div class="layui-form-item">
                             <div class="layui-inline">
-                                <label class="layui-form-label">耗材名称</label>
+                                <label class="layui-form-label">模板名称</label>
                                 <div class="layui-input-inline">
                                     <input type="text" name="account" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline">
                                 <button type="submit" class="layui-btn layui-btn-primary" lay-submit
-                                    lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                                        lay-filter="data-search-btn">
+                                    <i class="layui-icon"></i> 搜 索
+                                </button>
                             </div>
                         </div>
                     </form>
                 </div>
             </fieldset>
-
             <script type="text/html" id="toolbarDemo">
                 <div class="layui-btn-container">
                     <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
                     <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>
-
-                    <button type="button" class="layui-btn demo-class-accept" lay-options="{accept: 'file'}" id="uploadBut">
-                        <i class="layui-icon layui-icon-upload"></i>
-                        Excel数据上传
-                    </button>
-                    <button type="button" class="layui-btn " onclick="getDownload()">
-                        <i class="layui-icon layui-icon-upload" id=" = "downloadBut"></i>
-                        导出入库数据
-                    </button>
                 </div>
             </script>
 
             <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
             <script type="text/html" id="currentTableBar">
-                <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
-                <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">作废</a>
+                <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">不可操作</a>
+            </script>
+            
+            <script type="text/html" id="StatusCell">
+                {{# if(d.status === 1) { }}
+                    <a class="layui-font-blue">审核中</a>
+                {{# } else if(d.status === 2) { }}
+                    <a class="layui-font-green">结束</a>
+                {{# } else { }}
+                    <a class="layui-font-red">作废</a>
+                {{# } }}
             </script>
 
+ 
         </div>
     </div>
     <script src="../layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
     <script>
-
-        function getDownload() {
-            window.location = "/ConsumableInfo/DownLoadFile"
-        }
-       
-
         layui.use(['form', 'table', 'upload', 'layer'], function () {
             var $ = layui.jquery,
                 form = layui.form,
@@ -77,7 +74,7 @@
 
             table.render({
                 elem: '#currentTableId',
-                url: '/ConsumableInfo/GetAllConsumableInfos',
+                url: '/WorkFlow_Instance/GetWorkFlow_Instance',
                 toolbar: '#toolbarDemo',
                 defaultToolbar: ['filter', 'exports', 'print', {
                     title: '提示',
@@ -87,15 +84,14 @@
                 cols: [[
                     { type: "checkbox", width: 50 },
                     { field: 'id', width: 80, title: 'ID', sort: true, hide: true },
-                    { field: 'categoryId', minwidth: 180, title: '耗材类型', sort: true, hide: true },
-                    { field: 'consumableName', minwidth: 180, title: '耗材名称' },
+                    { field: 'modelName', minwidth: 180, title: '工作流模板' },
+                    { field: 'status', minwidth: 180, title: '状态' ,templet:"#StatusCell"},
                     { field: 'description', minwidth: 180, title: '描述' },
-                    { field: 'specification', title: '耗材规格', minWidth: 150 },
-                    { field: 'num', width: 180, title: '库存数量', sort: true },
-                    { field: 'unit', width: 180, title: '单位', sort: true, hide: true },
-                    { field: 'money', width: 80, title: '价格', sort: true },
-                    { field: 'warningNum', width: 135, title: '警告库存', sort: true },
+                    { field: 'reason', minwidth: 180, title: '申请理由' },
                     { field: 'createTime', minwidth: 180, title: '添加时间' },
+                    { field: 'creator', minwidth: 180, title: '添加人' },
+                    { field: 'outGoodsIdName', minwidth: 180, title: '出库物资' },
+                    { field: 'outNum', minwidth: 180, title: '出库数量' },
                     { title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center" }
                 ]],
                 limits: [10, 15, 20, 25, 50, 100],
@@ -112,43 +108,10 @@
                     where: param
                 }, 'data');
 
-                // 渲染
-                upload.render({
-                    elem: '#uploadBut',
-                    url: '/ConsumableInfo/Upload',
-                    accept: 'file',
-                    done: function (res) {
-                        layer.msg(res.msg);
-                        console.log("上传接口" + res);
-                        if (res.code == 200) {
-                            reloadTable();
-                        }
-                    }
-                });
             }
             // 监听搜索操作
             form.on('submit(data-search-btn)', function (data) {
                 var result = data.field;
-                //执行搜索重载
-//                table.reload('currentTableId', {
-//                    page: {
-//                        curr: 1
-//                    },
-//                    where: {
-///*                        id: data.field.id,*/
-//                        consumableName: result.field.consumableName
-//                    }
-//                }, 'data');
-//                // 渲染
-//                upload.render({
-//                    elem: '#uploadBut',
-//                    url: '/ConsumableInfo/Upload',
-//                    accept: 'file',
-//                    done: function (res) {
-
-//                    }
-//                });
-//                return false;
                 var selectWhere = {
                     consumableName: result.consumableName,
                 }
@@ -161,13 +124,13 @@
             table.on('toolbar(currentTableFilter)', function (obj) {
                 if (obj.event === 'add') {  // 监听添加操作
                     var index = layer.open({
-                        title: '添加耗材',
+                        title: '添加实例',
                         type: 2,
                         shade: 0.2,
                         maxmin: true,
                         shadeClose: true,
                         area: ['80%', '80%'],
-                        content: '/ConsumableInfo/CreatetConsumableInfoView'
+                        content: '/WorkFlow_Instance/CreatetWorkFlow_InstanceView'
                     });
                     $(window).on("resize", function () {
                         layer.full(index);

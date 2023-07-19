@@ -74,6 +74,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleInfoBLL.cs" />
     <Compile Include="UserInfoBLL.cs" />
+    <Compile Include="WorkFlow_InstanceBLL.cs" />
+    <Compile Include="WorkFlow_ModelBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonLib\CommonLib.csproj">

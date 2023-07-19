@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../layuimini/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../layuimini/css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-form layuimini-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label required" >工作流模板</label>
+            <div class="layui-input-block">
+                <select name="workFlow_ModelSelect" id="workFlow_ModelSelectId" lay-verify="required">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">物品</label>
+            <div class="layui-input-block">
+                <select name="modelSelect" id="consumableInfoModelSelectId" lay-verify="required">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">申请数量</label>
+            <div class="layui-input-block">
+                <input type="text" name="outNum" placeholder="请描述" value="" class="layui-input"lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">申请理由</label>
+            <div class="layui-input-block">
+                <input type="text" name="reason" placeholder="请描述" value="" class="layui-input"lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">描述</label>
+            <div class="layui-input-block">
+                <input type="text" name="description" placeholder="请描述" value="" class="layui-input"lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+            </div>
+        </div>
+    </div>
+    <script src="../layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script>
+
+        // 刷新父页面的表格函数		OutNum	0	int
+        function reloadParentTable() {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+            parent.layui.table.reload('currentTableId');
+        }
+
+
+        layui.use(['form'], function () {
+            var form = layui.form,
+                layer = layui.layer,
+                $ = layui.$;
+
+            
+
+            $.ajax({
+            url: '/WorkFlow_Instance/GetSelectOptions',
+            type: 'GET',
+            success: function (data) {
+                @* 这是物品 consumableInfoModelSelectId*@
+                var consumableInfoSelect = data.data.consumableInfoSelect;
+                @* 这是模板 *@
+                var modelSelect = data.data.modelSelect;
+                for (var i = 0; i < modelSelect.length; i++) {
+                    $("#workFlow_ModelSelectId").append('<option value="' + modelSelect[i].value + '">' + modelSelect[i].title + '</option>');                    
+                }
+                for (var i = 0; i < consumableInfoSelect.length; i++) {
+                    $("#consumableInfoModelSelectId").append('<option value="' + consumableInfoSelect[i].value + '">' + consumableInfoSelect[i].title + '</option>');                    
+                }
+                form.render('select');
+                
+                console.log(data);
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
+        });
+            //监听提交 		ModelId	null	string
+            form.on('submit(saveBtn)', function (data) {
+                data.field.modelId = $("#workFlow_ModelSelectId").val();
+                data.field.outGoodsId = $("#consumableInfoModelSelectId").val();
+                $.ajax({
+                    url: "/WorkFlow_Instance/CreateWorkFlow_Instance",
+                    type: "Post",
+                    @* data: {
+                        modelId: data.field.modelId,
+                        creOutGoodsIdator: data.field.creOutGoodsIdator,
+                    }, *@
+                    data: data.field,
+                    success: function (res) {
+                        if (res.code == 200) {
+                            var index = layer.alert(res.msg, {
+                                title: '最终的提交信息'
+                            }, function () {
+
+                                // 关闭弹出层
+                                layer.close(index);
+
+                                reloadParentTable();
+
+                                var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(iframeIndex);
+                            });
+                        } else {
+                            layer.alert(res.msg);
+                        }
+
+                    }
+
+                });
+                return false;
+            });
+
+        });
+    </script>
+</body>
+</html>
+

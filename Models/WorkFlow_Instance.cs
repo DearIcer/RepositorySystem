@@ -41,6 +41,6 @@ namespace Models
         /// 出库物资Id
         /// </summary>
         [MaxLength(36)]
-        public string CreOutGoodsIdator { get; set; }
+        public string OutGoodsId { get; set; }
     }
 }
