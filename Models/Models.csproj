@@ -70,6 +70,7 @@
     <Compile Include="DTO\GetWorkFlow_InstanceDTO.cs" />
     <Compile Include="DTO\GetWorkFlow_ModelDTO.cs" />
     <Compile Include="DTO\HomeMenuInfoDTO.cs" />
+    <Compile Include="DTO\WorkFlow_InstanceStepDTO.cs" />
     <Compile Include="Enums\ConsumableRecordTypeEnums.cs" />
     <Compile Include="Enums\WorkFlow_InstanceStatusEnum.cs" />
     <Compile Include="Enums\WorkFlow_InstanceStepStatusEnum.cs" />
@@ -86,6 +87,10 @@
     <Compile Include="Migrations\202307181101183_updateOutGoodsId.cs" />
     <Compile Include="Migrations\202307181101183_updateOutGoodsId.designer.cs">
       <DependentUpon>202307181101183_updateOutGoodsId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202307200308482_updateDataBase.cs" />
+    <Compile Include="Migrations\202307200308482_updateDataBase.designer.cs">
+      <DependentUpon>202307200308482_updateDataBase.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -111,6 +116,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202307181101183_updateOutGoodsId.resx">
       <DependentUpon>202307181101183_updateOutGoodsId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202307200308482_updateDataBase.resx">
+      <DependentUpon>202307200308482_updateDataBase.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

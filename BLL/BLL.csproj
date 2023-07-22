@@ -75,6 +75,7 @@
     <Compile Include="RoleInfoBLL.cs" />
     <Compile Include="UserInfoBLL.cs" />
     <Compile Include="WorkFlow_InstanceBLL.cs" />
+    <Compile Include="WorkFlow_InstanceStepBLL.cs" />
     <Compile Include="WorkFlow_ModelBLL.cs" />
   </ItemGroup>
   <ItemGroup>

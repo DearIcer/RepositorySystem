@@ -157,6 +157,7 @@
     <Compile Include="Controllers\RoleInfoController.cs" />
     <Compile Include="Controllers\UserInfoController.cs" />
     <Compile Include="Controllers\WorkFlow_InstanceController.cs" />
+    <Compile Include="Controllers\WorkFlow_InstanceStepController.cs" />
     <Compile Include="Controllers\WorkFlow_ModelController.cs" />
     <Compile Include="Filters\CustomAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -353,6 +354,8 @@
     <Content Include="Views\WorkFlow_Model\CreatetWorkFlow_ModelView.cshtml" />
     <Content Include="Views\WorkFlow_Instance\ListView.cshtml" />
     <Content Include="Views\WorkFlow_Instance\CreatetWorkFlow_InstanceView.cshtml" />
+    <Content Include="Views\WorkFlow_InstanceStep\ListView.cshtml" />
+    <Content Include="Views\WorkFlow_InstanceStep\UpdateWorkFlow_InstanceStepView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

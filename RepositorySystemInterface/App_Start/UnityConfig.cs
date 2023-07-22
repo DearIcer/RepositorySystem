@@ -83,6 +83,9 @@ namespace RepositorySystemInterface
 
             container.RegisterType<IWorkFlow_InstanceDAL, WorkFlow_InstanceDAL>();
             container.RegisterType<IWorkFlow_InstanceBLL, WorkFlow_InstanceBLL>();
+
+            container.RegisterType<IWorkFlow_InstanceStepDAL, WorkFlow_InstanceStepDAL>();
+            container.RegisterType<IWorkFlow_InstanceStepBLL, WorkFlow_InstanceStepBLL>();
         }
     }
 }

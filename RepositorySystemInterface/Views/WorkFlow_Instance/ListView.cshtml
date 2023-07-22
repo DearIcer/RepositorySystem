@@ -46,8 +46,15 @@
             <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
             <script type="text/html" id="currentTableBar">
-                <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">作废</a>
-                <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">不可操作</a>
+                
+                {{# if(d.status === 1) { }}
+                    <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">作废</a>
+                {{# } else if(d.status === 2) { }}
+                    
+                {{# } else { }}
+                   
+                {{# } }}
+                @* <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">不可操作</a> *@
             </script>
             
             <script type="text/html" id="StatusCell">
@@ -113,7 +120,7 @@
             form.on('submit(data-search-btn)', function (data) {
                 var result = data.field;
                 var selectWhere = {
-                    consumableName: result.consumableName,
+                    modelName: result.modelName,
                 }
                 reloadTable(selectWhere);
             });
@@ -178,59 +185,25 @@
             table.on('tool(currentTableFilter)', function (obj) {
                 var data = obj.data;
                 if (obj.event === 'edit') {
-                    var index = layer.open({
-                        title: '编辑耗材',
-                        type: 2,
-                        shade: 0.2,
-                        maxmin: true,
-                        shadeClose: true,
-                        area: ['80%', '80%'],
-                        content: "/ConsumableInfo/UpdateConsumableInfoView?id=" + data.id,
-                        success: function (layero, index) {
-                            var iframe = window['layui-layer-iframe' + index];
-                            iframe.getDate(data);
-                        }
-                    });
-                    $(window).on("resize", function () {
-                        layer.full(index);
-                    });
-                    return false;
-                } else if (obj.event === 'delete') {
-                    layer.confirm('真的删除行么', function (index) {
-                        $.ajax({
-                            url: "/ConsumableInfo/DeletetCategory",
-                            type: "Post",
-                            data: {
-                                id: data.id
-                            },
-                            success: function (res) {
-                                if (res.code == 200) {
-                                    layer.alert(res.msg);
-                                    obj.del();
-                                    layer.close(index);
-                                } else {
-                                    layer.alert(res.msg);
-                                }
+                   layer.msg(JSON.stringify(data));
+                   $.ajax({
+                    url: "/WorkFlow_Instance/UpdateWorkFlow_InstanceStatus",
+                        type: "Post",
+                        data: {
+                            id: data.id
+                        },success: function (res) {
+                            if(res.code == 200)
+                            {
+                                table.reload('currentTableId', {
+                                    page: {
+                                        curr: 1
+                                    },
+                                }, 'data');
                             }
-                        });
-                    });
-                }
-            });
-
-            // 渲染
-            upload.render({
-                elem: '#uploadBut',
-                url: '/ConsumableInfo/Upload',
-                accept: 'file',
-                done: function (res) {
-                    table.reload('currentTableId', {
-                        page: {
-                            curr: 1
-                        },
-                        where: {}
-                    }, 'data');
-                }
-            });
+                        }
+                   });
+                }                 
+            });          
         });
 
     </script>

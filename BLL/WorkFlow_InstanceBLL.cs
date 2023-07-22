@@ -7,6 +7,7 @@ using Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -108,23 +109,65 @@ namespace BLL
             }
         }
 
+        public bool UpdateWorkFlow_InstanceStatus(string id, out string msg)
+        {
+            using (var transaction = _dbContext.Database.BeginTransaction())           
+            {
+                try
+                {
+                    WorkFlow_Instance oldEntity = _dbContext.WorkFlow_Instance.FirstOrDefault(x => x.Id == id);
+                    if (oldEntity == null)
+                    {
+                        transaction.Rollback();
+                        msg = "查不到该实例";
+                        return false;
+                    }
+                    if(oldEntity.Status != (int)WorkFlow_InstanceStatusEnum.审批中)
+                    {
+                        transaction.Rollback();
+                        msg = "工作实例不处于审批状态不可作废";
+                        return false;
+                    }
+                    // 进行作废
+                    oldEntity.Status = (int)WorkFlow_InstanceStatusEnum.作废;
+                    _dbContext.Entry(oldEntity).State = System.Data.Entity.EntityState.Modified;
+                    bool isOk = _dbContext.SaveChanges() > 0;
+                    if (isOk == false)
+                    {
+                        transaction.Rollback();
+                        msg = "作废状态更新失败";
+                        return false;
+                    }
+                    List<WorkFlow_InstanceStep>list = _dbContext.WorkFlow_InstanceStep.Where(x => x.InstanceId == oldEntity.Id).ToList();
+                    foreach (var item in list)
+                    {
+                        item.ReviewStatus = (int)WorkFlow_InstanceStatusEnum.作废;
+                        _dbContext.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                        isOk = _dbContext.SaveChanges() > 0;
+                        if (isOk == false)
+                        {
+                            transaction.Rollback();
+                            msg = "工作流步骤更新失败";
+                            return false;
+                        }
+                    }
+                    transaction.Commit();
+                    msg = "修改成功";
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    msg = "作废失败" + ex.Message;
+                    return false;
+                    throw;
+                }
+            }
+            
+        }
 
         List<GetWorkFlow_InstanceDTO> IWorkFlow_InstanceBLL.GetWorkFlow_Instance(int page, int limit, string userId, out int count)
-        {
-            //var tempList = (from r in _workFlow_InstanceDAL.GetWorkFlow_Instance().Where(r => r.Id != null)
-            //                select new GetWorkFlow_InstanceDTO
-            //                {
-            //                    Id = r.Id,
-            //                    ModelId = r.ModelId,
-            //                    Status = r.Status,
-            //                    Description = r.Description,
-            //                    Reason = r.Reason,
-            //                    CreateTime = r.CreatedTime,
-            //                    Creator = r.Creator,
-            //                    OutGoodsId = r.OutGoodsId,
-            //                    OutNum = r.OutNum,
-            //                }).ToList();
-
+        {         
             var tempList = from wi in _dbContext.WorkFlow_Instance.Where(wi => wi.Creator == userId)
                            join wm in _dbContext.WorkFlow_Model
                            on wi.ModelId equals wm.Id
@@ -157,7 +200,7 @@ namespace BLL
                                ModelName = wiwm.Title
                            };
             count = _workFlow_InstanceDAL.GetWorkFlow_Instance().Count();
-            return tempList.OrderBy(u => u.CreateTime).Skip(limit * (page - 1)).Take(limit).ToList();
+            return tempList.OrderByDescending(u => u.CreateTime).Skip(limit * (page - 1)).Take(limit).ToList();
         }
     }
 }

@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IBLL", "IBLL\IBLL.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDAL", "IDAL\IDAL.csproj", "{CF95D981-813C-40F8-871A-03ACFAAAABF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataFilling", "DataFilling\DataFilling.csproj", "{D2A79006-B16B-45C7-9EBD-D7509952ABE7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,10 +51,6 @@ Global
 		{CF95D981-813C-40F8-871A-03ACFAAAABF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF95D981-813C-40F8-871A-03ACFAAAABF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF95D981-813C-40F8-871A-03ACFAAAABF9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D2A79006-B16B-45C7-9EBD-D7509952ABE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D2A79006-B16B-45C7-9EBD-D7509952ABE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D2A79006-B16B-45C7-9EBD-D7509952ABE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D2A79006-B16B-45C7-9EBD-D7509952ABE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

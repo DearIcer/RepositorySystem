@@ -213,8 +213,6 @@
                     return false;
                 } else if (obj.event === 'delete') {
                     layer.confirm('真的删除行么', function (index) {
-
-
                         $.ajax({
                             url: "/UserInfo/DeleteUserInfo",
                             type: "Post",
@@ -233,11 +231,6 @@
                             }
 
                         });
-
-
-
-
-
                     });
                 }
             });

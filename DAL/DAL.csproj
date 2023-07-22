@@ -64,6 +64,7 @@
     <Compile Include="R_UserInfo_RoleInfoDAL.cs" />
     <Compile Include="UserInfoDAL.cs" />
     <Compile Include="WorkFlow_InstanceDAL.cs" />
+    <Compile Include="WorkFlow_InstanceStepDAL.cs" />
     <Compile Include="WorkFlow_ModelDAL.cs" />
   </ItemGroup>
   <ItemGroup>

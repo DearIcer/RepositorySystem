@@ -10,10 +10,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" href="../layuimini/lib/layui-v2.6.3/css/layui.css" media="all">
-    <!--[if lt IE 9]>
-    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
     <style>
         html, body {
             width: 100%;
@@ -131,13 +127,7 @@
                         <label class="layui-icon layui-icon-password" for="password"></label>
                         <input type="password" name="password" lay-verify="required|password" placeholder="密码" autocomplete="off" class="layui-input" value="123456">
                     </div>
-                    <div class="layui-form-item">
-                        <label class="layui-icon layui-icon-vercode" for="captcha"></label>
-                        <input type="text" name="captcha" lay-verify="required|captcha" placeholder="图形验证码" autocomplete="off" class="layui-input verification captcha" value="xszg">
-                        <div class="captcha-img">
-                            <img id="captchaPic" src="../layuimini//images/captcha.jpg">
-                        </div>
-                    </div>
+                    
                     <div class="layui-form-item">
                         <input type="checkbox" name="rememberMe" value="true" lay-skin="primary" title="记住密码">
                     </div>
@@ -150,62 +140,6 @@
     </div>
     <script src="../layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
     <script src="../layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
-    @*<script src="../layuimini/lib/jq-module/jquery.particleground.min.js" charset="utf-8"></script>
-        <script>
-            layui.use(['form'], function () {
-                var form = layui.form,
-                    layer = layui.layer;
-
-                // 登录过期的时候，跳出ifram框架
-                if (top.location != self.location) top.location = self.location;
-
-                // 粒子线条背景
-                $(document).ready(function () {
-                    $('.layui-container').particleground({
-                        dotColor: '#7ec7fd',
-                        lineColor: '#7ec7fd'
-                    });
-                });
-
-                // 进行登录操作
-                form.on('submit(login)', function (data) {
-                    data = data.field;
-                    if (data.username == '') {
-                        layer.msg('用户名不能为空');
-                        return false;
-                    }
-                    if (data.password == '') {
-                        layer.msg('密码不能为空');
-                        return false;
-                    }
-                    if (data.captcha == '') {
-                        layer.msg('验证码不能为空');
-                        return false;
-                    }
-                    //layer.msg('登录成功', function () {
-                    //    window.location = '/Home/Index';
-                    $.ajax({
-                        url: '/Account/Login',
-                        type: 'Post',
-                        data: {
-                            account: data.username,
-                            password: data.password
-                        },
-                        successs: function (res) {
-                            console.log("接口返回结果", res);
-                            if (res.Status == 200) {
-                                layer.msg("登录成功,Hi 大冰！", function () {
-                                    window.location = '/Home/Index';
-                                });
-                            }
-                        }
-                    })
-
-                    });
-
-                    return false;
-                });
-            });</script>*@
     <script src="../layuimini/lib/jq-module/jquery.particleground.min.js" charset="utf-8"></script>
     <script>
         layui.use(['form'], function () {
@@ -238,8 +172,6 @@
                     layer.msg('验证码不能为空');
                     return false;
                 }
-                //layer.msg('登录成功', function () {
-                //    window.location = '/Home/Index';
                 $.ajax({
                     url: '/Account/Login',
                     type: 'Post',
@@ -259,16 +191,6 @@
                             layer.msg('账号或者密码错误！');
                         }
                     }
-
-                    //success: function (res) {
-                    //    console.log("接口返回结果", res);
-                    //    if (res.status == 200) {
-                    //        window.location = '/Home/Index';
-                    //    } else {
-                    //        layer.msg(res.msg);
-                    //        layer.msg(res.status);
-                    //    }
-                    //}
                 });
 
                 return false;

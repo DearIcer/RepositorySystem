@@ -59,6 +59,7 @@
     <Compile Include="IRoleInfoBLL.cs" />
     <Compile Include="IUserInfoBLL.cs" />
     <Compile Include="IWorkFlow_InstanceBLL.cs" />
+    <Compile Include="IWorkFlow_InstanceStepBLL.cs" />
     <Compile Include="IWorkFlow_ModelBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -306,7 +306,7 @@ namespace BLL
                 msg = "角色不存在";
                 return false;
             }
-
+            roleInfo.RoleName = entity.RoleName;
             //赋值描述
             roleInfo.Description = entity.Description;
             //创建时间

@@ -3,6 +3,7 @@ using CommonLib;
 using IBLL;
 using Models;
 using Models.DTO;
+using Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,6 +73,7 @@ namespace RepositorySystemInterface.Controllers
             if (string.IsNullOrWhiteSpace(infos.OutGoodsId))
             {
                 result.Msg = "物品为空";
+                
                 return new JsonHelper(result);
             }
             if (infos.OutNum <= 0)
@@ -107,5 +109,6 @@ namespace RepositorySystemInterface.Controllers
 
             return new JsonHelper(result);
         }
+        
     }
 }
