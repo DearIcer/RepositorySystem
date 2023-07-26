@@ -171,7 +171,7 @@
             };
             miniAdmin.render(options);
 
-            // 百度统计代码，只统计指定域名
+            @* // 百度统计代码，只统计指定域名
             miniTongji.render({
                 specific: true,
                 domains: [
@@ -179,16 +179,13 @@
                     'layuimini.99php.cn',
                     'layuimini-onepage.99php.cn',
                 ],
-            });
+            }); *@
 
             $('.login-out').on("click", function () {
                 layer.msg('退出登录成功', function () {
-                    /* window.location = '../layuimini/page/login-3.html';*/
                     window.location = '/Account/LoginView'
                     // 调用函数以删除当前站点的所有 cookie
                     deleteAllCookies();
-                    //deleteCookie('UserId');
-                    //deleteCookie('UserName');
                 });
             });
             // 指定要解码的 cookie 名称

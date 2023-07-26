@@ -52,8 +52,7 @@ namespace RepositorySystemInterface
             // 注册用户表的DAL和BLL
             container.RegisterType<IUserInfoDAL,UserInfoDAL>();
             container.RegisterType<IUserInfoBLL, UserInfoBLL>();
-            //container.RegisterType<IUserInfoBLL, UserInfoBLL>();
-            //
+
             container.RegisterType<IDepartmentInfoDAL, DepartmentInfoDAL>();
             container.RegisterType<IDepartmentInfoBLL, DepartmentInfoBLL>();
 
@@ -61,13 +60,11 @@ namespace RepositorySystemInterface
             container.RegisterType<IRoleInfoBLL, RoleInfoBLL>();
 
             container.RegisterType<IR_UserInfo_RoleInfoDAL, R_UserInfo_RoleInfoDAL>();
-            //container.RegisterType<IR_UserInfo_RoleInfoDAL, RoleInfoBLL>();
-
+    
             container.RegisterType<IMenuInfoBLL, MenuInfoBLL>();
             container.RegisterType<IMenuInfoDAL, MenuInfoDAL>();
 
             container.RegisterType<IR_RoleInfo_MenuInfoDAL, R_RoleInfo_MenuInfoDAL>();
-            //container.RegisterType<IR_R, MenuInfoDAL>();
 
             container.RegisterType<ICategoryDAL, CategoryDAL>();
             container.RegisterType<ICategoryBLL, CategoryBLL>();
