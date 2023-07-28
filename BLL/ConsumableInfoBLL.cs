@@ -128,6 +128,8 @@ namespace BLL
                             uu.UserName,
 
                         }).ToList();
+            //排序
+            datas = datas.OrderByDescending(it => it.CreateTime).ToList();
             string path = Directory.GetCurrentDirectory();
             string file_name = "出入库记录" + DateTime.Now.ToString("yyyy-MM-dd hh mm ss") + ".xlsx";
 
