@@ -29,52 +29,101 @@ namespace BLL
 
         public List<WorkFlow_InstanceStepDTO> GetWorkFlow_InstanceStep(int page, int limit, string userId, out int count)
         {
-            var tempList = from ws in _dbContext.WorkFlow_InstanceStep.Where (x => x.ReviewerId == userId)
-                           join wi in _dbContext.WorkFlow_Instance
+            var tempList = from ws in _dbContext.WorkFlow_InstanceStep.Where(x => x.ReviewerId == userId)
+                           join wi in _dbContext.WorkFlow_Instance//实例表
                            on ws.InstanceId equals wi.Id
                            into WsAndWi
                            from wswi in WsAndWi.DefaultIfEmpty()
 
-                           join c in _dbContext.ConsumableInfo
+                           join c in _dbContext.ConsumableInfo//耗材表
                            on wswi.OutGoodsId equals c.Id
                            into WsAndC
                            from wsc in WsAndC.DefaultIfEmpty()
 
-                           join u in _dbContext.UserInfo
+                           join u in _dbContext.UserInfo//用户表——申请人
                            on wswi.Creator equals u.Id
                            into WsAndU
                            from wsu in WsAndU.DefaultIfEmpty()
 
-                           join wm in _dbContext.WorkFlow_Model
+                           join wm in _dbContext.WorkFlow_Model//模板表
                            on wswi.ModelId equals wm.Id
                            into WsAnWm
                            from wswm in WsAnWm.DefaultIfEmpty()
 
-                           join u2 in _dbContext.UserInfo
+                           join u2 in _dbContext.UserInfo//用户表——审核人
                            on ws.ReviewerId equals u2.Id
                            into WsAndU2
                            from wsu2 in WsAndU2.DefaultIfEmpty()
 
                            select new WorkFlow_InstanceStepDTO
                            {
-                                Id = ws.Id,
-                                ModelTitle = wswm.Title,
-                                InstanceId = wswi.Id,
-                                Reason = wswi.Reason,
-                                CreatorName = wsu.UserName,
-                                CreatorId = wsu.Id,
+                               Id = ws.Id,
+                               ModelTitle = wswm.Title,//模板标题
+                               InstanceId = wswi.Id,//实例id
+                               Reason = wswi.Reason,//申请liy
+                               CreatorName = wsu.UserName,//申请人名
+                               CreatorId = wsu.Id,//申请人id
 
-                                ReviewerId = ws.ReviewerId,
-                                ReviewerName = wsu2.UserName,
-                                ReviewReason = ws.ReviewReason,
-                                ReviewStatus = ws.ReviewStatus,
-                                ReviewTime = ws.ReviewTime,
+                               ReviewerId = ws.ReviewerId,//审核人id
+                               ReviewerName = wsu2.UserName,//审核人名
+                               ReviewReason = ws.ReviewReason,//审核理由
+                               ReviewStatus = ws.ReviewStatus,//审核状态
+                               ReviewTime = ws.ReviewTime,//审核时间
+                               BeforeStepId = ws.BeforeStepId,//上一步骤id
+                               CreateTime = wsc.CreatedTime,//创建时间
 
-                                CreateTime = ws.CreatedTime,
-                                OutGoodsName = wsc.ConsumableName,
-                                OutNum = wswi.OutNum,
+                               //CreateTime = ws.CreatedTime,
+                               OutGoodsName = wsc.ConsumableName,
+                               OutNum = wswi.OutNum,
 
                            };
+            //var tempList = from ws in _dbContext.WorkFlow_InstanceStep.Where(x => x.ReviewerId != userId)
+            //               join wi in _dbContext.WorkFlow_Instance
+            //               on ws.InstanceId equals wi.Id
+            //               into WsAndWi
+            //               from wswi in WsAndWi.DefaultIfEmpty()
+
+            //               join c in _dbContext.ConsumableInfo
+            //               on wswi.OutGoodsId equals c.Id
+            //               into WsAndC
+            //               from wsc in WsAndC.DefaultIfEmpty()
+
+            //               join u in _dbContext.UserInfo
+            //               on wswi.Creator equals u.Id
+            //               into WsAndU
+            //               from wsu in WsAndU.DefaultIfEmpty()
+
+            //               join wm in _dbContext.WorkFlow_Model
+            //               on wswi.ModelId equals wm.Id
+            //               into WsAnWm
+            //               from wswm in WsAnWm.DefaultIfEmpty()
+
+            //               join u2 in _dbContext.UserInfo
+            //               on ws.ReviewerId equals u2.Id
+            //               into WsAndU2
+            //               from wsu2 in WsAndU2.DefaultIfEmpty()
+
+            //               select new WorkFlow_InstanceStepDTO
+            //               {
+            //                   Id = ws.Id,
+            //                   ModelTitle = wswm.Title,
+            //                   InstanceId = wswi.Id,
+            //                   Reason = wswi.Reason,
+            //                   CreatorName = wsu.UserName,
+            //                   CreatorId = wsu.Id,
+
+            //                   ReviewerId = ws.ReviewerId,
+            //                   ReviewerName = wsu2.UserName,
+            //                   ReviewReason = ws.ReviewReason,
+            //                   ReviewStatus = ws.ReviewStatus,
+            //                   ReviewTime = ws.ReviewTime,
+
+            //                   CreateTime = ws.CreatedTime,
+            //                   OutGoodsName = wsc.ConsumableName,
+            //                   OutNum = wswi.OutNum,
+
+            //               };
+
             count = _InstanceStepDAL.GetWorkFlow_InstanceStep().Count();
             return tempList.OrderBy(u => u.ReviewStatus).ThenBy(u => u.CreateTime).Skip(limit * (page - 1)).Take(limit).ToList();
         }

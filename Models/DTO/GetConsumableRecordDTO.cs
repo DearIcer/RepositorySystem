@@ -12,7 +12,7 @@ namespace Models.DTO
         public string ConsumableId { get; set; }
         public string ConsumableName { get; set; }
         public int Num { get; set; }
-        public int Type { get; set; }
+        public string Type { get; set; }
         public DateTime CreateTime { get; set; }
         public string Creator { get; set; }
         public string CreatorName { get; set; }

@@ -109,6 +109,27 @@ namespace RepositorySystemInterface.Controllers
 
             return new JsonHelper(result);
         }
-        
+        [HttpPost]
+        public ActionResult UpdateWorkFlow_InstanceStatus(string id)
+        {
+            ReturnResult result = new ReturnResult();
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                result.Msg = "id为空";
+                return new JsonHelper(result);
+            }
+
+            string msg;
+            bool isOk = _workFlow_InstanceBLL.UpdateWorkFlow_InstanceStatus(id, out msg);
+
+            result.Msg = msg;
+            result.IsSuccess = isOk;
+            if (isOk)
+            {
+                result.Code = 200;
+            }
+            return new JsonHelper(result);
+        }
+
     }
 }

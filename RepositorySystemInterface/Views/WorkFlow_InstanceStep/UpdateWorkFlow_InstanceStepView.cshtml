@@ -20,7 +20,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label required">申请人</label>
             <div class="layui-input-block">
-                <input type="text" name="creatorName" disabled value="" class="layui-input" disabled >
+                <input type="text" name="creatorName" disabled value="" class="layui-input" disabled>
             </div>
         </div>
 
@@ -34,21 +34,21 @@
         <div class="layui-form-item">
             <label class="layui-form-label ">申请理由</label>
             <div class="layui-input-block">
-                <input type="text" name="reason"  value="" class="layui-input">
+                <input type="text" name="reason" value="" class="layui-input">
             </div>
         </div>
 
         <div class="layui-form-item">
             <label class="layui-form-label required">申请数量</label>
             <div class="layui-input-block">
-                <input type="text" name="outNum" lay-verify="required"  value="" class="layui-input">              
+                <input type="text" name="outNum" lay-verify="required" value="" class="layui-input">
             </div>
         </div>
 
         <div class="layui-form-item">
             <label class="layui-form-label ">审核意见</label>
             <div class="layui-input-block">
-                <input type="text" name="reviewReason"  value="" class="layui-input">
+                <input type="text" name="reviewReason" value="" class="layui-input">
             </div>
         </div>
 
@@ -58,7 +58,7 @@
                 <input type="radio" name="reviewStatus" value="2" title="同意" checked="">
                 <input type="radio" name="reviewStatus" value="3" title="驳回">
             </div>
-        </div>      
+        </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
@@ -66,6 +66,8 @@
         </div>
     </div>
     <script src="../layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
     <script>
 
         // 刷新父页面的表格函数
@@ -79,17 +81,17 @@
         var form;
         //  获取父页面的回调数据
         function getDate(Data) {
-            parentData = Data;           
+            parentData = Data;
             form.val("fromData", {
                 "creatorName": parentData.creatorName,
                 "outGoodsName": parentData.outGoodsName,
                 "outNum": parentData.outNum,
                 "reason": parentData.reason,
-                "reviewReason":parentData.reviewReason
+                "reviewReason": parentData.reviewReason
             });
 
             // 指定要解码的 cookie 名称
-            var cookieName = "userId";
+            var cookieName = "UserID";
 
             // 获取当前页面的所有 cookie
             var cookies = document.cookie.split(";");
@@ -108,11 +110,13 @@
             // 将解码后的值保存到变量
             var decodedCookie = decodedValue;
             //验证是否是自己是否可以审核该工单
-            if(parentData.creatorId == decodedCookie)
-            {
-                $(".reviewer").css("display",true);
-                $("input[name=outNum]").attr("display",false);
+            if (parentData.reviewerId != decodedCookie) {
+                $(".reviewer").css("display", true);
+                $("input[name=outNum]").attr("display", true);
+
             }
+            console.log("id1:" + decodedCookie);
+            console.log("id2:" + parentData.reviewerId);
         }
 
 
@@ -123,12 +127,12 @@
             form = layui.form;
             var id = window.location.search.substr(4);
 
-           
+
             ////监听提交
             form.on('submit(saveBtn)', function (data) {
                 data.field.id = parentData.id;
                 $.ajax({
-                    url:  "/WorkFlow_InstanceStep/UpdateWorkFlow_InstanceStatus",
+                    url: "/WorkFlow_InstanceStep/UpdateWorkFlow_InstanceStatus",
                     type: 'POST',
                     data: data.field,
                     success: function (res) {

@@ -18,6 +18,7 @@ namespace BLL
         /// 部门表
         /// </summary>
         private IDepartmentInfoDAL _departmentInfoDAL;
+
         /// <summary>
         /// 数据上下文
         /// </summary>
@@ -27,6 +28,7 @@ namespace BLL
             _departmentInfoDAL = departmentInfoDAL;
             _dbContext = dbContext;
         }
+
         /// <summary>
         /// 添加部门信息
         /// </summary>

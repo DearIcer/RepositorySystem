@@ -179,8 +179,10 @@
     <Content Include="layuimini\css\layuimini.css" />
     <Content Include="layuimini\css\public.css" />
     <Content Include="layuimini\css\themes\default.css" />
+    <Content Include="layuimini\HtmlPage1.html" />
     <Content Include="layuimini\images\bg.jpg" />
     <Content Include="layuimini\images\captcha.jpg" />
+    <Content Include="layuimini\images\CustomBG.png" />
     <Content Include="layuimini\images\donate_qrcode.png" />
     <Content Include="layuimini\images\favicon.ico" />
     <Content Include="layuimini\images\home.png" />

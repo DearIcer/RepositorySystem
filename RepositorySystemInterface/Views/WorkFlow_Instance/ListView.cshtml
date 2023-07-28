@@ -185,7 +185,7 @@
             table.on('tool(currentTableFilter)', function (obj) {
                 var data = obj.data;
                 if (obj.event === 'edit') {
-                   layer.msg(JSON.stringify(data));
+/*                   layer.msg(JSON.stringify(data));*/
                    $.ajax({
                     url: "/WorkFlow_Instance/UpdateWorkFlow_InstanceStatus",
                         type: "Post",

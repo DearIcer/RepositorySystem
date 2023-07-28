@@ -56,7 +56,7 @@ namespace BLL
                                ConsumableId = cr.ConsumableId,
                                ConsumableName = ccu.ConsumableName,
                                Num = cr.Num,
-                               Type = cr.Type,
+                               Type = cr.Type == 1 ? "入库" : "出库",
                                CreateTime = cr.CreatedTime,
                                Creator = cr.Creator,
                                CreatorName = cru.UserName,
