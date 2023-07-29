@@ -42,26 +42,31 @@ namespace BLL
             if (string.IsNullOrWhiteSpace(entity.Id))
             {
                 msg = "部门ID不能为空!";
+                return false;
             }
 
             if (string.IsNullOrWhiteSpace(entity.Description))
             {
                 msg = "部门描述不能为空!";
+                return false;
             }
 
             if (string.IsNullOrWhiteSpace(entity.DepartmentName))
             {
                 msg = "部门名字不能为空!";
+                return false;
             }
 
             if (string.IsNullOrWhiteSpace(entity.LeaderId))
             {
                 msg = "主管ID不能为空!";
+                return false;
             }
 
             if (string.IsNullOrWhiteSpace(entity.ParentId))
             {
                 msg = "父部门ID不能为空";
+                return false;
             }
 
             //entity.Id = Guid.NewGuid().ToString();

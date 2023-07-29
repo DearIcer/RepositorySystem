@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -41,21 +41,31 @@
             </div>
         </div>
 
+        @*---------------------------------------------------------*@
         <div class="layui-form-item">
-            <label class="layui-form-label required">主管ID</label>
+            <label class="layui-form-label ">主管ID</label>
             <div class="layui-input-block">
-                <input type="text" name="leaderId" lay-verify="required" lay-reqtext="主管ID不能为空" placeholder="请输入主管ID" value="" class="layui-input">
+                <select name="leaderIdSelect" id="leaderIdSelectId">
+                    <option value=""></option>
+                </select>
+
                 <tip>填写主管ID。</tip>
             </div>
         </div>
+        @*---------------------------------------------------------*@
 
+        @*---------------------------------------------------------*@
         <div class="layui-form-item">
-            <label class="layui-form-label required">父部门ID</label>
+            <label class="layui-form-label">父部门ID</label>
             <div class="layui-input-block">
-                <input type="text" name="parentId" lay-verify="required" lay-reqtext="父部门ID不能为空" placeholder="请输入父部门ID" value="" class="layui-input">
-                <tip>填写父部门ID。</tip>
+                <select name="departmentSelect" id="departmentdSelectId">
+                    <option value=""></option>
+                </select>
+
             </div>
+
         </div>
+        @*---------------------------------------------------------*@
 
         <div class="layui-form-item">
             <div class="layui-input-block">
@@ -79,9 +89,32 @@
             layer = layui.layer,
             $ = layui.$;
 
+         $.ajax({
+                url: '/DepartmentInfo/GetSelectOptions',
+                type: 'GET',
+                success: function (data) {                    
+                   var leaderSelect = data.data.leaderSelect;
+                    for (var i = 0; i < leaderSelect.length; i++) {
+                        $("#leaderIdSelectId").append('<option value="' + leaderSelect[i].value + '">' + leaderSelect[i].title + '</option>');
+                        console.log(leaderSelect[i].value);
+                    }
+                    var parentSelect = data.data.parentSelect;
+                    for (var i = 0; i < parentSelect.length; i++) {
+                        $("#departmentdSelectId").append('<option value="' + parentSelect[i].value + '">' + parentSelect[i].title + '</option>');
+                    }
+                    form.render('select');
+                    console.log(data);
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+
+
         //监听提交
         form.on('submit(saveBtn)', function (data) {
-
+            data.field.parentId = $("#departmentdSelectId").val();
+            data.field.leaderId = $("#leaderIdSelectId").val();
             $.ajax({
                 url: "/DepartmentInfo/CreateDepartmentInfo",
                 type: "Post",

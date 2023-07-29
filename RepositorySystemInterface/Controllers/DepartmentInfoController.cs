@@ -116,6 +116,7 @@ namespace RepositorySystemInterface.Controllers
 
             return new JsonHelper(result);
         }
+
         /// <summary>
         /// 部门软删除接口，批量
         /// </summary>
@@ -182,6 +183,7 @@ namespace RepositorySystemInterface.Controllers
 
             return new JsonHelper(result);
         }
+
         /// <summary>
         /// 获取下拉列表的接口
         /// </summary>
