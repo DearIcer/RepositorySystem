@@ -21,7 +21,6 @@ namespace RepositorySystemInterface
 
             //只需要执行一次，用完记得注释！
             //InitDB();
-            //testdate();
         }
 
         public static void InitDB()
@@ -48,40 +47,6 @@ namespace RepositorySystemInterface
             db.UserInfo.Add(userInfo);
             db.SaveChanges();
         }
-        public static void testdate()
-        {
-            RepositorySystemContext db = new RepositorySystemContext();
-            // 测试数据源------------------------------------------------
 
-
-            //DepartmentInfo departmentInfo = new DepartmentInfo()
-            //{
-            //    Id = "000",
-            //    Description = "公司高管",
-            //    DepartmentName = "董事会",
-            //    LeaderId = "001",
-            //    ParentId = "000",
-            //    CreatedTime = DateTime.Now,
-            //};
-
-            //RoleInfo roleInfo = new RoleInfo()
-            //{ 
-            //    Id = "001",
-            //    CreatedTime = DateTime.Now,
-            //    RoleName = "Test",
-            //    Description = "Test",
-            //};
-            //db.RoleInfo.Add(roleInfo);
-            //db.SaveChanges();
-
-            //MenuInfo menuInfo = new MenuInfo()
-            //{
-            //    Id = new Guid().ToString(),
-
-
-            //};
-            //db.MenuInfo.Add(menuInfo);
-            //db.SaveChanges();
-        }
     }
 }
