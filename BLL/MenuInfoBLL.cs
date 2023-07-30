@@ -303,7 +303,7 @@ namespace BLL
             menu.Href = entity.Href;
             menu.ParentId = entity.ParentId;
             menu.Level = entity.Level;
-            entity.Sort = entity.Sort;
+            menu.Sort = entity.Sort;
             
             bool isOk = _menuInfoDAL.UpdateEntity(menu);
 
