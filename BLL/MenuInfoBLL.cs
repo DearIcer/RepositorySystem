@@ -1,13 +1,10 @@
-﻿using DAL;
-using IBLL;
+﻿using IBLL;
 using IDAL;
 using Models;
 using Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL
 {
@@ -159,6 +156,7 @@ namespace BLL
                 item.Child = childMenus;
             }
         }
+
         /// <summary>
         /// 查询菜单列表的函数
         /// </summary>
@@ -267,7 +265,7 @@ namespace BLL
         /// <summary>
         /// 根据id获取菜单表
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">用户id</param>
         /// <returns></returns>
         public MenuInfo GetMenuInfoById(string id)
         {

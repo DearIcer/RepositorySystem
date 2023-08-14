@@ -57,13 +57,13 @@ namespace IBLL
         /// <summary>
         /// 返回对应用户权限的菜单项
         /// </summary>
-        /// <returns></returns>
+        /// <returns>返回一个菜单集</returns>
         List<HomeMenuInfoDTO> GetAllHomeMenuInfos(string userId);
 
         /// <summary>
         /// 获取下拉列表数据
         /// </summary>
-        /// <returns></returns>
+        /// <returns>返回下拉数据Title和id</returns>
         object GetSelectOptions();
 
 

@@ -171,47 +171,51 @@ namespace BLL
         /// <returns>反正值:真、假</returns>
         public bool CreateUserInfo(UserInfo entity , out string msg)
         {
-            if (string.IsNullOrWhiteSpace(entity.Account))
+            using (var transaction = _dbContext.Database.BeginTransaction())
             {
-                msg = "用户名不能为空";
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(entity.PassWord))
-            {
-                msg = "密码不能为空";
-                return false;
-            }
-            if(string.IsNullOrWhiteSpace(entity.UserName))
-            {
-                msg = "用户名不能为空";
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(entity.PhoneNum))
-            {
-                msg = "手机号不能为空";
-                return false;
-            }
+                try
+                {
+                    if (ParameterHelper.ValidateParameter(entity.Account, "账号", out msg) &&
+                        ParameterHelper.ValidateParameter(entity.UserName, "用户名", out msg) &&
+                        ParameterHelper.ValidateParameter(entity.PassWord, "密码", out msg))
+                    {
+                        // 判断账号是否重复
+                        UserInfo user = _userInfoDAL.GetEntities().FirstOrDefault(u => u.Account == entity.Account);
+                        if (user != null)
+                        {
+                            msg = "用户账号已存在";
+                            return false;
+                        }
 
-            // 判断账号是否重复
-            UserInfo user = _userInfoDAL.GetEntities().FirstOrDefault(u => u.Account == entity.Account);
-            if (user != null)
-            {
-                msg = "用户账号已存在";
-                return false;   
+                        // 赋值id
+                        entity.Id = Guid.NewGuid().ToString();
+                        // 赋值密码，需要进行MD5加密
+                        entity.PassWord = MD5Help.GenerateMD5(entity.PassWord);
+                        // Time
+                        entity.CreatedTime = DateTime.Now;
+                        // 更新到数据库
+                        bool isSuccess = _userInfoDAL.CreateEntity(entity);
+                        _dbContext.SaveChanges();
+                        transaction.Commit();
+                        msg = isSuccess ? $"添加{entity.UserName}成功!" : "添加用户失败";
+                        return true;
+                    }
+                    else
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    msg = " 添加用户失败" +  ex.Message;
+                    transaction.Rollback();
+                    return false;
+                    throw;
+                }
             }
-
-            // 赋值id
-            entity.Id = Guid.NewGuid().ToString();
-            // 赋值密码，需要进行MD5加密
-            entity.PassWord = MD5Help.GenerateMD5(entity.PassWord);
-            // Time
-            entity.CreatedTime = DateTime.Now;
-            // 更新到数据库
-            bool isSuccess = _userInfoDAL.CreateEntity(entity);
-
-            msg = isSuccess ? $"添加{entity.UserName}成功!" : "添加用户失败";
-            
-            return isSuccess;
+         
         }
         /// <summary>
         /// 用户软删除

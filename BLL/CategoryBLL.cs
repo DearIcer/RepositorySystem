@@ -1,4 +1,4 @@
-﻿using DAL;
+﻿using CommonLib;
 using IBLL;
 using IDAL;
 using Models;
@@ -8,8 +8,6 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL
 {
@@ -20,70 +18,103 @@ namespace BLL
         public CategoryBLL(RepositorySystemContext dbContext, ICategoryDAL categoryDAL) { _dbContext = dbContext; _categoryDAL = categoryDAL; }
         public bool CreateCategory(Category entity, out string msg)
         {
-            if (string.IsNullOrWhiteSpace(entity.Description))
+            using (var transaction = _dbContext.Database.BeginTransaction())
             {
-                msg = "描述不能为空";
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(entity.CategoryName))
-            {
-                msg = "分类名不能为空";
-                return false;
+                try
+                {
+                    if (ParameterHelper.ValidateParameter(entity.Description, "描述", out msg) &&
+                       ParameterHelper.ValidateParameter(entity.CategoryName, "分类名", out msg)
+                       )
+                    {
+                        Category category = _categoryDAL.GetEntities().FirstOrDefault(u => u.CategoryName == entity.CategoryName);
+                        if (category != null)
+                        {
+                            msg = "分类已存在";
+                            return false;
+                        }
+                        // 赋值id
+                        entity.Id = Guid.NewGuid().ToString();
+                        entity.CreatedTime = DateTime.Now;
+                        _dbContext.Category.Add(entity);
+                        _dbContext.SaveChanges();   
+                        transaction.Commit();
+                        msg = $"添加{entity.CategoryName}成功!";
+                        return true;
+                    }
+                    else
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    msg = ex.Message;
+                    transaction.Rollback();
+                    return false;
+                    throw;
+                }
             }
 
-            Category category = _categoryDAL.GetEntities().FirstOrDefault(u => u.CategoryName == entity.CategoryName);
-            if (category != null)
-            {
-                msg = "分类已存在";
-                return false;
-            }
-
-            // 赋值id
-            entity.Id = Guid.NewGuid().ToString();
-            entity.CreatedTime = DateTime.Now;
-            try
-            {
-                _categoryDAL.CreateEntity(entity);
-                msg = $"添加{entity.CategoryName}成功!";
-                return true;
-            }
-            catch (Exception ex)
-            {
-                msg = "添加分类失败";
-                return false;
-            }
         }
 
         public bool DeleteCategory(string id)
         {
-            Category category = _categoryDAL.GetEntities().FirstOrDefault(u => u.Id == id);
-            if(category == null)
+            using (var transaction = _dbContext.Database.BeginTransaction())
             {
-                return false;
+                try
+                {
+                    Category category = _categoryDAL.GetEntities().FirstOrDefault(u => u.Id == id);
+                    if (category == null)
+                    {
+                        return false;
+                    }
+                    category.IsDelete = true;
+                    category.DeleteTime = DateTime.Now;
+                    _categoryDAL.UpdateEntity(category);
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    return false;
+                    throw;
+                }
             }
-            category.IsDelete = true;
-            category.DeleteTime = DateTime.Now;
 
-            return _categoryDAL.UpdateEntity(category);
         }
 
         public bool DeleteCategory(List<string> ids)
         {
-            int count = 0;
-            foreach (var item in ids)
+            using (var transaction = _dbContext.Database.BeginTransaction())
             {
-                Category category = _categoryDAL.GetEntities().FirstOrDefault(u => u.Id == item);
-                if (category == null)
+                try
                 {
-                    continue;
-                }
-                category.IsDelete = true;
-                category.DeleteTime = DateTime.Now;
+                    foreach (var item in ids)
+                    {
+                        Category category = _categoryDAL.GetEntities().FirstOrDefault(u => u.Id == item);
+                        if (category == null)
+                        {
+                            continue;
+                        }
+                        category.IsDelete = true;
+                        category.DeleteTime = DateTime.Now;
 
-                _categoryDAL.UpdateEntity(category);
-                count++;
+                        _categoryDAL.UpdateEntity(category);
+                    }
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    return false;
+                    throw;
+                }
             }
-            return count > 0;
+
         }
 
 
@@ -123,79 +154,48 @@ namespace BLL
             return parentSelect;
         }
 
-        //public bool UpdateCategory(Category entity, out string msg)
-        //{
-        //    if (string.IsNullOrWhiteSpace(entity.Description))
-        //    {
-        //        msg = "描述不能为空";
-        //        return false;
-        //    }
-        //    if (string.IsNullOrWhiteSpace(entity.CategoryName))
-        //    {
-        //        msg = "分类名不能为空";
-        //        return true;
-        //    }
-        //    // 判断是否存在
-        //    Category category = _categoryDAL.GetEntities().FirstOrDefault(u => u.CategoryName == entity.CategoryName);
-        //    if (category == null)
-        //    {
-        //        msg = "分类不存在";
-        //        return false;
-        //    }
-        //    category.Description = entity.Description;
-        //    category.CategoryName = entity.CategoryName;
 
-
-        //    bool isSuccess = _categoryDAL.UpdateEntity(category);
-
-        //    msg = isSuccess ? $"添加{category.CategoryName}成功!" : "添加分类失败";
-
-        //    return isSuccess;
-        //}
         public bool UpdateCategory(Category entity, out string msg)
         {
-            if (string.IsNullOrWhiteSpace(entity.Description))
+
+            if (ParameterHelper.ValidateParameter(entity.Description, "描述", out msg) &&
+               ParameterHelper.ValidateParameter(entity.CategoryName, "分类名", out msg)
+               )
             {
-                msg = "描述不能为空";
+                Category category = _categoryDAL.GetEntities().FirstOrDefault(u => u.Id == entity.Id);
+                if (category == null)
+                {
+                    msg = "分类不存在";
+                    return false;
+                }
+
+                category.Description = entity.Description;
+                category.CategoryName = entity.CategoryName;
+                try
+                {
+                    _categoryDAL.UpdateEntity(category);
+                    msg = $"更新{category.CategoryName}成功!";
+                    return true;
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    msg = "并发更新异常，实体已被修改，请重新加载实体。";
+                    // 重新加载实体
+                    _dbContext.Entry(category).Reload();
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    msg = "更新分类失败";
+                    return false;
+                }
+            }
+            else
+            {
+                msg = string.Empty;
                 return false;
             }
-            if (string.IsNullOrWhiteSpace(entity.CategoryName))
-            {
-                msg = "分类名不能为空";
-                return true;
-            }
 
-            Category category = _categoryDAL.GetEntities().FirstOrDefault(u => u.Id == entity.Id);
-            if (category == null)
-            {
-                msg = "分类不存在";
-                return false;
-            }
-
-            // 进行并发控制
-            //_dbContext.Entry(category).OriginalValues["Version"] = entity.Version;
-
-            category.Description = entity.Description;
-            category.CategoryName = entity.CategoryName;
-
-            try
-            {
-                _categoryDAL.UpdateEntity(category);
-                msg = $"更新{category.CategoryName}成功!";
-                return true;
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                msg = "并发更新异常，实体已被修改，请重新加载实体。";
-                // 重新加载实体
-                _dbContext.Entry(category).Reload();
-                return false;
-            }
-            catch (Exception ex)
-            {
-                msg = "更新分类失败";
-                return false;
-            }
         }
 
     }

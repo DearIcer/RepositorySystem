@@ -1,11 +1,6 @@
 ﻿using Models;
 using Models.DTO;
-using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IBLL
 {
@@ -44,8 +39,18 @@ namespace IBLL
         /// <returns></returns>
         bool UpdateCategory(Category entity, out string msg);
 
+        /// <summary>
+        /// 删除分类
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         bool DeleteCategory(string id);
 
+        /// <summary>
+        /// 删除分类批量
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
         bool DeleteCategory(List<string> ids);
 
         /// <summary>
